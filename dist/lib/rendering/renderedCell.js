@@ -477,7 +477,12 @@ var RenderedCell = (function (_super) {
         };
         var colDef = this.column.getColDef();
         if (colDef.cellEditorParams) {
-            utils_1.Utils.assign(params, colDef.cellEditorParams);
+            if (typeof colDef.cellEditorParams === 'function') {
+                utils_1.Utils.assign(params, colDef.cellEditorParams(this.node.data));
+            }
+            else {
+                utils_1.Utils.assign(params, colDef.cellEditorParams);
+            }
         }
         return params;
     };

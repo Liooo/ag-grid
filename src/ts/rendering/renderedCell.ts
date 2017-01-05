@@ -558,7 +558,11 @@ export class RenderedCell extends Component {
 
         var colDef = this.column.getColDef();
         if (colDef.cellEditorParams) {
+          if (typeof colDef.cellEditorParams === 'function') {
+            _.assign(params, colDef.cellEditorParams(this.node.data, this.value));
+          }else{
             _.assign(params, colDef.cellEditorParams);
+          }
         }
 
         return params;
