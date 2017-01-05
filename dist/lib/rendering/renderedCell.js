@@ -1003,7 +1003,12 @@ var RenderedCell = (function (_super) {
             addRenderedRowListener: this.renderedRow.addEventListener.bind(this.renderedRow)
         };
         if (cellRendererParams) {
-            utils_1.Utils.assign(params, cellRendererParams);
+            if (typeof cellRendererParams === 'function') {
+                utils_1.Utils.assign(params, cellRendererParams(this.node.data));
+            }
+            else {
+                utils_1.Utils.assign(params, cellRendererParams);
+            }
         }
         return params;
     };

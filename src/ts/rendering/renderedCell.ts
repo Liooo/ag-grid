@@ -1152,7 +1152,11 @@ export class RenderedCell extends Component {
         };
 
         if (cellRendererParams) {
+          if (typeof cellRendererParams === 'function') {
+            _.assign(params, cellRendererParams(this.node.data, this.value));
+          }else{
             _.assign(params, cellRendererParams);
+          }
         }
 
         return params;
