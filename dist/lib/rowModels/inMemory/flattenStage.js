@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../../context/context");
 var rowNode_1 = require("../../entities/rowNode");
 var utils_1 = require("../../utils");
@@ -140,29 +139,30 @@ var FlattenStage = (function () {
             return flowerNode;
         }
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], FlattenStage.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('selectionController'), 
+        __metadata('design:type', selectionController_1.SelectionController)
+    ], FlattenStage.prototype, "selectionController", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], FlattenStage.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], FlattenStage.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], FlattenStage.prototype, "columnController", void 0);
+    FlattenStage = __decorate([
+        context_1.Bean('flattenStage'), 
+        __metadata('design:paramtypes', [])
+    ], FlattenStage);
     return FlattenStage;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], FlattenStage.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('selectionController'),
-    __metadata("design:type", selectionController_1.SelectionController)
-], FlattenStage.prototype, "selectionController", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], FlattenStage.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], FlattenStage.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], FlattenStage.prototype, "columnController", void 0);
-FlattenStage = __decorate([
-    context_1.Bean('flattenStage')
-], FlattenStage);
 exports.FlattenStage = FlattenStage;

@@ -14,13 +14,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var column_1 = require("../entities/column");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var utils_1 = require("../utils");
 var functions_1 = require("../functions");
-var AutoGroupColService = AutoGroupColService_1 = (function () {
+var AutoGroupColService = (function () {
     function AutoGroupColService() {
     }
     AutoGroupColService.prototype.createAutoGroupColumns = function (rowGroupColumns) {
@@ -85,28 +84,28 @@ var AutoGroupColService = AutoGroupColService_1 = (function () {
                 autoColDef.headerCheckboxSelection = false;
                 autoColDef.cellRendererParams.checkbox = false;
             }
-            colId = AutoGroupColService_1.GROUP_AUTO_COLUMN_ID + "-" + Math.random() + "-" + rowGroupCol.getId();
+            colId = AutoGroupColService.GROUP_AUTO_COLUMN_ID + "-" + Math.random() + "-" + rowGroupCol.getId();
         }
         else {
-            colId = AutoGroupColService_1.GROUP_AUTO_COLUMN_ID + "-" + Math.random();
+            colId = AutoGroupColService.GROUP_AUTO_COLUMN_ID + "-" + Math.random();
         }
         var newCol = new column_1.Column(autoColDef, colId, true);
         this.context.wireBean(newCol);
         return newCol;
     };
+    AutoGroupColService.GROUP_AUTO_COLUMN_ID = 'ag-Grid-AutoColumn';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], AutoGroupColService.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], AutoGroupColService.prototype, "context", void 0);
+    AutoGroupColService = __decorate([
+        context_1.Bean('autoGroupColService'), 
+        __metadata('design:paramtypes', [])
+    ], AutoGroupColService);
     return AutoGroupColService;
 }());
-AutoGroupColService.GROUP_AUTO_COLUMN_ID = 'ag-Grid-AutoColumn';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], AutoGroupColService.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], AutoGroupColService.prototype, "context", void 0);
-AutoGroupColService = AutoGroupColService_1 = __decorate([
-    context_1.Bean('autoGroupColService')
-], AutoGroupColService);
 exports.AutoGroupColService = AutoGroupColService;
-var AutoGroupColService_1;

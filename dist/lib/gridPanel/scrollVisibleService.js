@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var utils_1 = require("../utils");
 var eventService_1 = require("../eventService");
@@ -68,17 +67,18 @@ var ScrollVisibleService = (function () {
         }
         return result;
     };
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], ScrollVisibleService.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], ScrollVisibleService.prototype, "columnController", void 0);
+    ScrollVisibleService = __decorate([
+        context_1.Bean('scrollVisibleService'), 
+        __metadata('design:paramtypes', [])
+    ], ScrollVisibleService);
     return ScrollVisibleService;
 }());
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], ScrollVisibleService.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], ScrollVisibleService.prototype, "columnController", void 0);
-ScrollVisibleService = __decorate([
-    context_1.Bean('scrollVisibleService')
-], ScrollVisibleService);
 exports.ScrollVisibleService = ScrollVisibleService;

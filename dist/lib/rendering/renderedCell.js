@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var column_1 = require("../entities/column");
 var rowNode_1 = require("../entities/rowNode");
@@ -57,20 +51,19 @@ var columnAnimationService_1 = require("./columnAnimationService");
 var RenderedCell = (function (_super) {
     __extends(RenderedCell, _super);
     function RenderedCell(column, node, scope, renderedRow) {
-        var _this = _super.call(this, '<div/>') || this;
+        _super.call(this, '<div/>');
         // set to null, not false, as we need to set 'ag-cell-no-focus' first time around
-        _this.cellFocused = null;
-        _this.firstRightPinned = false;
-        _this.lastLeftPinned = false;
+        this.cellFocused = null;
+        this.firstRightPinned = false;
+        this.lastLeftPinned = false;
         // because we reference eGridCell everywhere in this class,
         // we keep a local reference
-        _this.eGridCell = _this.getGui();
-        _this.column = column;
-        _this.node = node;
-        _this.scope = scope;
-        _this.renderedRow = renderedRow;
-        _this.setupGridCell();
-        return _this;
+        this.eGridCell = this.getGui();
+        this.column = column;
+        this.node = node;
+        this.scope = scope;
+        this.renderedRow = renderedRow;
+        this.setupGridCell();
     }
     RenderedCell.prototype.createGridCell = function () {
         var gridCellDef = {
@@ -949,7 +942,6 @@ var RenderedCell = (function (_super) {
             if (template) {
                 this.eParentOfValue.innerHTML = template;
             }
-            // use cell renderer if it exists
         }
         else if (floatingCellRenderer && this.node.floating) {
             // if floating, then give preference to floating cell renderer
@@ -1026,105 +1018,105 @@ var RenderedCell = (function (_super) {
             utils_1.Utils.addCssClass(this.eGridCell, 'ag-group-cell');
         }
     };
+    RenderedCell.PRINTABLE_CHARACTERS = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!"£$%^&*()_+-=[];\'#,./\|<>?:@~{}';
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], RenderedCell.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('columnApi'), 
+        __metadata('design:type', columnController_1.ColumnApi)
+    ], RenderedCell.prototype, "columnApi", void 0);
+    __decorate([
+        context_1.Autowired('gridApi'), 
+        __metadata('design:type', gridApi_1.GridApi)
+    ], RenderedCell.prototype, "gridApi", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], RenderedCell.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('expressionService'), 
+        __metadata('design:type', expressionService_1.ExpressionService)
+    ], RenderedCell.prototype, "expressionService", void 0);
+    __decorate([
+        context_1.Autowired('rowRenderer'), 
+        __metadata('design:type', rowRenderer_1.RowRenderer)
+    ], RenderedCell.prototype, "rowRenderer", void 0);
+    __decorate([
+        context_1.Autowired('$compile'), 
+        __metadata('design:type', Object)
+    ], RenderedCell.prototype, "$compile", void 0);
+    __decorate([
+        context_1.Autowired('templateService'), 
+        __metadata('design:type', templateService_1.TemplateService)
+    ], RenderedCell.prototype, "templateService", void 0);
+    __decorate([
+        context_1.Autowired('valueService'), 
+        __metadata('design:type', valueService_1.ValueService)
+    ], RenderedCell.prototype, "valueService", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], RenderedCell.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], RenderedCell.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('columnAnimationService'), 
+        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+    ], RenderedCell.prototype, "columnAnimationService", void 0);
+    __decorate([
+        context_1.Optional('rangeController'), 
+        __metadata('design:type', Object)
+    ], RenderedCell.prototype, "rangeController", void 0);
+    __decorate([
+        context_1.Autowired('focusedCellController'), 
+        __metadata('design:type', focusedCellController_1.FocusedCellController)
+    ], RenderedCell.prototype, "focusedCellController", void 0);
+    __decorate([
+        context_1.Optional('contextMenuFactory'), 
+        __metadata('design:type', Object)
+    ], RenderedCell.prototype, "contextMenuFactory", void 0);
+    __decorate([
+        context_1.Autowired('focusService'), 
+        __metadata('design:type', focusService_1.FocusService)
+    ], RenderedCell.prototype, "focusService", void 0);
+    __decorate([
+        context_1.Autowired('cellEditorFactory'), 
+        __metadata('design:type', cellEditorFactory_1.CellEditorFactory)
+    ], RenderedCell.prototype, "cellEditorFactory", void 0);
+    __decorate([
+        context_1.Autowired('cellRendererFactory'), 
+        __metadata('design:type', cellRendererFactory_1.CellRendererFactory)
+    ], RenderedCell.prototype, "cellRendererFactory", void 0);
+    __decorate([
+        context_1.Autowired('popupService'), 
+        __metadata('design:type', popupService_1.PopupService)
+    ], RenderedCell.prototype, "popupService", void 0);
+    __decorate([
+        context_1.Autowired('cellRendererService'), 
+        __metadata('design:type', cellRendererService_1.CellRendererService)
+    ], RenderedCell.prototype, "cellRendererService", void 0);
+    __decorate([
+        context_1.Autowired('valueFormatterService'), 
+        __metadata('design:type', valueFormatterService_1.ValueFormatterService)
+    ], RenderedCell.prototype, "valueFormatterService", void 0);
+    __decorate([
+        context_1.Autowired('stylingService'), 
+        __metadata('design:type', stylingService_1.StylingService)
+    ], RenderedCell.prototype, "stylingService", void 0);
+    __decorate([
+        context_1.Autowired('columnHoverService'), 
+        __metadata('design:type', columnHoverService_1.ColumnHoverService)
+    ], RenderedCell.prototype, "columnHoverService", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], RenderedCell.prototype, "init", null);
     return RenderedCell;
 }(component_1.Component));
-RenderedCell.PRINTABLE_CHARACTERS = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!"£$%^&*()_+-=[];\'#,./\|<>?:@~{}';
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], RenderedCell.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('columnApi'),
-    __metadata("design:type", columnController_1.ColumnApi)
-], RenderedCell.prototype, "columnApi", void 0);
-__decorate([
-    context_1.Autowired('gridApi'),
-    __metadata("design:type", gridApi_1.GridApi)
-], RenderedCell.prototype, "gridApi", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], RenderedCell.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('expressionService'),
-    __metadata("design:type", expressionService_1.ExpressionService)
-], RenderedCell.prototype, "expressionService", void 0);
-__decorate([
-    context_1.Autowired('rowRenderer'),
-    __metadata("design:type", rowRenderer_1.RowRenderer)
-], RenderedCell.prototype, "rowRenderer", void 0);
-__decorate([
-    context_1.Autowired('$compile'),
-    __metadata("design:type", Object)
-], RenderedCell.prototype, "$compile", void 0);
-__decorate([
-    context_1.Autowired('templateService'),
-    __metadata("design:type", templateService_1.TemplateService)
-], RenderedCell.prototype, "templateService", void 0);
-__decorate([
-    context_1.Autowired('valueService'),
-    __metadata("design:type", valueService_1.ValueService)
-], RenderedCell.prototype, "valueService", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], RenderedCell.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], RenderedCell.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('columnAnimationService'),
-    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-], RenderedCell.prototype, "columnAnimationService", void 0);
-__decorate([
-    context_1.Optional('rangeController'),
-    __metadata("design:type", Object)
-], RenderedCell.prototype, "rangeController", void 0);
-__decorate([
-    context_1.Autowired('focusedCellController'),
-    __metadata("design:type", focusedCellController_1.FocusedCellController)
-], RenderedCell.prototype, "focusedCellController", void 0);
-__decorate([
-    context_1.Optional('contextMenuFactory'),
-    __metadata("design:type", Object)
-], RenderedCell.prototype, "contextMenuFactory", void 0);
-__decorate([
-    context_1.Autowired('focusService'),
-    __metadata("design:type", focusService_1.FocusService)
-], RenderedCell.prototype, "focusService", void 0);
-__decorate([
-    context_1.Autowired('cellEditorFactory'),
-    __metadata("design:type", cellEditorFactory_1.CellEditorFactory)
-], RenderedCell.prototype, "cellEditorFactory", void 0);
-__decorate([
-    context_1.Autowired('cellRendererFactory'),
-    __metadata("design:type", cellRendererFactory_1.CellRendererFactory)
-], RenderedCell.prototype, "cellRendererFactory", void 0);
-__decorate([
-    context_1.Autowired('popupService'),
-    __metadata("design:type", popupService_1.PopupService)
-], RenderedCell.prototype, "popupService", void 0);
-__decorate([
-    context_1.Autowired('cellRendererService'),
-    __metadata("design:type", cellRendererService_1.CellRendererService)
-], RenderedCell.prototype, "cellRendererService", void 0);
-__decorate([
-    context_1.Autowired('valueFormatterService'),
-    __metadata("design:type", valueFormatterService_1.ValueFormatterService)
-], RenderedCell.prototype, "valueFormatterService", void 0);
-__decorate([
-    context_1.Autowired('stylingService'),
-    __metadata("design:type", stylingService_1.StylingService)
-], RenderedCell.prototype, "stylingService", void 0);
-__decorate([
-    context_1.Autowired('columnHoverService'),
-    __metadata("design:type", columnHoverService_1.ColumnHoverService)
-], RenderedCell.prototype, "columnHoverService", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], RenderedCell.prototype, "init", null);
 exports.RenderedCell = RenderedCell;

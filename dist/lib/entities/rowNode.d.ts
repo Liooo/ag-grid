@@ -3,6 +3,7 @@
 // Definitions by: Niall Crosby <https://github.com/ceolter/>
 import { ColDef } from "./colDef";
 import { Column } from "./column";
+import { IEnterpriseCache } from "../interfaces/iEnterpriseCache";
 export interface SetSelectedParams {
     newValue: boolean;
     clearSelection?: boolean;
@@ -84,6 +85,8 @@ export declare class RowNode {
     childrenMapped: {
         [key: string]: any;
     };
+    /** Enterprise Row Model Only - the children are in an infinite cache */
+    childrenCache: IEnterpriseCache;
     /** Groups only - True if group is expanded, otherwise false */
     expanded: boolean;
     /** Groups only - If doing footers, reference to the footer node for this group */

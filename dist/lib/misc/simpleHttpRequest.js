@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function simpleHttpRequest(params) {
     var promise = new Promise();
     var httpRequest = new XMLHttpRequest();

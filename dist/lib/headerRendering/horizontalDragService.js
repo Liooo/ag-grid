@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var context_1 = require("../context/context");
 var HorizontalDragService = (function () {
@@ -28,15 +27,16 @@ var HorizontalDragService = (function () {
             new DragInstance(params, startEvent, eBody);
         });
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HorizontalDragService.prototype, "gridOptionsWrapper", void 0);
+    HorizontalDragService = __decorate([
+        context_1.Bean('horizontalDragService'), 
+        __metadata('design:paramtypes', [])
+    ], HorizontalDragService);
     return HorizontalDragService;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HorizontalDragService.prototype, "gridOptionsWrapper", void 0);
-HorizontalDragService = __decorate([
-    context_1.Bean('horizontalDragService')
-], HorizontalDragService);
 exports.HorizontalDragService = HorizontalDragService;
 var DragInstance = (function () {
     function DragInstance(params, startEvent, eBody) {

@@ -17,7 +17,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var gridOptionsWrapper_1 = require("./gridOptionsWrapper");
 var columnController_1 = require("./columnController/columnController");
 var gridPanel_1 = require("./gridPanel/gridPanel");
@@ -172,37 +171,38 @@ var MasterSlaveService = (function () {
             }
         });
     };
+    __decorate([
+        context_3.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], MasterSlaveService.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_3.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], MasterSlaveService.prototype, "columnController", void 0);
+    __decorate([
+        context_3.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], MasterSlaveService.prototype, "gridPanel", void 0);
+    __decorate([
+        context_3.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], MasterSlaveService.prototype, "eventService", void 0);
+    __decorate([
+        __param(0, context_2.Qualifier('loggerFactory')), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+        __metadata('design:returntype', void 0)
+    ], MasterSlaveService.prototype, "setBeans", null);
+    __decorate([
+        context_4.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], MasterSlaveService.prototype, "init", null);
+    MasterSlaveService = __decorate([
+        context_1.Bean('masterSlaveService'), 
+        __metadata('design:paramtypes', [])
+    ], MasterSlaveService);
     return MasterSlaveService;
 }());
-__decorate([
-    context_3.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], MasterSlaveService.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_3.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], MasterSlaveService.prototype, "columnController", void 0);
-__decorate([
-    context_3.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], MasterSlaveService.prototype, "gridPanel", void 0);
-__decorate([
-    context_3.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], MasterSlaveService.prototype, "eventService", void 0);
-__decorate([
-    __param(0, context_2.Qualifier('loggerFactory')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-    __metadata("design:returntype", void 0)
-], MasterSlaveService.prototype, "setBeans", null);
-__decorate([
-    context_4.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], MasterSlaveService.prototype, "init", null);
-MasterSlaveService = __decorate([
-    context_1.Bean('masterSlaveService')
-], MasterSlaveService);
 exports.MasterSlaveService = MasterSlaveService;

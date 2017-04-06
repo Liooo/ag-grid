@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var dateFilter_1 = require("./dateFilter");
 var componentAnnotations_1 = require("../widgets/componentAnnotations");
@@ -35,7 +29,7 @@ var constants_1 = require("../constants");
 var InputTextFloatingFilterComp = (function (_super) {
     __extends(InputTextFloatingFilterComp, _super);
     function InputTextFloatingFilterComp() {
-        return _super.call(this, "<div><input  ref=\"eColumnFloatingFilter\" class=\"ag-floating-filter-input\"></div>") || this;
+        _super.call(this, "<div><input  ref=\"eColumnFloatingFilter\" class=\"ag-floating-filter-input\"></div>");
     }
     InputTextFloatingFilterComp.prototype.init = function (params) {
         this.onFloatingFilterChanged = params.onFloatingFilterChanged;
@@ -60,17 +54,17 @@ var InputTextFloatingFilterComp = (function (_super) {
             });
         }
     };
+    __decorate([
+        componentAnnotations_1.RefSelector('eColumnFloatingFilter'), 
+        __metadata('design:type', HTMLInputElement)
+    ], InputTextFloatingFilterComp.prototype, "eColumnFloatingFilter", void 0);
     return InputTextFloatingFilterComp;
 }(component_1.Component));
-__decorate([
-    componentAnnotations_1.RefSelector('eColumnFloatingFilter'),
-    __metadata("design:type", HTMLInputElement)
-], InputTextFloatingFilterComp.prototype, "eColumnFloatingFilter", void 0);
 exports.InputTextFloatingFilterComp = InputTextFloatingFilterComp;
 var TextFloatingFilterComp = (function (_super) {
     __extends(TextFloatingFilterComp, _super);
     function TextFloatingFilterComp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     TextFloatingFilterComp.prototype.asFloatingFilterText = function (parentModel) {
         if (!parentModel)
@@ -91,7 +85,7 @@ exports.TextFloatingFilterComp = TextFloatingFilterComp;
 var DateFloatingFilterComp = (function (_super) {
     __extends(DateFloatingFilterComp, _super);
     function DateFloatingFilterComp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     DateFloatingFilterComp.prototype.init = function (params) {
         this.onFloatingFilterChanged = params.onFloatingFilterChanged;
@@ -135,17 +129,17 @@ var DateFloatingFilterComp = (function (_super) {
         }
         this.dateComponent.setDate(utils_1._.parseYyyyMmDdToDate(parentModel.dateFrom, '-'));
     };
+    __decorate([
+        context_1.Autowired('componentProvider'), 
+        __metadata('design:type', componentProvider_1.ComponentProvider)
+    ], DateFloatingFilterComp.prototype, "componentProvider", void 0);
     return DateFloatingFilterComp;
 }(component_1.Component));
-__decorate([
-    context_1.Autowired('componentProvider'),
-    __metadata("design:type", componentProvider_1.ComponentProvider)
-], DateFloatingFilterComp.prototype, "componentProvider", void 0);
 exports.DateFloatingFilterComp = DateFloatingFilterComp;
 var NumberFloatingFilterComp = (function (_super) {
     __extends(NumberFloatingFilterComp, _super);
     function NumberFloatingFilterComp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     NumberFloatingFilterComp.prototype.asFloatingFilterText = function (parentModel) {
         var rawParentModel = this.currentParentModel();
@@ -198,7 +192,7 @@ exports.NumberFloatingFilterComp = NumberFloatingFilterComp;
 var SetFloatingFilterComp = (function (_super) {
     __extends(SetFloatingFilterComp, _super);
     function SetFloatingFilterComp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     SetFloatingFilterComp.prototype.init = function (params) {
         _super.prototype.init.call(this, params);
@@ -221,7 +215,7 @@ exports.SetFloatingFilterComp = SetFloatingFilterComp;
 var ReadModelAsStringFloatingFilterComp = (function (_super) {
     __extends(ReadModelAsStringFloatingFilterComp, _super);
     function ReadModelAsStringFloatingFilterComp() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     ReadModelAsStringFloatingFilterComp.prototype.init = function (params) {
         _super.prototype.init.call(this, params);

@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../../utils");
 var column_1 = require("../../entities/column");
 var filterManager_1 = require("../../filter/filterManager");
@@ -43,12 +37,11 @@ var component_1 = require("../../widgets/component");
 var RenderedHeaderCell = (function (_super) {
     __extends(RenderedHeaderCell, _super);
     function RenderedHeaderCell(column, eRoot, dragSourceDropTarget, pinned) {
-        var _this = _super.call(this) || this;
-        _this.column = column;
-        _this.eRoot = eRoot;
-        _this.dragSourceDropTarget = dragSourceDropTarget;
-        _this.pinned = pinned;
-        return _this;
+        _super.call(this);
+        this.column = column;
+        this.eRoot = eRoot;
+        this.dragSourceDropTarget = dragSourceDropTarget;
+        this.pinned = pinned;
     }
     RenderedHeaderCell.prototype.getColumn = function () {
         return this.column;
@@ -345,60 +338,60 @@ var RenderedHeaderCell = (function (_super) {
         var newWidth = this.startWidth + dragChangeNormalised;
         this.columnController.setColumnWidth(this.column, newWidth, finished);
     };
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], RenderedHeaderCell.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], RenderedHeaderCell.prototype, "filterManager", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], RenderedHeaderCell.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('$compile'), 
+        __metadata('design:type', Object)
+    ], RenderedHeaderCell.prototype, "$compile", void 0);
+    __decorate([
+        context_1.Autowired('gridCore'), 
+        __metadata('design:type', gridCore_1.GridCore)
+    ], RenderedHeaderCell.prototype, "gridCore", void 0);
+    __decorate([
+        context_1.Autowired('headerTemplateLoader'), 
+        __metadata('design:type', headerTemplateLoader_1.HeaderTemplateLoader)
+    ], RenderedHeaderCell.prototype, "headerTemplateLoader", void 0);
+    __decorate([
+        context_1.Autowired('horizontalDragService'), 
+        __metadata('design:type', horizontalDragService_1.HorizontalDragService)
+    ], RenderedHeaderCell.prototype, "horizontalDragService", void 0);
+    __decorate([
+        context_1.Autowired('menuFactory'), 
+        __metadata('design:type', Object)
+    ], RenderedHeaderCell.prototype, "menuFactory", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], RenderedHeaderCell.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('dragAndDropService'), 
+        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+    ], RenderedHeaderCell.prototype, "dragAndDropService", void 0);
+    __decorate([
+        context_1.Autowired('sortController'), 
+        __metadata('design:type', sortController_1.SortController)
+    ], RenderedHeaderCell.prototype, "sortController", void 0);
+    __decorate([
+        context_1.Autowired('$scope'), 
+        __metadata('design:type', Object)
+    ], RenderedHeaderCell.prototype, "$scope", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], RenderedHeaderCell.prototype, "init", null);
     return RenderedHeaderCell;
 }(component_1.Component));
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], RenderedHeaderCell.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('filterManager'),
-    __metadata("design:type", filterManager_1.FilterManager)
-], RenderedHeaderCell.prototype, "filterManager", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], RenderedHeaderCell.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('$compile'),
-    __metadata("design:type", Object)
-], RenderedHeaderCell.prototype, "$compile", void 0);
-__decorate([
-    context_1.Autowired('gridCore'),
-    __metadata("design:type", gridCore_1.GridCore)
-], RenderedHeaderCell.prototype, "gridCore", void 0);
-__decorate([
-    context_1.Autowired('headerTemplateLoader'),
-    __metadata("design:type", headerTemplateLoader_1.HeaderTemplateLoader)
-], RenderedHeaderCell.prototype, "headerTemplateLoader", void 0);
-__decorate([
-    context_1.Autowired('horizontalDragService'),
-    __metadata("design:type", horizontalDragService_1.HorizontalDragService)
-], RenderedHeaderCell.prototype, "horizontalDragService", void 0);
-__decorate([
-    context_1.Autowired('menuFactory'),
-    __metadata("design:type", Object)
-], RenderedHeaderCell.prototype, "menuFactory", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], RenderedHeaderCell.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('dragAndDropService'),
-    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-], RenderedHeaderCell.prototype, "dragAndDropService", void 0);
-__decorate([
-    context_1.Autowired('sortController'),
-    __metadata("design:type", sortController_1.SortController)
-], RenderedHeaderCell.prototype, "sortController", void 0);
-__decorate([
-    context_1.Autowired('$scope'),
-    __metadata("design:type", Object)
-], RenderedHeaderCell.prototype, "$scope", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], RenderedHeaderCell.prototype, "init", null);
 exports.RenderedHeaderCell = RenderedHeaderCell;

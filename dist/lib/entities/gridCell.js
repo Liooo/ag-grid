@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var gridRow_1 = require("./gridRow");
 var GridCell = (function () {

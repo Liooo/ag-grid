@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var eventService_1 = require("../eventService");
 var context_1 = require("../context/context");
 var events_1 = require("../events");
@@ -32,7 +26,7 @@ var beanStub_1 = require("../context/beanStub");
 var ColumnHoverService = (function (_super) {
     __extends(ColumnHoverService, _super);
     function ColumnHoverService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     ColumnHoverService.prototype.init = function () {
         this.addDestroyableEventListener(this.eventService, events_1.Events.EVENT_CELL_MOUSE_OVER, this.onCellMouseOver.bind(this));
@@ -49,19 +43,20 @@ var ColumnHoverService = (function (_super) {
     ColumnHoverService.prototype.isHovered = function (column) {
         return column == this.currentlySelectedColumn;
     };
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], ColumnHoverService.prototype, "eventService", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], ColumnHoverService.prototype, "init", null);
+    ColumnHoverService = __decorate([
+        context_1.Bean('columnHoverService'), 
+        __metadata('design:paramtypes', [])
+    ], ColumnHoverService);
     return ColumnHoverService;
 }(beanStub_1.BeanStub));
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], ColumnHoverService.prototype, "eventService", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ColumnHoverService.prototype, "init", null);
-ColumnHoverService = __decorate([
-    context_1.Bean('columnHoverService')
-], ColumnHoverService);
 exports.ColumnHoverService = ColumnHoverService;

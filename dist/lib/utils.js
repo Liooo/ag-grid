@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var FUNCTION_STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var FUNCTION_ARGUMENT_NAMES = /([^\s,]+)/g;
 // util class, only used when debugging, for printing time to console
@@ -549,8 +548,6 @@ var Utils = (function () {
                 return valueA.localeCompare(valueB);
             }
             catch (e) {
-                // if something wrong with localeCompare, eg not supported
-                // by browser, then just continue without using it
             }
         }
         if (valueA < valueB) {

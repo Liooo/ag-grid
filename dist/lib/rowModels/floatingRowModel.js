@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var rowNode_1 = require("../entities/rowNode");
 var context_1 = require("../context/context");
@@ -23,7 +22,7 @@ var context_2 = require("../context/context");
 var events_1 = require("../events");
 var context_3 = require("../context/context");
 var constants_1 = require("../constants");
-var utils_1 = require("../utils");
+var utils_1 = require('../utils');
 var FloatingRowModel = (function () {
     function FloatingRowModel() {
     }
@@ -126,27 +125,28 @@ var FloatingRowModel = (function () {
             return lastNode.rowTop + lastNode.rowHeight;
         }
     };
+    __decorate([
+        context_2.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], FloatingRowModel.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_2.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], FloatingRowModel.prototype, "eventService", void 0);
+    __decorate([
+        context_2.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], FloatingRowModel.prototype, "context", void 0);
+    __decorate([
+        context_3.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], FloatingRowModel.prototype, "init", null);
+    FloatingRowModel = __decorate([
+        context_1.Bean('floatingRowModel'), 
+        __metadata('design:paramtypes', [])
+    ], FloatingRowModel);
     return FloatingRowModel;
 }());
-__decorate([
-    context_2.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], FloatingRowModel.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_2.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], FloatingRowModel.prototype, "eventService", void 0);
-__decorate([
-    context_2.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], FloatingRowModel.prototype, "context", void 0);
-__decorate([
-    context_3.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], FloatingRowModel.prototype, "init", null);
-FloatingRowModel = __decorate([
-    context_1.Bean('floatingRowModel')
-], FloatingRowModel);
 exports.FloatingRowModel = FloatingRowModel;

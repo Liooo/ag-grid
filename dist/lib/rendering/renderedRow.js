@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var renderedCell_1 = require("./renderedCell");
 var rowNode_1 = require("../entities/rowNode");
@@ -45,31 +39,30 @@ var paginationProxy_1 = require("../rowModels/paginationProxy");
 var RenderedRow = (function (_super) {
     __extends(RenderedRow, _super);
     function RenderedRow(parentScope, rowRenderer, bodyContainerComp, fullWidthContainerComp, pinnedLeftContainerComp, pinnedRightContainerComp, node, animateIn) {
-        var _this = _super.call(this) || this;
-        _this.eAllRowContainers = [];
-        _this.renderedCells = {};
+        _super.call(this);
+        this.eAllRowContainers = [];
+        this.renderedCells = {};
         // for animations, there are bits we want done in the next VM turn, to all DOM to update first.
         // instead of each row doing a setTimeout(func,0), we put the functions here and the rowRenderer
         // executes them all in one timeout
-        _this.nextVmTurnFunctions = [];
+        this.nextVmTurnFunctions = [];
         // for animations, these functions get called 400ms after the row is cleared, called by the rowRenderer
         // so each row isn't setting up it's own timeout
-        _this.delayedDestroyFunctions = [];
+        this.delayedDestroyFunctions = [];
         // these get called before the row is destroyed - they set up the DOM for the remove animation (ie they
         // set the DOM up for the animation), then the delayedDestroyFunctions get called when the animation is
         // complete (ie removes from the dom).
-        _this.startRemoveAnimationFunctions = [];
-        _this.editingRow = false;
-        _this.initialised = false;
-        _this.parentScope = parentScope;
-        _this.rowRenderer = rowRenderer;
-        _this.bodyContainerComp = bodyContainerComp;
-        _this.fullWidthContainerComp = fullWidthContainerComp;
-        _this.pinnedLeftContainerComp = pinnedLeftContainerComp;
-        _this.pinnedRightContainerComp = pinnedRightContainerComp;
-        _this.rowNode = node;
-        _this.animateIn = animateIn;
-        return _this;
+        this.startRemoveAnimationFunctions = [];
+        this.editingRow = false;
+        this.initialised = false;
+        this.parentScope = parentScope;
+        this.rowRenderer = rowRenderer;
+        this.bodyContainerComp = bodyContainerComp;
+        this.fullWidthContainerComp = fullWidthContainerComp;
+        this.pinnedLeftContainerComp = pinnedLeftContainerComp;
+        this.pinnedRightContainerComp = pinnedRightContainerComp;
+        this.rowNode = node;
+        this.animateIn = animateIn;
     }
     RenderedRow.prototype.setupRowContainers = function (animateInRowTop) {
         var isFullWidthCellFunc = this.gridOptionsWrapper.getIsFullWidthCellFunc();
@@ -294,7 +287,6 @@ var RenderedRow = (function (_super) {
                 }
             }
             else {
-                // otherwise nothing, the floating fullWidth containers are not impacted by column changes
             }
         }
         else {
@@ -987,53 +979,53 @@ var RenderedRow = (function (_super) {
             _this.eAllRowContainers.forEach(function (row) { return utils_1.Utils.addCssClass(row, classStr); });
         });
     };
+    RenderedRow.EVENT_RENDERED_ROW_REMOVED = 'renderedRowRemoved';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], RenderedRow.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], RenderedRow.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('columnAnimationService'), 
+        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+    ], RenderedRow.prototype, "columnAnimationService", void 0);
+    __decorate([
+        context_1.Autowired('$compile'), 
+        __metadata('design:type', Object)
+    ], RenderedRow.prototype, "$compile", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], RenderedRow.prototype, "mainEventService", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], RenderedRow.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('focusedCellController'), 
+        __metadata('design:type', focusedCellController_1.FocusedCellController)
+    ], RenderedRow.prototype, "focusedCellController", void 0);
+    __decorate([
+        context_1.Autowired('cellRendererService'), 
+        __metadata('design:type', cellRendererService_1.CellRendererService)
+    ], RenderedRow.prototype, "cellRendererService", void 0);
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], RenderedRow.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('paginationProxy'), 
+        __metadata('design:type', paginationProxy_1.PaginationProxy)
+    ], RenderedRow.prototype, "paginationProxy", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], RenderedRow.prototype, "init", null);
     return RenderedRow;
 }(beanStub_1.BeanStub));
-RenderedRow.EVENT_RENDERED_ROW_REMOVED = 'renderedRowRemoved';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], RenderedRow.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], RenderedRow.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('columnAnimationService'),
-    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-], RenderedRow.prototype, "columnAnimationService", void 0);
-__decorate([
-    context_1.Autowired('$compile'),
-    __metadata("design:type", Object)
-], RenderedRow.prototype, "$compile", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], RenderedRow.prototype, "mainEventService", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], RenderedRow.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('focusedCellController'),
-    __metadata("design:type", focusedCellController_1.FocusedCellController)
-], RenderedRow.prototype, "focusedCellController", void 0);
-__decorate([
-    context_1.Autowired('cellRendererService'),
-    __metadata("design:type", cellRendererService_1.CellRendererService)
-], RenderedRow.prototype, "cellRendererService", void 0);
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], RenderedRow.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('paginationProxy'),
-    __metadata("design:type", paginationProxy_1.PaginationProxy)
-], RenderedRow.prototype, "paginationProxy", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], RenderedRow.prototype, "init", null);
 exports.RenderedRow = RenderedRow;

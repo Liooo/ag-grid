@@ -4,30 +4,45 @@
 import { NumberSequence } from "../../utils";
 import { RowNode } from "../../entities/rowNode";
 import { IDatasource } from "../iDatasource";
-export interface CacheParams {
+import { InfiniteBlock } from "./infiniteBlock";
+export interface RowNodeCacheParams {
+    initialRowCount: number;
     pageSize: number;
+    overflowSize: number;
     rowHeight: number;
-    maxPagesInCache: number;
-    maxConcurrentDatasourceRequests: number;
-    paginationOverflowSize: number;
-    paginationInitialRowCount: number;
+    lastAccessedSequence: NumberSequence;
+}
+export interface InfiniteCacheParams extends RowNodeCacheParams {
+    maxBlocksInCache: number;
+    maxConcurrentRequests: number;
     sortModel: any;
     filterModel: any;
     datasource: IDatasource;
-    lastAccessedSequence: NumberSequence;
 }
-export declare class InfinitePageCache {
-    private eventService;
-    private context;
-    private pages;
-    private activePageLoadsCount;
-    private pagesInCacheCount;
-    private cacheParams;
+export declare abstract class RowNodeCache {
     private virtualRowCount;
     private maxRowFound;
-    private logger;
+    private rowNodeCacheParams;
     private active;
-    constructor(cacheSettings: CacheParams);
+    constructor(params: RowNodeCacheParams);
+    isActive(): boolean;
+    getVirtualRowCount(): number;
+    hack_setVirtualRowCount(virtualRowCount: number): void;
+    isMaxRowFound(): boolean;
+    destroy(): void;
+    protected checkVirtualRowCount(page: InfiniteBlock, lastRow: any): void;
+    setVirtualRowCount(rowCount: number, maxRowFound?: boolean): void;
+    protected abstract dispatchModelUpdated(): void;
+}
+export declare class InfiniteCache extends RowNodeCache {
+    private eventService;
+    private context;
+    private blocks;
+    private activePageLoadsCount;
+    private blocksCount;
+    private cacheParams;
+    private logger;
+    constructor(params: InfiniteCacheParams);
     getRowBounds(index: number): {
         rowTop: number;
         rowHeight: number;
@@ -42,19 +57,14 @@ export declare class InfinitePageCache {
     insertItemsAtIndex(indexToInsert: number, items: any[]): void;
     getRowCount(): number;
     private onPageLoaded(event);
-    destroy(): void;
     getRow(rowIndex: number, dontCreatePage?: boolean): RowNode;
-    private createPage(pageNumber);
-    private removePageFromCache(pageToRemove);
+    private createBlock(blockNumber);
+    private removeBlockFromCache(pageToRemove);
     private printCacheStatus();
-    private checkPageToLoad();
+    private checkBlockToLoad();
     private findLeastRecentlyUsedPage(pageToExclude);
-    private checkVirtualRowCount(page, lastRow);
-    private dispatchModelUpdated();
+    protected dispatchModelUpdated(): void;
     getPageState(): any;
-    refreshVirtualPageCache(): void;
-    purgeVirtualPageCache(): void;
-    getVirtualRowCount(): number;
-    isMaxRowFound(): boolean;
-    setVirtualRowCount(rowCount: number, maxRowFound?: boolean): void;
+    refreshCache(): void;
+    purgeCache(): void;
 }

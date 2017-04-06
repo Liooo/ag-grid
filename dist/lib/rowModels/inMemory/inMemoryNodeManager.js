@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var rowNode_1 = require("../../entities/rowNode");
 var utils_1 = require("../../utils");
 var InMemoryNodeManager = (function () {
@@ -175,7 +174,7 @@ var InMemoryNodeManager = (function () {
             return false;
         }
     };
+    InMemoryNodeManager.TOP_LEVEL = 0;
     return InMemoryNodeManager;
 }());
-InMemoryNodeManager.TOP_LEVEL = 0;
 exports.InMemoryNodeManager = InMemoryNodeManager;

@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("./context/context");
 var columnController_1 = require("./columnController/columnController");
 var constants_1 = require("./constants");
@@ -231,43 +230,44 @@ var GridSerializer = (function () {
         }
         return gridSerializingSession.parse();
     };
+    __decorate([
+        context_1.Autowired('displayedGroupCreator'), 
+        __metadata('design:type', displayedGroupCreator_1.DisplayedGroupCreator)
+    ], GridSerializer.prototype, "displayedGroupCreator", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], GridSerializer.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('rowModel'), 
+        __metadata('design:type', Object)
+    ], GridSerializer.prototype, "rowModel", void 0);
+    __decorate([
+        context_1.Autowired('floatingRowModel'), 
+        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+    ], GridSerializer.prototype, "floatingRowModel", void 0);
+    __decorate([
+        context_1.Autowired('selectionController'), 
+        __metadata('design:type', selectionController_1.SelectionController)
+    ], GridSerializer.prototype, "selectionController", void 0);
+    __decorate([
+        context_1.Autowired('balancedColumnTreeBuilder'), 
+        __metadata('design:type', balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
+    ], GridSerializer.prototype, "balancedColumnTreeBuilder", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], GridSerializer.prototype, "gridOptionsWrapper", void 0);
+    GridSerializer = __decorate([
+        context_1.Bean("gridSerializer"), 
+        __metadata('design:paramtypes', [])
+    ], GridSerializer);
     return GridSerializer;
 }());
-__decorate([
-    context_1.Autowired('displayedGroupCreator'),
-    __metadata("design:type", displayedGroupCreator_1.DisplayedGroupCreator)
-], GridSerializer.prototype, "displayedGroupCreator", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], GridSerializer.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('rowModel'),
-    __metadata("design:type", Object)
-], GridSerializer.prototype, "rowModel", void 0);
-__decorate([
-    context_1.Autowired('floatingRowModel'),
-    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-], GridSerializer.prototype, "floatingRowModel", void 0);
-__decorate([
-    context_1.Autowired('selectionController'),
-    __metadata("design:type", selectionController_1.SelectionController)
-], GridSerializer.prototype, "selectionController", void 0);
-__decorate([
-    context_1.Autowired('balancedColumnTreeBuilder'),
-    __metadata("design:type", balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
-], GridSerializer.prototype, "balancedColumnTreeBuilder", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], GridSerializer.prototype, "gridOptionsWrapper", void 0);
-GridSerializer = __decorate([
-    context_1.Bean("gridSerializer")
-], GridSerializer);
 exports.GridSerializer = GridSerializer;
-var RowType;
 (function (RowType) {
     RowType[RowType["HEADER_GROUPING"] = 0] = "HEADER_GROUPING";
     RowType[RowType["HEADER"] = 1] = "HEADER";
     RowType[RowType["BODY"] = 2] = "BODY";
-})(RowType = exports.RowType || (exports.RowType = {}));
+})(exports.RowType || (exports.RowType = {}));
+var RowType = exports.RowType;

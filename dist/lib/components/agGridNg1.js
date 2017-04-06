@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var grid_1 = require("../grid");
 function initialiseAgGridWithAngular1(angular) {
     var angularModule = angular.module("agGrid", []);

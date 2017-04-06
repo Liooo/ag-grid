@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var filterManager_1 = require("../filter/filterManager");
 var FilterService = (function () {
@@ -71,13 +70,14 @@ var FilterService = (function () {
         });
         rowNode.allChildrenCount = allChildrenCount;
     };
+    __decorate([
+        context_1.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], FilterService.prototype, "filterManager", void 0);
+    FilterService = __decorate([
+        context_1.Bean("filterService"), 
+        __metadata('design:paramtypes', [])
+    ], FilterService);
     return FilterService;
 }());
-__decorate([
-    context_1.Autowired('filterManager'),
-    __metadata("design:type", filterManager_1.FilterManager)
-], FilterService.prototype, "filterManager", void 0);
-FilterService = __decorate([
-    context_1.Bean("filterService")
-], FilterService);
 exports.FilterService = FilterService;

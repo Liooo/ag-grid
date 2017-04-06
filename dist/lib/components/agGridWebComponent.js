@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var componentUtil_1 = require("./componentUtil");
 var grid_1 = require("../grid");
 var registered = false;

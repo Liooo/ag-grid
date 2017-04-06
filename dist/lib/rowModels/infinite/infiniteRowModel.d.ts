@@ -5,14 +5,14 @@ import { RowNode } from "../../entities/rowNode";
 import { IRowModel } from "../../interfaces/iRowModel";
 import { IDatasource } from "../iDatasource";
 import { BeanStub } from "../../context/beanStub";
-export declare class InfinitePageRowModel extends BeanStub implements IRowModel {
+export declare class InfiniteRowModel extends BeanStub implements IRowModel {
     private gridOptionsWrapper;
     private filterManager;
     private sortController;
     private selectionController;
     private eventService;
     private context;
-    private virtualPageCache;
+    private infiniteCache;
     private datasource;
     getRowBounds(index: number): {
         rowTop: number;
@@ -42,10 +42,10 @@ export declare class InfinitePageRowModel extends BeanStub implements IRowModel 
     removeItems(rowNodes: RowNode[], skipRefresh: boolean): void;
     addItems(items: any[], skipRefresh: boolean): void;
     isRowPresent(rowNode: RowNode): boolean;
-    refreshVirtualPageCache(): void;
-    purgeVirtualPageCache(): void;
+    refreshCache(): void;
+    purgeCache(): void;
     getVirtualRowCount(): number;
     isMaxRowFound(): boolean;
     setVirtualRowCount(rowCount: number, maxRowFound?: boolean): void;
-    getVirtualPageState(): any;
+    getPageState(): any;
 }

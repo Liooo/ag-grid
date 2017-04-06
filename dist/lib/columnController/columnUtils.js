@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var columnGroup_1 = require("../entities/columnGroup");
 var originalColumnGroup_1 = require("../entities/originalColumnGroup");
@@ -140,13 +139,14 @@ var ColumnUtils = (function () {
             callback(child);
         });
     };
+    __decorate([
+        context_2.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], ColumnUtils.prototype, "gridOptionsWrapper", void 0);
+    ColumnUtils = __decorate([
+        context_1.Bean('columnUtils'), 
+        __metadata('design:paramtypes', [])
+    ], ColumnUtils);
     return ColumnUtils;
 }());
-__decorate([
-    context_2.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], ColumnUtils.prototype, "gridOptionsWrapper", void 0);
-ColumnUtils = __decorate([
-    context_1.Bean('columnUtils')
-], ColumnUtils);
 exports.ColumnUtils = ColumnUtils;

@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,10 +19,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../widgets/component");
 var rowNode_1 = require("../entities/rowNode");
-var utils_1 = require("../utils");
+var utils_1 = require('../utils');
 var context_1 = require("../context/context");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var svgFactory_1 = require("../svgFactory");
@@ -39,7 +33,7 @@ var svgFactory = svgFactory_1.SvgFactory.getInstance();
 var CheckboxSelectionComponent = (function (_super) {
     __extends(CheckboxSelectionComponent, _super);
     function CheckboxSelectionComponent() {
-        return _super.call(this, "<span class=\"ag-selection-checkbox\"/>") || this;
+        _super.call(this, "<span class=\"ag-selection-checkbox\"/>");
     }
     CheckboxSelectionComponent.prototype.createAndAddIcons = function () {
         this.eCheckedIcon = utils_1.Utils.createIconNoSpan('checkboxChecked', this.gridOptionsWrapper, null, svgFactory.createCheckboxCheckedIcon);
@@ -109,22 +103,22 @@ var CheckboxSelectionComponent = (function (_super) {
         };
         return params;
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], CheckboxSelectionComponent.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], CheckboxSelectionComponent.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('gridApi'), 
+        __metadata('design:type', gridApi_1.GridApi)
+    ], CheckboxSelectionComponent.prototype, "gridApi", void 0);
+    __decorate([
+        context_1.Autowired('columnApi'), 
+        __metadata('design:type', columnController_1.ColumnApi)
+    ], CheckboxSelectionComponent.prototype, "columnApi", void 0);
     return CheckboxSelectionComponent;
 }(component_1.Component));
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], CheckboxSelectionComponent.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], CheckboxSelectionComponent.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('gridApi'),
-    __metadata("design:type", gridApi_1.GridApi)
-], CheckboxSelectionComponent.prototype, "gridApi", void 0);
-__decorate([
-    context_1.Autowired('columnApi'),
-    __metadata("design:type", columnController_1.ColumnApi)
-], CheckboxSelectionComponent.prototype, "columnApi", void 0);
 exports.CheckboxSelectionComponent = CheckboxSelectionComponent;

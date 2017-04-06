@@ -4,7 +4,8 @@
 import { Component } from "../../widgets/component";
 import { Column } from "../../entities/column";
 import { IComponent } from "../../interfaces/iComponent";
-import { EventService } from "../../eventService";
+import { ColumnApi } from "../../columnController/columnController";
+import { GridApi } from "../../gridApi";
 export interface IHeaderParams {
     column: Column;
     displayName: string;
@@ -13,7 +14,9 @@ export interface IHeaderParams {
     showColumnMenu: (source: HTMLElement) => void;
     progressSort: (multiSort?: boolean) => void;
     setSort: (sort: string, multiSort?: boolean) => void;
-    eventService: EventService;
+    columnApi: ColumnApi;
+    api: GridApi;
+    context: any;
 }
 export interface IHeader {
 }

@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 /**
  * There are many instances of this component covering each of the areas a row can be entered

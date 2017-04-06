@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var expressionService_1 = require("../expressionService");
 var StylingService = (function () {
@@ -68,13 +67,14 @@ var StylingService = (function () {
             }
         }
     };
+    __decorate([
+        context_1.Autowired('expressionService'), 
+        __metadata('design:type', expressionService_1.ExpressionService)
+    ], StylingService.prototype, "expressionService", void 0);
+    StylingService = __decorate([
+        context_1.Bean('stylingService'), 
+        __metadata('design:paramtypes', [])
+    ], StylingService);
     return StylingService;
 }());
-__decorate([
-    context_1.Autowired('expressionService'),
-    __metadata("design:type", expressionService_1.ExpressionService)
-], StylingService.prototype, "expressionService", void 0);
-StylingService = __decorate([
-    context_1.Bean('stylingService')
-], StylingService);
 exports.StylingService = StylingService;

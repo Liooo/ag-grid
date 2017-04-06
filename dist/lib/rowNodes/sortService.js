@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var sortController_1 = require("../sortController");
 var utils_1 = require("../utils");
@@ -75,17 +74,18 @@ var SortService = (function () {
             child.childIndex = index;
         });
     };
+    __decorate([
+        context_1.Autowired('sortController'), 
+        __metadata('design:type', sortController_1.SortController)
+    ], SortService.prototype, "sortController", void 0);
+    __decorate([
+        context_1.Autowired('valueService'), 
+        __metadata('design:type', valueService_1.ValueService)
+    ], SortService.prototype, "valueService", void 0);
+    SortService = __decorate([
+        context_1.Bean('sortService'), 
+        __metadata('design:paramtypes', [])
+    ], SortService);
     return SortService;
 }());
-__decorate([
-    context_1.Autowired('sortController'),
-    __metadata("design:type", sortController_1.SortController)
-], SortService.prototype, "sortController", void 0);
-__decorate([
-    context_1.Autowired('valueService'),
-    __metadata("design:type", valueService_1.ValueService)
-], SortService.prototype, "valueService", void 0);
-SortService = __decorate([
-    context_1.Bean('sortService')
-], SortService);
 exports.SortService = SortService;

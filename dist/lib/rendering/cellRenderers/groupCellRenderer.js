@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var svgFactory_1 = require("../../svgFactory");
 var gridOptionsWrapper_1 = require("../../gridOptionsWrapper");
 var expressionService_1 = require("../../expressionService");
@@ -45,7 +39,7 @@ var svgFactory = svgFactory_1.SvgFactory.getInstance();
 var GroupCellRenderer = (function (_super) {
     __extends(GroupCellRenderer, _super);
     function GroupCellRenderer() {
-        return _super.call(this, GroupCellRenderer.TEMPLATE) || this;
+        _super.call(this, GroupCellRenderer.TEMPLATE);
     }
     GroupCellRenderer.prototype.init = function (params) {
         this.setParams(params);
@@ -237,18 +231,20 @@ var GroupCellRenderer = (function (_super) {
         if (utils_1.Utils.missing(columnOfGroupedCol)) {
             columnOfGroupedCol = params.column;
         }
-        var colDefOfGroupedCol = columnOfGroupedCol.getColDef();
         var groupName = this.getGroupName();
         var valueFormatted = this.valueFormatterService.formatValue(columnOfGroupedCol, params.node, params.scope, params.rowIndex, groupName);
+        var groupedColCellRenderer = columnOfGroupedCol.getCellRenderer();
         // reuse the params but change the value
-        if (colDefOfGroupedCol && typeof colDefOfGroupedCol.cellRenderer === 'function') {
+        if (typeof groupedColCellRenderer === 'function') {
             // reuse the params but change the value
             params.value = groupName;
             params.valueFormatted = valueFormatted;
+            var colDefOfGroupedCol = columnOfGroupedCol.getColDef();
+            var groupedColCellRendererParams = colDefOfGroupedCol ? colDefOfGroupedCol.cellRendererParams : null;
             // because we are talking about the different column to the original, any user provided params
             // are for the wrong column, so need to copy them in again.
-            if (colDefOfGroupedCol.cellRendererParams) {
-                utils_1.Utils.assign(params, colDefOfGroupedCol.cellRendererParams);
+            if (groupedColCellRendererParams) {
+                utils_1.Utils.assign(params, groupedColCellRenderer);
             }
             this.cellRendererService.useCellRenderer(colDefOfGroupedCol.cellRenderer, this.eValue, params);
         }
@@ -371,66 +367,66 @@ var GroupCellRenderer = (function (_super) {
             utils_1.Utils.setVisible(this.eLoading, false);
         }
     };
+    GroupCellRenderer.TEMPLATE = '<span>' +
+        '<span class="ag-group-expanded" ref="eExpanded"></span>' +
+        '<span class="ag-group-contracted" ref="eContracted"></span>' +
+        '<span class="ag-group-loading" ref="eLoading"></span>' +
+        '<span class="ag-group-checkbox" ref="eCheckbox"></span>' +
+        '<span class="ag-group-value" ref="eValue"></span>' +
+        '<span class="ag-group-child-count" ref="eChildCount"></span>' +
+        '</span>';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], GroupCellRenderer.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('expressionService'), 
+        __metadata('design:type', expressionService_1.ExpressionService)
+    ], GroupCellRenderer.prototype, "expressionService", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], GroupCellRenderer.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('cellRendererService'), 
+        __metadata('design:type', cellRendererService_1.CellRendererService)
+    ], GroupCellRenderer.prototype, "cellRendererService", void 0);
+    __decorate([
+        context_1.Autowired('valueFormatterService'), 
+        __metadata('design:type', valueFormatterService_1.ValueFormatterService)
+    ], GroupCellRenderer.prototype, "valueFormatterService", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], GroupCellRenderer.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], GroupCellRenderer.prototype, "columnController", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eExpanded'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eExpanded", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eContracted'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eContracted", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eLoading'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eLoading", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eCheckbox'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eCheckbox", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eValue'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eValue", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eChildCount'), 
+        __metadata('design:type', HTMLElement)
+    ], GroupCellRenderer.prototype, "eChildCount", void 0);
     return GroupCellRenderer;
 }(component_1.Component));
-GroupCellRenderer.TEMPLATE = '<span>' +
-    '<span class="ag-group-expanded" ref="eExpanded"></span>' +
-    '<span class="ag-group-contracted" ref="eContracted"></span>' +
-    '<span class="ag-group-loading" ref="eLoading"></span>' +
-    '<span class="ag-group-checkbox" ref="eCheckbox"></span>' +
-    '<span class="ag-group-value" ref="eValue"></span>' +
-    '<span class="ag-group-child-count" ref="eChildCount"></span>' +
-    '</span>';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], GroupCellRenderer.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('expressionService'),
-    __metadata("design:type", expressionService_1.ExpressionService)
-], GroupCellRenderer.prototype, "expressionService", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], GroupCellRenderer.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('cellRendererService'),
-    __metadata("design:type", cellRendererService_1.CellRendererService)
-], GroupCellRenderer.prototype, "cellRendererService", void 0);
-__decorate([
-    context_1.Autowired('valueFormatterService'),
-    __metadata("design:type", valueFormatterService_1.ValueFormatterService)
-], GroupCellRenderer.prototype, "valueFormatterService", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], GroupCellRenderer.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], GroupCellRenderer.prototype, "columnController", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eExpanded'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eExpanded", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eContracted'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eContracted", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eLoading'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eLoading", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eCheckbox'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eCheckbox", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eValue'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eValue", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eChildCount'),
-    __metadata("design:type", HTMLElement)
-], GroupCellRenderer.prototype, "eChildCount", void 0);
 exports.GroupCellRenderer = GroupCellRenderer;

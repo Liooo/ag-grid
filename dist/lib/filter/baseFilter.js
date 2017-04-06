@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../widgets/component");
 var componentAnnotations_1 = require("../widgets/componentAnnotations");
 var context_1 = require("../context/context");
@@ -60,9 +54,8 @@ var DEFAULT_TRANSLATIONS = {
 var BaseFilter = (function (_super) {
     __extends(BaseFilter, _super);
     function BaseFilter() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.filter = 'equals';
-        return _this;
+        _super.apply(this, arguments);
+        this.filter = 'equals';
     }
     BaseFilter.prototype.init = function (params) {
         this.filterParams = params;
@@ -156,39 +149,39 @@ var BaseFilter = (function (_super) {
         var translate = this.gridOptionsWrapper.getLocaleTextFunc();
         return translate(toTranslate, DEFAULT_TRANSLATIONS[toTranslate]);
     };
+    BaseFilter.EQUALS = 'equals';
+    BaseFilter.NOT_EQUAL = 'notEqual';
+    BaseFilter.LESS_THAN = 'lessThan';
+    BaseFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual';
+    BaseFilter.GREATER_THAN = 'greaterThan';
+    BaseFilter.GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual';
+    BaseFilter.IN_RANGE = 'inRange';
+    BaseFilter.CONTAINS = 'contains'; //1;
+    BaseFilter.NOT_CONTAINS = 'notContains'; //1;
+    BaseFilter.STARTS_WITH = 'startsWith'; //4;
+    BaseFilter.ENDS_WITH = 'endsWith'; //5;
+    __decorate([
+        componentAnnotations_1.QuerySelector('#applyPanel'), 
+        __metadata('design:type', HTMLElement)
+    ], BaseFilter.prototype, "eButtonsPanel", void 0);
+    __decorate([
+        componentAnnotations_1.QuerySelector('#applyButton'), 
+        __metadata('design:type', HTMLElement)
+    ], BaseFilter.prototype, "eApplyButton", void 0);
+    __decorate([
+        componentAnnotations_1.QuerySelector('#clearButton'), 
+        __metadata('design:type', HTMLElement)
+    ], BaseFilter.prototype, "eClearButton", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], BaseFilter.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], BaseFilter.prototype, "gridOptionsWrapper", void 0);
     return BaseFilter;
 }(component_1.Component));
-BaseFilter.EQUALS = 'equals';
-BaseFilter.NOT_EQUAL = 'notEqual';
-BaseFilter.LESS_THAN = 'lessThan';
-BaseFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual';
-BaseFilter.GREATER_THAN = 'greaterThan';
-BaseFilter.GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual';
-BaseFilter.IN_RANGE = 'inRange';
-BaseFilter.CONTAINS = 'contains'; //1;
-BaseFilter.NOT_CONTAINS = 'notContains'; //1;
-BaseFilter.STARTS_WITH = 'startsWith'; //4;
-BaseFilter.ENDS_WITH = 'endsWith'; //5;
-__decorate([
-    componentAnnotations_1.QuerySelector('#applyPanel'),
-    __metadata("design:type", HTMLElement)
-], BaseFilter.prototype, "eButtonsPanel", void 0);
-__decorate([
-    componentAnnotations_1.QuerySelector('#applyButton'),
-    __metadata("design:type", HTMLElement)
-], BaseFilter.prototype, "eApplyButton", void 0);
-__decorate([
-    componentAnnotations_1.QuerySelector('#clearButton'),
-    __metadata("design:type", HTMLElement)
-], BaseFilter.prototype, "eClearButton", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], BaseFilter.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], BaseFilter.prototype, "gridOptionsWrapper", void 0);
 exports.BaseFilter = BaseFilter;
 /**
  * Every filter with a dropdown where the user can specify a comparing type against the filter values
@@ -196,7 +189,7 @@ exports.BaseFilter = BaseFilter;
 var ComparableBaseFilter = (function (_super) {
     __extends(ComparableBaseFilter, _super);
     function ComparableBaseFilter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     ComparableBaseFilter.prototype.init = function (params) {
         _super.prototype.init.call(this, params);
@@ -231,12 +224,12 @@ var ComparableBaseFilter = (function (_super) {
         this.filter = filterType;
         this.eTypeSelector.value = filterType;
     };
+    __decorate([
+        componentAnnotations_1.QuerySelector('#filterType'), 
+        __metadata('design:type', HTMLSelectElement)
+    ], ComparableBaseFilter.prototype, "eTypeSelector", void 0);
     return ComparableBaseFilter;
 }(BaseFilter));
-__decorate([
-    componentAnnotations_1.QuerySelector('#filterType'),
-    __metadata("design:type", HTMLSelectElement)
-], ComparableBaseFilter.prototype, "eTypeSelector", void 0);
 exports.ComparableBaseFilter = ComparableBaseFilter;
 /**
  * Comparable filter with scalar underlying values (ie numbers and dates. Strings are not scalar so have to extend
@@ -245,7 +238,7 @@ exports.ComparableBaseFilter = ComparableBaseFilter;
 var ScalarBaseFilter = (function (_super) {
     __extends(ScalarBaseFilter, _super);
     function ScalarBaseFilter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     ScalarBaseFilter.prototype.doesFilterPass = function (params) {
         var value = this.filterParams.valueGetter(params.node);

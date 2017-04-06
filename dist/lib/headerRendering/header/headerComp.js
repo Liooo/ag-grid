@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../../widgets/component");
 var column_1 = require("../../entities/column");
 var utils_1 = require("../../utils");
@@ -40,7 +34,7 @@ var svgFactory = svgFactory_1.SvgFactory.getInstance();
 var HeaderComp = (function (_super) {
     __extends(HeaderComp, _super);
     function HeaderComp() {
-        return _super.call(this, HeaderComp.TEMPLATE) || this;
+        _super.call(this, HeaderComp.TEMPLATE);
     }
     HeaderComp.prototype.init = function (params) {
         this.params = params;
@@ -178,65 +172,65 @@ var HeaderComp = (function (_super) {
         var filterPresent = this.params.column.isFilterActive();
         utils_1.Utils.addOrRemoveCssClass(this.eFilter, 'ag-hidden', !filterPresent);
     };
+    HeaderComp.TEMPLATE = '<div>' +
+        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+        '  <div ref="eLabel" class="ag-header-cell-label">' +
+        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+        '    <span ref="eText" class="ag-header-cell-text"></span>' +
+        '  </div>' +
+        '</div>';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HeaderComp.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('sortController'), 
+        __metadata('design:type', sortController_1.SortController)
+    ], HeaderComp.prototype, "sortController", void 0);
+    __decorate([
+        context_1.Autowired('menuFactory'), 
+        __metadata('design:type', Object)
+    ], HeaderComp.prototype, "menuFactory", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], HeaderComp.prototype, "eventService", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eFilter'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eFilter", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eSortAsc'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eSortAsc", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eSortDesc'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eSortDesc", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eSortNone'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eSortNone", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eSortOrder'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eSortOrder", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eMenu'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eMenu", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eLabel'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eLabel", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eText'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderComp.prototype, "eText", void 0);
     return HeaderComp;
 }(component_1.Component));
-HeaderComp.TEMPLATE = '<div>' +
-    '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
-    '  <div ref="eLabel" class="ag-header-cell-label">' +
-    '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
-    '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
-    '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
-    '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
-    '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
-    '    <span ref="eText" class="ag-header-cell-text"></span>' +
-    '  </div>' +
-    '</div>';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HeaderComp.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('sortController'),
-    __metadata("design:type", sortController_1.SortController)
-], HeaderComp.prototype, "sortController", void 0);
-__decorate([
-    context_1.Autowired('menuFactory'),
-    __metadata("design:type", Object)
-], HeaderComp.prototype, "menuFactory", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], HeaderComp.prototype, "eventService", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eFilter'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eFilter", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eSortAsc'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eSortAsc", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eSortDesc'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eSortDesc", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eSortNone'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eSortNone", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eSortOrder'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eSortOrder", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eMenu'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eMenu", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eLabel'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eLabel", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eText'),
-    __metadata("design:type", HTMLElement)
-], HeaderComp.prototype, "eText", void 0);
 exports.HeaderComp = HeaderComp;

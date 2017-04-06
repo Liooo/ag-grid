@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../widgets/component");
 var context_1 = require("../context/context");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
@@ -39,23 +33,22 @@ var headerWrapperComp_1 = require("./header/headerWrapperComp");
 var headerGroupWrapperComp_1 = require("./headerGroup/headerGroupWrapperComp");
 var filterManager_1 = require("../filter/filterManager");
 var componentProvider_1 = require("../componentProvider");
-var HeaderRowType;
 (function (HeaderRowType) {
     HeaderRowType[HeaderRowType["COLUMN_GROUP"] = 0] = "COLUMN_GROUP";
     HeaderRowType[HeaderRowType["COLUMN"] = 1] = "COLUMN";
     HeaderRowType[HeaderRowType["FLOATING_FILTER"] = 2] = "FLOATING_FILTER";
-})(HeaderRowType = exports.HeaderRowType || (exports.HeaderRowType = {}));
+})(exports.HeaderRowType || (exports.HeaderRowType = {}));
+var HeaderRowType = exports.HeaderRowType;
 var HeaderRowComp = (function (_super) {
     __extends(HeaderRowComp, _super);
     function HeaderRowComp(dept, type, pinned, eRoot, dropTarget) {
-        var _this = _super.call(this, "<div class=\"ag-header-row\"/>") || this;
-        _this.headerElements = {};
-        _this.dept = dept;
-        _this.type = type;
-        _this.pinned = pinned;
-        _this.eRoot = eRoot;
-        _this.dropTarget = dropTarget;
-        return _this;
+        _super.call(this, "<div class=\"ag-header-row\"/>");
+        this.headerElements = {};
+        this.dept = dept;
+        this.type = type;
+        this.pinned = pinned;
+        this.eRoot = eRoot;
+        this.dropTarget = dropTarget;
     }
     HeaderRowComp.prototype.forEachHeaderElement = function (callback) {
         var _this = this;
@@ -230,38 +223,38 @@ var HeaderRowComp = (function (_super) {
         };
         return baseParams;
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HeaderRowComp.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], HeaderRowComp.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], HeaderRowComp.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], HeaderRowComp.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], HeaderRowComp.prototype, "filterManager", void 0);
+    __decorate([
+        context_1.Autowired('componentProvider'), 
+        __metadata('design:type', componentProvider_1.ComponentProvider)
+    ], HeaderRowComp.prototype, "componentProvider", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], HeaderRowComp.prototype, "init", null);
     return HeaderRowComp;
 }(component_1.Component));
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HeaderRowComp.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], HeaderRowComp.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], HeaderRowComp.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], HeaderRowComp.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('filterManager'),
-    __metadata("design:type", filterManager_1.FilterManager)
-], HeaderRowComp.prototype, "filterManager", void 0);
-__decorate([
-    context_1.Autowired('componentProvider'),
-    __metadata("design:type", componentProvider_1.ComponentProvider)
-], HeaderRowComp.prototype, "componentProvider", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], HeaderRowComp.prototype, "init", null);
 exports.HeaderRowComp = HeaderRowComp;
 // remove this in v9, when we take out support for the old headers
 var warningGiven = false;

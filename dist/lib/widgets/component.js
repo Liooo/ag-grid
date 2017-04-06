@@ -5,30 +5,23 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var utils_1 = require("../utils");
 var beanStub_1 = require("../context/beanStub");
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component(template) {
-        var _this = _super.call(this) || this;
-        _this.childComponents = [];
-        _this.annotatedEventListeners = [];
-        _this.visible = true;
+        _super.call(this);
+        this.childComponents = [];
+        this.annotatedEventListeners = [];
+        this.visible = true;
         if (template) {
-            _this.setTemplate(template);
+            this.setTemplate(template);
         }
-        return _this;
     }
     Component.prototype.instantiate = function (context) {
         this.instantiateRecurse(this.getGui(), context);
@@ -99,7 +92,6 @@ var Component = (function (_super) {
                 }
             }
             else {
-                // put debug msg in here if query selector fails???
             }
         });
     };
@@ -207,7 +199,7 @@ var Component = (function (_super) {
     Component.prototype.getRefElement = function (refName) {
         return this.queryForHtmlElement('[ref="' + refName + '"]');
     };
+    Component.EVENT_VISIBLE_CHANGED = 'visibleChanged';
     return Component;
 }(beanStub_1.BeanStub));
-Component.EVENT_VISIBLE_CHANGED = 'visibleChanged';
 exports.Component = Component;

@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function QuerySelector(selector) {
     return querySelectorFunc.bind(this, selector);
 }

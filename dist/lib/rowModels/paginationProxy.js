@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var beanStub_1 = require("../context/beanStub");
 var eventService_1 = require("../eventService");
 var events_1 = require("../events");
@@ -42,7 +36,7 @@ exports.RowBounds = RowBounds;
 var PaginationAutoPageSizeService = (function (_super) {
     __extends(PaginationAutoPageSizeService, _super);
     function PaginationAutoPageSizeService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     PaginationAutoPageSizeService.prototype.notActive = function () {
         return !this.gridOptionsWrapper.isPaginationAutoPageSize();
@@ -72,43 +66,43 @@ var PaginationAutoPageSizeService = (function (_super) {
             this.gridOptionsWrapper.setProperty('paginationPageSize', newPageSize);
         }
     };
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], PaginationAutoPageSizeService.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], PaginationAutoPageSizeService.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], PaginationAutoPageSizeService.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('scrollVisibleService'), 
+        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+    ], PaginationAutoPageSizeService.prototype, "scrollVisibleService", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], PaginationAutoPageSizeService.prototype, "postConstruct", null);
+    PaginationAutoPageSizeService = __decorate([
+        context_1.Bean('paginationAutoPageSizeService'), 
+        __metadata('design:paramtypes', [])
+    ], PaginationAutoPageSizeService);
     return PaginationAutoPageSizeService;
 }(beanStub_1.BeanStub));
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], PaginationAutoPageSizeService.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], PaginationAutoPageSizeService.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], PaginationAutoPageSizeService.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('scrollVisibleService'),
-    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-], PaginationAutoPageSizeService.prototype, "scrollVisibleService", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PaginationAutoPageSizeService.prototype, "postConstruct", null);
-PaginationAutoPageSizeService = __decorate([
-    context_1.Bean('paginationAutoPageSizeService')
-], PaginationAutoPageSizeService);
 exports.PaginationAutoPageSizeService = PaginationAutoPageSizeService;
 var PaginationProxy = (function (_super) {
     __extends(PaginationProxy, _super);
     function PaginationProxy() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.currentPage = 0;
-        _this.topRowIndex = 0;
-        _this.bottomRowIndex = 0;
-        _this.pixelOffset = 0;
-        return _this;
+        _super.apply(this, arguments);
+        this.currentPage = 0;
+        this.topRowIndex = 0;
+        this.bottomRowIndex = 0;
+        this.pixelOffset = 0;
     }
     PaginationProxy.prototype.postConstruct = function () {
         this.active = this.gridOptionsWrapper.isPagination();
@@ -272,31 +266,32 @@ var PaginationProxy = (function (_super) {
         this.bottomRowBounds = this.rowModel.getRowBounds(this.bottomRowIndex);
         this.pixelOffset = utils_1._.exists(this.topRowBounds) ? this.topRowBounds.rowTop : 0;
     };
+    __decorate([
+        context_1.Autowired('rowModel'), 
+        __metadata('design:type', Object)
+    ], PaginationProxy.prototype, "rowModel", void 0);
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], PaginationProxy.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], PaginationProxy.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], PaginationProxy.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], PaginationProxy.prototype, "postConstruct", null);
+    PaginationProxy = __decorate([
+        context_1.Bean('paginationProxy'), 
+        __metadata('design:paramtypes', [])
+    ], PaginationProxy);
     return PaginationProxy;
 }(beanStub_1.BeanStub));
-__decorate([
-    context_1.Autowired('rowModel'),
-    __metadata("design:type", Object)
-], PaginationProxy.prototype, "rowModel", void 0);
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], PaginationProxy.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], PaginationProxy.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], PaginationProxy.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PaginationProxy.prototype, "postConstruct", null);
-PaginationProxy = __decorate([
-    context_1.Bean('paginationProxy')
-], PaginationProxy);
 exports.PaginationProxy = PaginationProxy;

@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var columnGroup_1 = require("./columnGroup");
 var column_1 = require("./column");
 var eventService_1 = require("../eventService");
@@ -106,7 +105,7 @@ var OriginalColumnGroup = (function () {
     OriginalColumnGroup.prototype.removeEventListener = function (eventType, listener) {
         this.localEventService.removeEventListener(eventType, listener);
     };
+    OriginalColumnGroup.EVENT_EXPANDED_CHANGED = 'expandedChanged';
     return OriginalColumnGroup;
 }());
-OriginalColumnGroup.EVENT_EXPANDED_CHANGED = 'expandedChanged';
 exports.OriginalColumnGroup = OriginalColumnGroup;

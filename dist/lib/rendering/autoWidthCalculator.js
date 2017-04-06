@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var rowRenderer_1 = require("./rowRenderer");
 var gridPanel_1 = require("../gridPanel/gridPanel");
 var context_1 = require("../context/context");
@@ -110,25 +109,26 @@ var AutoWidthCalculator = (function () {
         eCloneParent.appendChild(eCellClone);
         eDummyContainer.appendChild(eCloneParent);
     };
+    __decorate([
+        context_2.Autowired('rowRenderer'), 
+        __metadata('design:type', rowRenderer_1.RowRenderer)
+    ], AutoWidthCalculator.prototype, "rowRenderer", void 0);
+    __decorate([
+        context_2.Autowired('headerRenderer'), 
+        __metadata('design:type', headerRenderer_1.HeaderRenderer)
+    ], AutoWidthCalculator.prototype, "headerRenderer", void 0);
+    __decorate([
+        context_2.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], AutoWidthCalculator.prototype, "gridPanel", void 0);
+    __decorate([
+        context_2.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], AutoWidthCalculator.prototype, "gridOptionsWrapper", void 0);
+    AutoWidthCalculator = __decorate([
+        context_1.Bean('autoWidthCalculator'), 
+        __metadata('design:paramtypes', [])
+    ], AutoWidthCalculator);
     return AutoWidthCalculator;
 }());
-__decorate([
-    context_2.Autowired('rowRenderer'),
-    __metadata("design:type", rowRenderer_1.RowRenderer)
-], AutoWidthCalculator.prototype, "rowRenderer", void 0);
-__decorate([
-    context_2.Autowired('headerRenderer'),
-    __metadata("design:type", headerRenderer_1.HeaderRenderer)
-], AutoWidthCalculator.prototype, "headerRenderer", void 0);
-__decorate([
-    context_2.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], AutoWidthCalculator.prototype, "gridPanel", void 0);
-__decorate([
-    context_2.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], AutoWidthCalculator.prototype, "gridOptionsWrapper", void 0);
-AutoWidthCalculator = __decorate([
-    context_1.Bean('autoWidthCalculator')
-], AutoWidthCalculator);
 exports.AutoWidthCalculator = AutoWidthCalculator;

@@ -5,8 +5,7 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("./utils");
+var utils_1 = require('./utils');
 function defaultGroupComparator(valueA, valueB, nodeA, nodeB) {
     var nodeAIsGroup = utils_1.Utils.exists(nodeA) && nodeA.group;
     var nodeBIsGroup = utils_1.Utils.exists(nodeB) && nodeB.group;

@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../../context/context");
 var gridOptionsWrapper_1 = require("../../gridOptionsWrapper");
 var sortService_1 = require("../../rowNodes/sortService");
@@ -30,17 +29,18 @@ var SortStage = (function () {
             this.sortService.sortAccordingToColumnsState(params.rowNode);
         }
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], SortStage.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('sortService'), 
+        __metadata('design:type', sortService_1.SortService)
+    ], SortStage.prototype, "sortService", void 0);
+    SortStage = __decorate([
+        context_1.Bean('sortStage'), 
+        __metadata('design:paramtypes', [])
+    ], SortStage);
     return SortStage;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], SortStage.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('sortService'),
-    __metadata("design:type", sortService_1.SortService)
-], SortStage.prototype, "sortService", void 0);
-SortStage = __decorate([
-    context_1.Bean('sortStage')
-], SortStage);
 exports.SortStage = SortStage;

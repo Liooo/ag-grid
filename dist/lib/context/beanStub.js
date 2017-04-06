@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var eventService_1 = require("../eventService");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var BeanStub = (function () {

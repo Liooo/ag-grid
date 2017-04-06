@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../../widgets/component");
 var svgFactory_1 = require("../../svgFactory");
 var utils_1 = require("../../utils");
@@ -38,7 +32,7 @@ var svgFactory = svgFactory_1.SvgFactory.getInstance();
 var HeaderGroupComp = (function (_super) {
     __extends(HeaderGroupComp, _super);
     function HeaderGroupComp() {
-        return _super.call(this, HeaderGroupComp.TEMPLATE) || this;
+        _super.call(this, HeaderGroupComp.TEMPLATE);
     }
     HeaderGroupComp.prototype.init = function (params) {
         this.params = params;
@@ -100,27 +94,27 @@ var HeaderGroupComp = (function (_super) {
             eInnerText.innerHTML = this.params.displayName;
         }
     };
+    HeaderGroupComp.TEMPLATE = "<div class=\"ag-header-group-cell-label\">" +
+        "<span ref=\"agLabel\" class=\"ag-header-group-text\"></span>" +
+        "<span ref=\"agOpened\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-expanded\"></span>" +
+        "<span ref=\"agClosed\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-collapsed\"></span>" +
+        "</div>";
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], HeaderGroupComp.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HeaderGroupComp.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('agOpened'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderGroupComp.prototype, "eOpenIcon", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('agClosed'), 
+        __metadata('design:type', HTMLElement)
+    ], HeaderGroupComp.prototype, "eCloseIcon", void 0);
     return HeaderGroupComp;
 }(component_1.Component));
-HeaderGroupComp.TEMPLATE = "<div class=\"ag-header-group-cell-label\">" +
-    "<span ref=\"agLabel\" class=\"ag-header-group-text\"></span>" +
-    "<span ref=\"agOpened\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-expanded\"></span>" +
-    "<span ref=\"agClosed\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-collapsed\"></span>" +
-    "</div>";
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], HeaderGroupComp.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HeaderGroupComp.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('agOpened'),
-    __metadata("design:type", HTMLElement)
-], HeaderGroupComp.prototype, "eOpenIcon", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('agClosed'),
-    __metadata("design:type", HTMLElement)
-], HeaderGroupComp.prototype, "eCloseIcon", void 0);
 exports.HeaderGroupComp = HeaderGroupComp;

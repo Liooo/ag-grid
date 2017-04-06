@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var logger_1 = require("../logger");
 var utils_1 = require("../utils");
@@ -216,33 +215,34 @@ var DragService = (function () {
         this.dragEndFunctions.forEach(function (func) { return func(); });
         this.dragEndFunctions.length = 0;
     };
+    __decorate([
+        context_1.Autowired('loggerFactory'), 
+        __metadata('design:type', logger_1.LoggerFactory)
+    ], DragService.prototype, "loggerFactory", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], DragService.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], DragService.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], DragService.prototype, "init", null);
+    __decorate([
+        context_1.PreDestroy, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], DragService.prototype, "destroy", null);
+    DragService = __decorate([
+        context_1.Bean('dragService'), 
+        __metadata('design:paramtypes', [])
+    ], DragService);
     return DragService;
 }());
-__decorate([
-    context_1.Autowired('loggerFactory'),
-    __metadata("design:type", logger_1.LoggerFactory)
-], DragService.prototype, "loggerFactory", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], DragService.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], DragService.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], DragService.prototype, "init", null);
-__decorate([
-    context_1.PreDestroy,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], DragService.prototype, "destroy", null);
-DragService = __decorate([
-    context_1.Bean('dragService')
-], DragService);
 exports.DragService = DragService;

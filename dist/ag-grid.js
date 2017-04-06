@@ -79,7 +79,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var grid_1 = __webpack_require__(2);
 	var gridApi_1 = __webpack_require__(11);
 	var events_1 = __webpack_require__(10);
@@ -146,7 +145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var popupService_1 = __webpack_require__(47);
 	var gridRow_1 = __webpack_require__(36);
 	var inMemoryRowModel_1 = __webpack_require__(113);
-	var infinitePageRowModel_1 = __webpack_require__(110);
+	var infiniteRowModel_1 = __webpack_require__(110);
 	var animateSlideCellRenderer_1 = __webpack_require__(74);
 	var cellEditorFactory_1 = __webpack_require__(66);
 	var popupEditorWrapper_1 = __webpack_require__(69);
@@ -170,8 +169,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var headerRowComp_1 = __webpack_require__(87);
 	var animateShowChangeCellRenderer_1 = __webpack_require__(75);
 	var inMemoryNodeManager_1 = __webpack_require__(114);
-	var infinitePageCache_1 = __webpack_require__(111);
-	var infinitePage_1 = __webpack_require__(112);
+	var infiniteCache_1 = __webpack_require__(111);
+	var infiniteBlock_1 = __webpack_require__(112);
 	var baseFrameworkFactory_1 = __webpack_require__(115);
 	var methodNotImplementedException_1 = __webpack_require__(80);
 	var touchListener_1 = __webpack_require__(57);
@@ -282,10 +281,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    exports.InMemoryNodeManager = inMemoryNodeManager_1.InMemoryNodeManager;
 	    // rowControllers
 	    exports.FloatingRowModel = floatingRowModel_1.FloatingRowModel;
-	    exports.VirtualPageRowModel = infinitePageRowModel_1.InfinitePageRowModel;
-	    exports.VirtualPageCache = infinitePageCache_1.InfinitePageCache;
-	    exports.VirtualPage = infinitePage_1.InfinitePage;
-	    //styling
+	    exports.InfiniteRowModel = infiniteRowModel_1.InfiniteRowModel;
+	    exports.RowNodeCache = infiniteCache_1.RowNodeCache;
+	    exports.InfiniteCache = infiniteCache_1.InfiniteCache;
+	    exports.RowNodeBlock = infiniteBlock_1.RowNodeBlock;
+	    exports.InfiniteBlock = infiniteBlock_1.InfiniteBlock;
+	    // styling
 	    exports.StylingService = stylingService_1.StylingService;
 	    // widgets
 	    exports.AgCheckbox = agCheckbox_1.AgCheckbox;
@@ -340,7 +341,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var floatingRowModel_1 = __webpack_require__(27);
 	var selectionController_1 = __webpack_require__(29);
@@ -380,7 +380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var focusService_1 = __webpack_require__(44);
 	var cellEditorFactory_1 = __webpack_require__(66);
 	var events_1 = __webpack_require__(10);
-	var infinitePageRowModel_1 = __webpack_require__(110);
+	var infiniteRowModel_1 = __webpack_require__(110);
 	var inMemoryRowModel_1 = __webpack_require__(113);
 	var cellRendererFactory_1 = __webpack_require__(73);
 	var cellRendererService_1 = __webpack_require__(77);
@@ -492,16 +492,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Grid.prototype.destroy = function () {
 	        this.context.destroy();
 	    };
+	    // the default is InMemoryRowModel, which is also used for pagination.
+	    // the enterprise adds viewport to this list.
+	    Grid.RowModelClasses = {
+	        virtual: infiniteRowModel_1.InfiniteRowModel,
+	        infinite: infiniteRowModel_1.InfiniteRowModel,
+	        pagination: inMemoryRowModel_1.InMemoryRowModel,
+	        normal: inMemoryRowModel_1.InMemoryRowModel
+	    };
 	    return Grid;
 	}());
-	// the default is InMemoryRowModel, which is also used for pagination.
-	// the enterprise adds viewport to this list.
-	Grid.RowModelClasses = {
-	    virtual: infinitePageRowModel_1.InfinitePageRowModel,
-	    infinite: infinitePageRowModel_1.InfinitePageRowModel,
-	    pagination: inMemoryRowModel_1.InMemoryRowModel,
-	    normal: inMemoryRowModel_1.InMemoryRowModel
-	};
 	exports.Grid = Grid;
 
 
@@ -528,7 +528,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var constants_1 = __webpack_require__(8);
 	var componentUtil_1 = __webpack_require__(9);
@@ -560,7 +559,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return defaultValue;
 	    }
 	}
-	var GridOptionsWrapper = GridOptionsWrapper_1 = (function () {
+	var GridOptionsWrapper = (function () {
 	    function GridOptionsWrapper() {
 	        this.propertyEventService = new eventService_1.EventService();
 	        this.domDataKey = '__AG_' + Math.random().toString();
@@ -838,15 +837,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    GridOptionsWrapper.prototype.getMinColWidth = function () {
-	        if (this.gridOptions.minColWidth > GridOptionsWrapper_1.MIN_COL_WIDTH) {
+	        if (this.gridOptions.minColWidth > GridOptionsWrapper.MIN_COL_WIDTH) {
 	            return this.gridOptions.minColWidth;
 	        }
 	        else {
-	            return GridOptionsWrapper_1.MIN_COL_WIDTH;
+	            return GridOptionsWrapper.MIN_COL_WIDTH;
 	        }
 	    };
 	    GridOptionsWrapper.prototype.getMaxColWidth = function () {
-	        if (this.gridOptions.maxColWidth > GridOptionsWrapper_1.MIN_COL_WIDTH) {
+	        if (this.gridOptions.maxColWidth > GridOptionsWrapper.MIN_COL_WIDTH) {
 	            return this.gridOptions.maxColWidth;
 	        }
 	        else {
@@ -854,7 +853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    GridOptionsWrapper.prototype.getColWidth = function () {
-	        if (typeof this.gridOptions.colWidth !== 'number' || this.gridOptions.colWidth < GridOptionsWrapper_1.MIN_COL_WIDTH) {
+	        if (typeof this.gridOptions.colWidth !== 'number' || this.gridOptions.colWidth < GridOptionsWrapper.MIN_COL_WIDTH) {
 	            return 200;
 	        }
 	        else {
@@ -990,53 +989,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridOptionsWrapper.prototype.isNumeric = function (value) {
 	        return !isNaN(value) && typeof value === 'number';
 	    };
+	    GridOptionsWrapper.MIN_COL_WIDTH = 10;
+	    GridOptionsWrapper.PROP_HEADER_HEIGHT = 'headerHeight';
+	    __decorate([
+	        context_1.Autowired('gridOptions'), 
+	        __metadata('design:type', Object)
+	    ], GridOptionsWrapper.prototype, "gridOptions", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GridOptionsWrapper.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], GridOptionsWrapper.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('enterprise'), 
+	        __metadata('design:type', Boolean)
+	    ], GridOptionsWrapper.prototype, "enterprise", void 0);
+	    __decorate([
+	        context_1.Autowired('frameworkFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridOptionsWrapper.prototype, "frameworkFactory", void 0);
+	    __decorate([
+	        __param(0, context_1.Qualifier('gridApi')),
+	        __param(1, context_1.Qualifier('columnApi')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [gridApi_1.GridApi, columnController_1.ColumnApi]), 
+	        __metadata('design:returntype', void 0)
+	    ], GridOptionsWrapper.prototype, "agWire", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridOptionsWrapper.prototype, "destroy", null);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridOptionsWrapper.prototype, "init", null);
+	    GridOptionsWrapper = __decorate([
+	        context_1.Bean('gridOptionsWrapper'), 
+	        __metadata('design:paramtypes', [])
+	    ], GridOptionsWrapper);
 	    return GridOptionsWrapper;
 	}());
-	GridOptionsWrapper.MIN_COL_WIDTH = 10;
-	GridOptionsWrapper.PROP_HEADER_HEIGHT = 'headerHeight';
-	__decorate([
-	    context_1.Autowired('gridOptions'),
-	    __metadata("design:type", Object)
-	], GridOptionsWrapper.prototype, "gridOptions", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GridOptionsWrapper.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], GridOptionsWrapper.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('enterprise'),
-	    __metadata("design:type", Boolean)
-	], GridOptionsWrapper.prototype, "enterprise", void 0);
-	__decorate([
-	    context_1.Autowired('frameworkFactory'),
-	    __metadata("design:type", Object)
-	], GridOptionsWrapper.prototype, "frameworkFactory", void 0);
-	__decorate([
-	    __param(0, context_1.Qualifier('gridApi')), __param(1, context_1.Qualifier('columnApi')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [gridApi_1.GridApi, columnController_1.ColumnApi]),
-	    __metadata("design:returntype", void 0)
-	], GridOptionsWrapper.prototype, "agWire", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridOptionsWrapper.prototype, "destroy", null);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridOptionsWrapper.prototype, "init", null);
-	GridOptionsWrapper = GridOptionsWrapper_1 = __decorate([
-	    context_1.Bean('gridOptionsWrapper')
-	], GridOptionsWrapper);
 	exports.GridOptionsWrapper = GridOptionsWrapper;
-	var GridOptionsWrapper_1;
 
 
 /***/ },
@@ -1062,12 +1062,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var logger_1 = __webpack_require__(5);
 	var utils_1 = __webpack_require__(7);
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
-	var EventService = EventService_1 = (function () {
+	var EventService = (function () {
 	    function EventService() {
 	        this.allListeners = {};
 	        this.globalListeners = [];
@@ -1097,7 +1096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // as the model may need to update before the view works on the info. if you register
 	    // via this method, you get notified before the view parts
 	    EventService.prototype.addModalPriorityEventListener = function (eventType, listener) {
-	        this.addEventListener(eventType + EventService_1.PRIORITY, listener);
+	        this.addEventListener(eventType + EventService.PRIORITY, listener);
 	    };
 	    EventService.prototype.addGlobalListener = function (listener) {
 	        this.globalListeners.push(listener);
@@ -1117,7 +1116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        // console.log(`dispatching ${eventType}: ${event}`);
 	        // this allows the columnController to get events before anyone else
-	        var p1ListenerList = this.getListenerList(eventType + EventService_1.PRIORITY);
+	        var p1ListenerList = this.getListenerList(eventType + EventService.PRIORITY);
 	        p1ListenerList.forEach(function (listener) {
 	            listener(event);
 	        });
@@ -1129,24 +1128,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            listener(eventType, event);
 	        });
 	    };
+	    // this is an old idea niall had, should really take it out, was to do with ordering who gets to process
+	    // events first, to give model and service objects preference over the view
+	    EventService.PRIORITY = '-P1';
+	    __decorate([
+	        __param(0, context_2.Qualifier('loggerFactory')),
+	        __param(1, context_2.Qualifier('globalEventListener')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory, Function]), 
+	        __metadata('design:returntype', void 0)
+	    ], EventService.prototype, "agWire", null);
+	    EventService = __decorate([
+	        context_1.Bean('eventService'), 
+	        __metadata('design:paramtypes', [])
+	    ], EventService);
 	    return EventService;
 	}());
-	// this is an old idea niall had, should really take it out, was to do with ordering who gets to process
-	// events first, to give model and service objects preference over the view
-	EventService.PRIORITY = '-P1';
-	__decorate([
-	    __param(0, context_2.Qualifier('loggerFactory')),
-	    __param(1, context_2.Qualifier('globalEventListener')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory,
-	        Function]),
-	    __metadata("design:returntype", void 0)
-	], EventService.prototype, "agWire", null);
-	EventService = EventService_1 = __decorate([
-	    context_1.Bean('eventService')
-	], EventService);
 	exports.EventService = EventService;
-	var EventService_1;
 
 
 /***/ },
@@ -1172,7 +1170,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
@@ -1185,17 +1182,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    LoggerFactory.prototype.create = function (name) {
 	        return new Logger(name, this.logging);
 	    };
+	    __decorate([
+	        __param(0, context_2.Qualifier('gridOptionsWrapper')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [gridOptionsWrapper_1.GridOptionsWrapper]), 
+	        __metadata('design:returntype', void 0)
+	    ], LoggerFactory.prototype, "setBeans", null);
+	    LoggerFactory = __decorate([
+	        context_1.Bean('loggerFactory'), 
+	        __metadata('design:paramtypes', [])
+	    ], LoggerFactory);
 	    return LoggerFactory;
 	}());
-	__decorate([
-	    __param(0, context_2.Qualifier('gridOptionsWrapper')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [gridOptionsWrapper_1.GridOptionsWrapper]),
-	    __metadata("design:returntype", void 0)
-	], LoggerFactory.prototype, "setBeans", null);
-	LoggerFactory = __decorate([
-	    context_1.Bean('loggerFactory')
-	], LoggerFactory);
 	exports.LoggerFactory = LoggerFactory;
 	var Logger = (function () {
 	    function Logger(name, logging) {
@@ -1223,7 +1221,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var Context = (function () {
 	    function Context(params, logger) {
@@ -1564,7 +1561,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var FUNCTION_STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 	var FUNCTION_ARGUMENT_NAMES = /([^\s,]+)/g;
 	// util class, only used when debugging, for printing time to console
@@ -2108,8 +2104,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return valueA.localeCompare(valueB);
 	            }
 	            catch (e) {
-	                // if something wrong with localeCompare, eg not supported
-	                // by browser, then just continue without using it
 	            }
 	        }
 	        if (valueA < valueB) {
@@ -2577,115 +2571,114 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var Constants = (function () {
 	    function Constants() {
 	    }
+	    Constants.STEP_EVERYTHING = 0;
+	    Constants.STEP_FILTER = 1;
+	    Constants.STEP_SORT = 2;
+	    Constants.STEP_MAP = 3;
+	    Constants.STEP_AGGREGATE = 4;
+	    Constants.STEP_PIVOT = 5;
+	    Constants.STEP_PAGINATE = 6;
+	    Constants.STEP_SET_HEIGHTS = 7;
+	    Constants.ROW_BUFFER_SIZE = 10;
+	    Constants.LAYOUT_INTERVAL = 500;
+	    Constants.KEY_BACKSPACE = 8;
+	    Constants.KEY_TAB = 9;
+	    Constants.KEY_ENTER = 13;
+	    Constants.KEY_SHIFT = 16;
+	    Constants.KEY_ESCAPE = 27;
+	    Constants.KEY_SPACE = 32;
+	    Constants.KEY_LEFT = 37;
+	    Constants.KEY_UP = 38;
+	    Constants.KEY_RIGHT = 39;
+	    Constants.KEY_DOWN = 40;
+	    Constants.KEY_DELETE = 46;
+	    Constants.KEY_A = 65;
+	    Constants.KEY_C = 67;
+	    Constants.KEY_V = 86;
+	    Constants.KEY_D = 68;
+	    Constants.KEY_F2 = 113;
+	    Constants.KEY_PAGE_UP = 33;
+	    Constants.KEY_PAGE_DOWN = 34;
+	    Constants.KEY_PAGE_HOME = 36;
+	    Constants.KEY_PAGE_END = 35;
+	    Constants.KEY_PAGE_UP_NAME = 'pageUp';
+	    Constants.KEY_PAGE_DOWN_NAME = 'pageDown';
+	    Constants.KEY_PAGE_HOME_NAME = 'home';
+	    Constants.KEY_PAGE_END_NAME = 'end';
+	    Constants.KEY_CTRL_UP_NAME = 'ctrlUp';
+	    Constants.KEY_CTRL_LEFT_NAME = 'ctrlLeft';
+	    Constants.KEY_CTRL_RIGHT_NAME = 'ctrlRight';
+	    Constants.KEY_CTRL_DOWN_NAME = 'ctrlDown';
+	    Constants.ROW_MODEL_TYPE_PAGINATION = 'pagination';
+	    Constants.ROW_MODEL_TYPE_VIRTUAL_DEPRECATED = 'virtual';
+	    Constants.ROW_MODEL_TYPE_INFINITE = 'infinite';
+	    Constants.ROW_MODEL_TYPE_VIEWPORT = 'viewport';
+	    Constants.ROW_MODEL_TYPE_NORMAL = 'normal';
+	    Constants.ROW_MODEL_TYPE_ENTERPRISE = 'enterprise';
+	    Constants.ALWAYS = 'always';
+	    Constants.ONLY_WHEN_GROUPING = 'onlyWhenGrouping';
+	    Constants.FLOATING_TOP = 'top';
+	    Constants.FLOATING_BOTTOM = 'bottom';
+	    Constants.VERTICAL_SCROLL_KEYS_ID = 'verticalScrollKeys';
+	    Constants.HORIZONTAL_SCROLL_KEYS_ID = 'horizontalScrollKeys';
+	    Constants.DIAGONAL_SCROLL_KEYS_ID = 'diagonalScrollKeys';
+	    Constants.VERTICAL_SCROLL_KEYS = {
+	        id: Constants.VERTICAL_SCROLL_KEYS_ID,
+	        bindings: [{
+	                id: Constants.KEY_PAGE_UP_NAME,
+	                ctlRequired: false,
+	                altRequired: false,
+	                keyCode: Constants.KEY_PAGE_UP
+	            }, {
+	                id: Constants.KEY_PAGE_DOWN_NAME,
+	                ctlRequired: false,
+	                altRequired: false,
+	                keyCode: Constants.KEY_PAGE_DOWN
+	            }, {
+	                id: Constants.KEY_CTRL_UP_NAME,
+	                ctlRequired: true,
+	                altRequired: false,
+	                keyCode: Constants.KEY_UP
+	            }, {
+	                id: Constants.KEY_CTRL_DOWN_NAME,
+	                ctlRequired: true,
+	                altRequired: false,
+	                keyCode: Constants.KEY_DOWN
+	            }]
+	    };
+	    Constants.HORIZONTAL_SCROLL_KEYS = {
+	        id: Constants.HORIZONTAL_SCROLL_KEYS_ID,
+	        bindings: [{
+	                id: Constants.KEY_CTRL_LEFT_NAME,
+	                ctlRequired: true,
+	                altRequired: false,
+	                keyCode: Constants.KEY_LEFT
+	            }, {
+	                id: Constants.KEY_CTRL_RIGHT_NAME,
+	                ctlRequired: true,
+	                altRequired: false,
+	                keyCode: Constants.KEY_RIGHT
+	            }]
+	    };
+	    Constants.DIAGONAL_SCROLL_KEYS = {
+	        id: Constants.DIAGONAL_SCROLL_KEYS_ID,
+	        bindings: [{
+	                id: Constants.KEY_PAGE_HOME_NAME,
+	                ctlRequired: false,
+	                altRequired: false,
+	                keyCode: Constants.KEY_PAGE_HOME
+	            }, {
+	                id: Constants.KEY_PAGE_END_NAME,
+	                ctlRequired: false,
+	                altRequired: false,
+	                keyCode: Constants.KEY_PAGE_END
+	            }]
+	    };
 	    return Constants;
 	}());
-	Constants.STEP_EVERYTHING = 0;
-	Constants.STEP_FILTER = 1;
-	Constants.STEP_SORT = 2;
-	Constants.STEP_MAP = 3;
-	Constants.STEP_AGGREGATE = 4;
-	Constants.STEP_PIVOT = 5;
-	Constants.STEP_PAGINATE = 6;
-	Constants.STEP_SET_HEIGHTS = 7;
-	Constants.ROW_BUFFER_SIZE = 10;
-	Constants.LAYOUT_INTERVAL = 500;
-	Constants.KEY_BACKSPACE = 8;
-	Constants.KEY_TAB = 9;
-	Constants.KEY_ENTER = 13;
-	Constants.KEY_SHIFT = 16;
-	Constants.KEY_ESCAPE = 27;
-	Constants.KEY_SPACE = 32;
-	Constants.KEY_LEFT = 37;
-	Constants.KEY_UP = 38;
-	Constants.KEY_RIGHT = 39;
-	Constants.KEY_DOWN = 40;
-	Constants.KEY_DELETE = 46;
-	Constants.KEY_A = 65;
-	Constants.KEY_C = 67;
-	Constants.KEY_V = 86;
-	Constants.KEY_D = 68;
-	Constants.KEY_F2 = 113;
-	Constants.KEY_PAGE_UP = 33;
-	Constants.KEY_PAGE_DOWN = 34;
-	Constants.KEY_PAGE_HOME = 36;
-	Constants.KEY_PAGE_END = 35;
-	Constants.KEY_PAGE_UP_NAME = 'pageUp';
-	Constants.KEY_PAGE_DOWN_NAME = 'pageDown';
-	Constants.KEY_PAGE_HOME_NAME = 'home';
-	Constants.KEY_PAGE_END_NAME = 'end';
-	Constants.KEY_CTRL_UP_NAME = 'ctrlUp';
-	Constants.KEY_CTRL_LEFT_NAME = 'ctrlLeft';
-	Constants.KEY_CTRL_RIGHT_NAME = 'ctrlRight';
-	Constants.KEY_CTRL_DOWN_NAME = 'ctrlDown';
-	Constants.ROW_MODEL_TYPE_PAGINATION = 'pagination';
-	Constants.ROW_MODEL_TYPE_VIRTUAL_DEPRECATED = 'virtual';
-	Constants.ROW_MODEL_TYPE_INFINITE = 'infinite';
-	Constants.ROW_MODEL_TYPE_VIEWPORT = 'viewport';
-	Constants.ROW_MODEL_TYPE_NORMAL = 'normal';
-	Constants.ROW_MODEL_TYPE_ENTERPRISE = 'enterprise';
-	Constants.ALWAYS = 'always';
-	Constants.ONLY_WHEN_GROUPING = 'onlyWhenGrouping';
-	Constants.FLOATING_TOP = 'top';
-	Constants.FLOATING_BOTTOM = 'bottom';
-	Constants.VERTICAL_SCROLL_KEYS_ID = 'verticalScrollKeys';
-	Constants.HORIZONTAL_SCROLL_KEYS_ID = 'horizontalScrollKeys';
-	Constants.DIAGONAL_SCROLL_KEYS_ID = 'diagonalScrollKeys';
-	Constants.VERTICAL_SCROLL_KEYS = {
-	    id: Constants.VERTICAL_SCROLL_KEYS_ID,
-	    bindings: [{
-	            id: Constants.KEY_PAGE_UP_NAME,
-	            ctlRequired: false,
-	            altRequired: false,
-	            keyCode: Constants.KEY_PAGE_UP
-	        }, {
-	            id: Constants.KEY_PAGE_DOWN_NAME,
-	            ctlRequired: false,
-	            altRequired: false,
-	            keyCode: Constants.KEY_PAGE_DOWN
-	        }, {
-	            id: Constants.KEY_CTRL_UP_NAME,
-	            ctlRequired: true,
-	            altRequired: false,
-	            keyCode: Constants.KEY_UP
-	        }, {
-	            id: Constants.KEY_CTRL_DOWN_NAME,
-	            ctlRequired: true,
-	            altRequired: false,
-	            keyCode: Constants.KEY_DOWN
-	        }]
-	};
-	Constants.HORIZONTAL_SCROLL_KEYS = {
-	    id: Constants.HORIZONTAL_SCROLL_KEYS_ID,
-	    bindings: [{
-	            id: Constants.KEY_CTRL_LEFT_NAME,
-	            ctlRequired: true,
-	            altRequired: false,
-	            keyCode: Constants.KEY_LEFT
-	        }, {
-	            id: Constants.KEY_CTRL_RIGHT_NAME,
-	            ctlRequired: true,
-	            altRequired: false,
-	            keyCode: Constants.KEY_RIGHT
-	        }]
-	};
-	Constants.DIAGONAL_SCROLL_KEYS = {
-	    id: Constants.DIAGONAL_SCROLL_KEYS_ID,
-	    bindings: [{
-	            id: Constants.KEY_PAGE_HOME_NAME,
-	            ctlRequired: false,
-	            altRequired: false,
-	            keyCode: Constants.KEY_PAGE_HOME
-	        }, {
-	            id: Constants.KEY_PAGE_END_NAME,
-	            ctlRequired: false,
-	            altRequired: false,
-	            keyCode: Constants.KEY_PAGE_END
-	        }]
-	};
 	exports.Constants = Constants;
 
 
@@ -2700,7 +2693,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var events_1 = __webpack_require__(10);
 	var utils_1 = __webpack_require__(7);
 	var ComponentUtil = (function () {
@@ -2848,66 +2840,64 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return undefined;
 	        }
 	    };
+	    // all the events are populated in here AFTER this class (at the bottom of the file).
+	    ComponentUtil.EVENTS = [];
+	    ComponentUtil.STRING_PROPERTIES = [
+	        'sortingOrder', 'rowClass', 'rowSelection', 'overlayLoadingTemplate',
+	        'overlayNoRowsTemplate', 'headerCellTemplate', 'quickFilterText', 'rowModelType',
+	        'editType'];
+	    ComponentUtil.OBJECT_PROPERTIES = [
+	        'rowStyle', 'context', 'groupColumnDef', 'localeText', 'icons', 'datasource', 'enterpriseDatasource', 'viewportDatasource',
+	        'groupRowRendererParams', 'aggFuncs', 'fullWidthCellRendererParams', 'defaultColGroupDef', 'defaultColDef', 'defaultExportParams'
+	    ];
+	    ComponentUtil.ARRAY_PROPERTIES = [
+	        'slaveGrids', 'rowData', 'floatingTopRowData', 'floatingBottomRowData', 'columnDefs', 'excelStyles'
+	    ];
+	    ComponentUtil.NUMBER_PROPERTIES = [
+	        'rowHeight', 'rowBuffer', 'colWidth', 'headerHeight', 'groupDefaultExpanded',
+	        'minColWidth', 'maxColWidth', 'viewportRowModelPageSize', 'viewportRowModelBufferSize',
+	        'layoutInterval', 'autoSizePadding', 'maxPagesInCache', 'maxConcurrentDatasourceRequests',
+	        'paginationOverflowSize', 'paginationPageSize', 'infiniteBlockSize', 'infiniteInitialRowCount',
+	        'scrollbarWidth', 'paginationStartPage', 'infiniteBlockSize'
+	    ];
+	    ComponentUtil.BOOLEAN_PROPERTIES = [
+	        'toolPanelSuppressRowGroups', 'toolPanelSuppressValues', 'toolPanelSuppressPivots', 'toolPanelSuppressPivotMode',
+	        'suppressRowClickSelection', 'suppressCellSelection', 'suppressHorizontalScroll', 'debug',
+	        'enableColResize', 'enableCellExpressions', 'enableSorting', 'enableServerSideSorting',
+	        'enableFilter', 'enableServerSideFilter', 'angularCompileRows', 'angularCompileFilters',
+	        'angularCompileHeaders', 'groupSuppressAutoColumn', 'groupSelectsChildren',
+	        'groupIncludeFooter', 'groupUseEntireRow', 'groupSuppressRow', 'groupSuppressBlankHeader', 'forPrint',
+	        'suppressMenuHide', 'rowDeselection', 'unSortIcon', 'suppressMultiSort', 'suppressScrollLag',
+	        'singleClickEdit', 'suppressLoadingOverlay', 'suppressNoRowsOverlay', 'suppressAutoSize',
+	        'suppressParentsInRowNodes', 'showToolPanel', 'suppressColumnMoveAnimation', 'suppressMovableColumns',
+	        'suppressFieldDotNotation', 'enableRangeSelection', 'suppressEnterprise', 'rowGroupPanelShow',
+	        'pivotPanelShow', 'suppressTouch', 'allowContextMenuWithControlKey',
+	        'suppressContextMenu', 'suppressMenuFilterPanel', 'suppressMenuMainPanel', 'suppressMenuColumnPanel',
+	        'enableStatusBar', 'rememberGroupStateWhenNewData', 'enableCellChangeFlash', 'suppressDragLeaveHidesColumns',
+	        'suppressMiddleClickScrolls', 'suppressPreventDefaultOnMouseWheel', 'suppressUseColIdForGroups',
+	        'suppressCopyRowsToClipboard', 'pivotMode', 'suppressAggFuncInHeader', 'suppressColumnVirtualisation',
+	        'suppressFocusAfterRefresh', 'functionsPassive', 'functionsReadOnly', 'suppressRowHoverClass',
+	        'animateRows', 'groupSelectsFiltered', 'groupRemoveSingleChildren', 'enableRtl', 'suppressClickEdit',
+	        'enableGroupEdit', 'embedFullWidthRows', 'suppressTabbing', 'suppressPaginationPanel', 'floatingFilter',
+	        'groupHideOpenParents', 'groupMultiAutoColumn', 'pagination', 'stopEditingWhenGridLosesFocus',
+	        'paginationAutoPageSize'
+	    ];
+	    ComponentUtil.FUNCTION_PROPERTIES = ['headerCellRenderer', 'localeTextFunc', 'groupRowInnerRenderer', 'groupRowInnerRendererFramework',
+	        'dateComponent', 'dateComponentFramework', 'groupRowRenderer', 'groupRowRendererFramework', 'isScrollLag', 'isExternalFilterPresent',
+	        'getRowHeight', 'doesExternalFilterPass', 'getRowClass', 'getRowStyle', 'getHeaderCellTemplate', 'traverseNode',
+	        'getContextMenuItems', 'getMainMenuItems', 'processRowPostCreate', 'processCellForClipboard',
+	        'getNodeChildDetails', 'groupRowAggNodes', 'getRowNodeId', 'isFullWidthCell', 'fullWidthCellRenderer',
+	        'fullWidthCellRendererFramework', 'doesDataFlower', 'processSecondaryColDef', 'processSecondaryColGroupDef',
+	        'getBusinessKeyForNode', 'sendToClipboard', 'navigateToNextCell', 'tabToNextCell',
+	        'processCellFromClipboard', 'getDocument'];
+	    ComponentUtil.ALL_PROPERTIES = ComponentUtil.ARRAY_PROPERTIES
+	        .concat(ComponentUtil.OBJECT_PROPERTIES)
+	        .concat(ComponentUtil.STRING_PROPERTIES)
+	        .concat(ComponentUtil.NUMBER_PROPERTIES)
+	        .concat(ComponentUtil.FUNCTION_PROPERTIES)
+	        .concat(ComponentUtil.BOOLEAN_PROPERTIES);
 	    return ComponentUtil;
 	}());
-	// all the events are populated in here AFTER this class (at the bottom of the file).
-	ComponentUtil.EVENTS = [];
-	ComponentUtil.STRING_PROPERTIES = [
-	    'sortingOrder', 'rowClass', 'rowSelection', 'overlayLoadingTemplate',
-	    'overlayNoRowsTemplate', 'headerCellTemplate', 'quickFilterText', 'rowModelType',
-	    'editType'
-	];
-	ComponentUtil.OBJECT_PROPERTIES = [
-	    'rowStyle', 'context', 'groupColumnDef', 'localeText', 'icons', 'datasource', 'enterpriseDatasource', 'viewportDatasource',
-	    'groupRowRendererParams', 'aggFuncs', 'fullWidthCellRendererParams', 'defaultColGroupDef', 'defaultColDef', 'defaultExportParams'
-	    //,'cellRenderers','cellEditors'
-	];
-	ComponentUtil.ARRAY_PROPERTIES = [
-	    'slaveGrids', 'rowData', 'floatingTopRowData', 'floatingBottomRowData', 'columnDefs', 'excelStyles'
-	];
-	ComponentUtil.NUMBER_PROPERTIES = [
-	    'rowHeight', 'rowBuffer', 'colWidth', 'headerHeight', 'groupDefaultExpanded',
-	    'minColWidth', 'maxColWidth', 'viewportRowModelPageSize', 'viewportRowModelBufferSize',
-	    'layoutInterval', 'autoSizePadding', 'maxPagesInCache', 'maxConcurrentDatasourceRequests',
-	    'paginationOverflowSize', 'paginationPageSize', 'infiniteBlockSize', 'infiniteInitialRowCount',
-	    'scrollbarWidth', 'paginationStartPage', 'infiniteBlockSize'
-	];
-	ComponentUtil.BOOLEAN_PROPERTIES = [
-	    'toolPanelSuppressRowGroups', 'toolPanelSuppressValues', 'toolPanelSuppressPivots', 'toolPanelSuppressPivotMode',
-	    'suppressRowClickSelection', 'suppressCellSelection', 'suppressHorizontalScroll', 'debug',
-	    'enableColResize', 'enableCellExpressions', 'enableSorting', 'enableServerSideSorting',
-	    'enableFilter', 'enableServerSideFilter', 'angularCompileRows', 'angularCompileFilters',
-	    'angularCompileHeaders', 'groupSuppressAutoColumn', 'groupSelectsChildren',
-	    'groupIncludeFooter', 'groupUseEntireRow', 'groupSuppressRow', 'groupSuppressBlankHeader', 'forPrint',
-	    'suppressMenuHide', 'rowDeselection', 'unSortIcon', 'suppressMultiSort', 'suppressScrollLag',
-	    'singleClickEdit', 'suppressLoadingOverlay', 'suppressNoRowsOverlay', 'suppressAutoSize',
-	    'suppressParentsInRowNodes', 'showToolPanel', 'suppressColumnMoveAnimation', 'suppressMovableColumns',
-	    'suppressFieldDotNotation', 'enableRangeSelection', 'suppressEnterprise', 'rowGroupPanelShow',
-	    'pivotPanelShow', 'suppressTouch', 'allowContextMenuWithControlKey',
-	    'suppressContextMenu', 'suppressMenuFilterPanel', 'suppressMenuMainPanel', 'suppressMenuColumnPanel',
-	    'enableStatusBar', 'rememberGroupStateWhenNewData', 'enableCellChangeFlash', 'suppressDragLeaveHidesColumns',
-	    'suppressMiddleClickScrolls', 'suppressPreventDefaultOnMouseWheel', 'suppressUseColIdForGroups',
-	    'suppressCopyRowsToClipboard', 'pivotMode', 'suppressAggFuncInHeader', 'suppressColumnVirtualisation',
-	    'suppressFocusAfterRefresh', 'functionsPassive', 'functionsReadOnly', 'suppressRowHoverClass',
-	    'animateRows', 'groupSelectsFiltered', 'groupRemoveSingleChildren', 'enableRtl', 'suppressClickEdit',
-	    'enableGroupEdit', 'embedFullWidthRows', 'suppressTabbing', 'suppressPaginationPanel', 'floatingFilter',
-	    'groupHideOpenParents', 'groupMultiAutoColumn', 'pagination', 'stopEditingWhenGridLosesFocus',
-	    'paginationAutoPageSize'
-	];
-	ComponentUtil.FUNCTION_PROPERTIES = ['headerCellRenderer', 'localeTextFunc', 'groupRowInnerRenderer', 'groupRowInnerRendererFramework',
-	    'dateComponent', 'dateComponentFramework', 'groupRowRenderer', 'groupRowRendererFramework', 'isScrollLag', 'isExternalFilterPresent',
-	    'getRowHeight', 'doesExternalFilterPass', 'getRowClass', 'getRowStyle', 'getHeaderCellTemplate', 'traverseNode',
-	    'getContextMenuItems', 'getMainMenuItems', 'processRowPostCreate', 'processCellForClipboard',
-	    'getNodeChildDetails', 'groupRowAggNodes', 'getRowNodeId', 'isFullWidthCell', 'fullWidthCellRenderer',
-	    'fullWidthCellRendererFramework', 'doesDataFlower', 'processSecondaryColDef', 'processSecondaryColGroupDef',
-	    'getBusinessKeyForNode', 'sendToClipboard', 'navigateToNextCell', 'tabToNextCell',
-	    'processCellFromClipboard', 'getDocument'];
-	ComponentUtil.ALL_PROPERTIES = ComponentUtil.ARRAY_PROPERTIES
-	    .concat(ComponentUtil.OBJECT_PROPERTIES)
-	    .concat(ComponentUtil.STRING_PROPERTIES)
-	    .concat(ComponentUtil.NUMBER_PROPERTIES)
-	    .concat(ComponentUtil.FUNCTION_PROPERTIES)
-	    .concat(ComponentUtil.BOOLEAN_PROPERTIES);
 	exports.ComponentUtil = ComponentUtil;
 	utils_1.Utils.iterateObject(events_1.Events, function (key, value) {
 	    ComponentUtil.EVENTS.push(value);
@@ -2933,117 +2923,116 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var Events = (function () {
 	    function Events() {
 	    }
+	    /** Everything has changed with the columns. Either complete new set of columns set, or user called setState()*/
+	    Events.EVENT_COLUMN_EVERYTHING_CHANGED = 'columnEverythingChanged';
+	    /** User has set in new columns. */
+	    Events.EVENT_NEW_COLUMNS_LOADED = 'newColumnsLoaded';
+	    /** The pivot mode flag was changed */
+	    Events.EVENT_COLUMN_PIVOT_MODE_CHANGED = 'columnPivotModeChanged';
+	    /** A row group column was added, removed or order changed. */
+	    Events.EVENT_COLUMN_ROW_GROUP_CHANGED = 'columnRowGroupChanged';
+	    /** A pivot column was added, removed or order changed. */
+	    Events.EVENT_COLUMN_PIVOT_CHANGED = 'columnPivotChanged';
+	    /** The list of grid columns has changed. */
+	    Events.EVENT_GRID_COLUMNS_CHANGED = 'gridColumnsChanged';
+	    /** A value column was added, removed or agg function was changed. */
+	    Events.EVENT_COLUMN_VALUE_CHANGED = 'columnValueChanged';
+	    /** A column was moved */
+	    Events.EVENT_COLUMN_MOVED = 'columnMoved';
+	    /** One or more columns was shown / hidden */
+	    Events.EVENT_COLUMN_VISIBLE = 'columnVisible';
+	    /** One or more columns was pinned / unpinned*/
+	    Events.EVENT_COLUMN_PINNED = 'columnPinned';
+	    /** A column group was opened / closed */
+	    Events.EVENT_COLUMN_GROUP_OPENED = 'columnGroupOpened';
+	    /** One or more columns was resized. If just one, the column in the event is set. */
+	    Events.EVENT_COLUMN_RESIZED = 'columnResized';
+	    /** The list of displayed columns has changed, can result from columns open / close, column move, pivot, group, etc */
+	    Events.EVENT_DISPLAYED_COLUMNS_CHANGED = 'displayedColumnsChanged';
+	    /** The list of virtual columns has changed, results from viewport changing */
+	    Events.EVENT_VIRTUAL_COLUMNS_CHANGED = 'virtualColumnsChanged';
+	    /** A row group was opened / closed */
+	    Events.EVENT_ROW_GROUP_OPENED = 'rowGroupOpened';
+	    /** The client has set new data into the grid */
+	    Events.EVENT_ROW_DATA_CHANGED = 'rowDataChanged';
+	    /** The client has set new floating data into the grid */
+	    Events.EVENT_FLOATING_ROW_DATA_CHANGED = 'floatingRowDataChanged';
+	    /** Range selection has changed */
+	    Events.EVENT_RANGE_SELECTION_CHANGED = 'rangeSelectionChanged';
+	    /** Model was updated - grid updates the drawn rows when this happens */
+	    Events.EVENT_MODEL_UPDATED = 'modelUpdated';
+	    Events.EVENT_CELL_CLICKED = 'cellClicked';
+	    Events.EVENT_CELL_DOUBLE_CLICKED = 'cellDoubleClicked';
+	    Events.EVENT_CELL_CONTEXT_MENU = 'cellContextMenu';
+	    Events.EVENT_CELL_VALUE_CHANGED = 'cellValueChanged';
+	    Events.EVENT_ROW_VALUE_CHANGED = 'rowValueChanged';
+	    Events.EVENT_CELL_FOCUSED = 'cellFocused';
+	    Events.EVENT_ROW_SELECTED = 'rowSelected';
+	    Events.EVENT_SELECTION_CHANGED = 'selectionChanged';
+	    Events.EVENT_CELL_MOUSE_OVER = 'cellMouseOver';
+	    Events.EVENT_CELL_MOUSE_OUT = 'cellMouseOut';
+	    Events.EVENT_COLUMN_HOVER_CHANGED = 'columnHoverChanged';
+	    /** 3 events for filtering. The grid LISTENS for filterChanged, and does the filter here. The before and after
+	     * are for the client, if it wants to do something before or after the filter getting applied. */
+	    Events.EVENT_BEFORE_FILTER_CHANGED = 'beforeFilterChanged';
+	    Events.EVENT_FILTER_CHANGED = 'filterChanged';
+	    Events.EVENT_AFTER_FILTER_CHANGED = 'afterFilterChanged';
+	    /** Filter was change but not applied. Only useful if apply buttons are used in filters. */
+	    Events.EVENT_FILTER_MODIFIED = 'filterModified';
+	    /** 3 events for sorting. The grid LISTENS for sortChanged, and does the filter here. The before and after
+	     * are for the client, if it wants to do something before or after the sort getting applied. */
+	    Events.EVENT_BEFORE_SORT_CHANGED = 'beforeSortChanged';
+	    Events.EVENT_SORT_CHANGED = 'sortChanged';
+	    Events.EVENT_AFTER_SORT_CHANGED = 'afterSortChanged';
+	    /** A row was removed from the dom, for any reason. Use to clean up resources (if any) used by the row. */
+	    Events.EVENT_VIRTUAL_ROW_REMOVED = 'virtualRowRemoved';
+	    Events.EVENT_ROW_CLICKED = 'rowClicked';
+	    Events.EVENT_ROW_DOUBLE_CLICKED = 'rowDoubleClicked';
+	    /** Gets called once after the grid has finished initialising. */
+	    Events.EVENT_GRID_READY = 'gridReady';
+	    /** Width of height of the main grid div has changed. Grid listens for this and does layout of grid if it's
+	     * changed, so always filling the space it was given.  */
+	    Events.EVENT_GRID_SIZE_CHANGED = 'gridSizeChanged';
+	    /** The indexes of the rows rendered has changed, eg user has scrolled to a new vertical position. */
+	    Events.EVENT_VIEWPORT_CHANGED = 'viewportChanged';
+	    /** A column drag has started, either resizing a column or moving a column. */
+	    Events.EVENT_DRAG_STARTED = 'dragStarted';
+	    /** A column drag has stopped */
+	    Events.EVENT_DRAG_STOPPED = 'dragStopped';
+	    Events.EVENT_ROW_EDITING_STARTED = 'rowEditingStarted';
+	    Events.EVENT_ROW_EDITING_STOPPED = 'rowEditingStopped';
+	    Events.EVENT_CELL_EDITING_STARTED = 'cellEditingStarted';
+	    Events.EVENT_CELL_EDITING_STOPPED = 'cellEditingStopped';
+	    /** Client added a new row. */
+	    Events.EVENT_ITEMS_ADDED = 'itemsAdded';
+	    /** Client removed a row. */
+	    Events.EVENT_ITEMS_REMOVED = 'itemsRemoved';
+	    /** Main body of grid has scrolled, either horizontally or vertically */
+	    Events.EVENT_BODY_SCROLL = 'bodyScroll';
+	    /** All items from here down are used internally by the grid, not intended for external use. */
+	    Events.EVENT_FLASH_CELLS = 'flashCells';
+	    /** All the events from here down are experimental, should not be documented or used by ag-Grid customers */
+	    Events.EVENT_PAGINATION_CHANGED = 'paginationChanged';
+	    Events.EVENT_BODY_HEIGHT_CHANGED = 'bodyHeightChanged';
+	    Events.DEPRECATED_EVENT_PAGINATION_RESET = 'paginationReset';
+	    Events.DEPRECATED_EVENT_PAGINATION_PAGE_LOADED = 'paginationPageLoaded';
+	    Events.DEPRECATED_EVENT_PAGINATION_PAGE_REQUESTED = 'paginationPageRequested';
+	    // not documented, as it's experimental, don't want people with dependencies on this
+	    Events.EVENT_DISPLAYED_COLUMNS_WIDTH_CHANGED = 'displayedColumnsWidthChanged';
+	    Events.EVENT_SCROLL_VISIBILITY_CHANGED = 'scrollVisibilityChanged';
+	    Events.EVENT_COMPONENT_STATE_CHANGED = 'componentStateChanged';
+	    // these are used for server side group and agg - only used by CS with Viewport Row Model - intention is
+	    // to design these better around server side functions and then release to general public when fully working with
+	    // all the row models.
+	    Events.EVENT_COLUMN_ROW_GROUP_CHANGE_REQUEST = 'columnRowGroupChangeRequest';
+	    Events.EVENT_COLUMN_PIVOT_CHANGE_REQUEST = 'columnPivotChangeRequest';
+	    Events.EVENT_COLUMN_VALUE_CHANGE_REQUEST = 'columnValueChangeRequest';
+	    Events.EVENT_COLUMN_AGG_FUNC_CHANGE_REQUEST = 'columnAggFuncChangeRequest';
 	    return Events;
 	}());
-	/** Everything has changed with the columns. Either complete new set of columns set, or user called setState()*/
-	Events.EVENT_COLUMN_EVERYTHING_CHANGED = 'columnEverythingChanged';
-	/** User has set in new columns. */
-	Events.EVENT_NEW_COLUMNS_LOADED = 'newColumnsLoaded';
-	/** The pivot mode flag was changed */
-	Events.EVENT_COLUMN_PIVOT_MODE_CHANGED = 'columnPivotModeChanged';
-	/** A row group column was added, removed or order changed. */
-	Events.EVENT_COLUMN_ROW_GROUP_CHANGED = 'columnRowGroupChanged';
-	/** A pivot column was added, removed or order changed. */
-	Events.EVENT_COLUMN_PIVOT_CHANGED = 'columnPivotChanged';
-	/** The list of grid columns has changed. */
-	Events.EVENT_GRID_COLUMNS_CHANGED = 'gridColumnsChanged';
-	/** A value column was added, removed or agg function was changed. */
-	Events.EVENT_COLUMN_VALUE_CHANGED = 'columnValueChanged';
-	/** A column was moved */
-	Events.EVENT_COLUMN_MOVED = 'columnMoved';
-	/** One or more columns was shown / hidden */
-	Events.EVENT_COLUMN_VISIBLE = 'columnVisible';
-	/** One or more columns was pinned / unpinned*/
-	Events.EVENT_COLUMN_PINNED = 'columnPinned';
-	/** A column group was opened / closed */
-	Events.EVENT_COLUMN_GROUP_OPENED = 'columnGroupOpened';
-	/** One or more columns was resized. If just one, the column in the event is set. */
-	Events.EVENT_COLUMN_RESIZED = 'columnResized';
-	/** The list of displayed columns has changed, can result from columns open / close, column move, pivot, group, etc */
-	Events.EVENT_DISPLAYED_COLUMNS_CHANGED = 'displayedColumnsChanged';
-	/** The list of virtual columns has changed, results from viewport changing */
-	Events.EVENT_VIRTUAL_COLUMNS_CHANGED = 'virtualColumnsChanged';
-	/** A row group was opened / closed */
-	Events.EVENT_ROW_GROUP_OPENED = 'rowGroupOpened';
-	/** The client has set new data into the grid */
-	Events.EVENT_ROW_DATA_CHANGED = 'rowDataChanged';
-	/** The client has set new floating data into the grid */
-	Events.EVENT_FLOATING_ROW_DATA_CHANGED = 'floatingRowDataChanged';
-	/** Range selection has changed */
-	Events.EVENT_RANGE_SELECTION_CHANGED = 'rangeSelectionChanged';
-	/** Model was updated - grid updates the drawn rows when this happens */
-	Events.EVENT_MODEL_UPDATED = 'modelUpdated';
-	Events.EVENT_CELL_CLICKED = 'cellClicked';
-	Events.EVENT_CELL_DOUBLE_CLICKED = 'cellDoubleClicked';
-	Events.EVENT_CELL_CONTEXT_MENU = 'cellContextMenu';
-	Events.EVENT_CELL_VALUE_CHANGED = 'cellValueChanged';
-	Events.EVENT_ROW_VALUE_CHANGED = 'rowValueChanged';
-	Events.EVENT_CELL_FOCUSED = 'cellFocused';
-	Events.EVENT_ROW_SELECTED = 'rowSelected';
-	Events.EVENT_SELECTION_CHANGED = 'selectionChanged';
-	Events.EVENT_CELL_MOUSE_OVER = 'cellMouseOver';
-	Events.EVENT_CELL_MOUSE_OUT = 'cellMouseOut';
-	Events.EVENT_COLUMN_HOVER_CHANGED = 'columnHoverChanged';
-	/** 3 events for filtering. The grid LISTENS for filterChanged, and does the filter here. The before and after
-	 * are for the client, if it wants to do something before or after the filter getting applied. */
-	Events.EVENT_BEFORE_FILTER_CHANGED = 'beforeFilterChanged';
-	Events.EVENT_FILTER_CHANGED = 'filterChanged';
-	Events.EVENT_AFTER_FILTER_CHANGED = 'afterFilterChanged';
-	/** Filter was change but not applied. Only useful if apply buttons are used in filters. */
-	Events.EVENT_FILTER_MODIFIED = 'filterModified';
-	/** 3 events for sorting. The grid LISTENS for sortChanged, and does the filter here. The before and after
-	 * are for the client, if it wants to do something before or after the sort getting applied. */
-	Events.EVENT_BEFORE_SORT_CHANGED = 'beforeSortChanged';
-	Events.EVENT_SORT_CHANGED = 'sortChanged';
-	Events.EVENT_AFTER_SORT_CHANGED = 'afterSortChanged';
-	/** A row was removed from the dom, for any reason. Use to clean up resources (if any) used by the row. */
-	Events.EVENT_VIRTUAL_ROW_REMOVED = 'virtualRowRemoved';
-	Events.EVENT_ROW_CLICKED = 'rowClicked';
-	Events.EVENT_ROW_DOUBLE_CLICKED = 'rowDoubleClicked';
-	/** Gets called once after the grid has finished initialising. */
-	Events.EVENT_GRID_READY = 'gridReady';
-	/** Width of height of the main grid div has changed. Grid listens for this and does layout of grid if it's
-	 * changed, so always filling the space it was given.  */
-	Events.EVENT_GRID_SIZE_CHANGED = 'gridSizeChanged';
-	/** The indexes of the rows rendered has changed, eg user has scrolled to a new vertical position. */
-	Events.EVENT_VIEWPORT_CHANGED = 'viewportChanged';
-	/** A column drag has started, either resizing a column or moving a column. */
-	Events.EVENT_DRAG_STARTED = 'dragStarted';
-	/** A column drag has stopped */
-	Events.EVENT_DRAG_STOPPED = 'dragStopped';
-	Events.EVENT_ROW_EDITING_STARTED = 'rowEditingStarted';
-	Events.EVENT_ROW_EDITING_STOPPED = 'rowEditingStopped';
-	Events.EVENT_CELL_EDITING_STARTED = 'cellEditingStarted';
-	Events.EVENT_CELL_EDITING_STOPPED = 'cellEditingStopped';
-	/** Client added a new row. */
-	Events.EVENT_ITEMS_ADDED = 'itemsAdded';
-	/** Client removed a row. */
-	Events.EVENT_ITEMS_REMOVED = 'itemsRemoved';
-	/** Main body of grid has scrolled, either horizontally or vertically */
-	Events.EVENT_BODY_SCROLL = 'bodyScroll';
-	/** All items from here down are used internally by the grid, not intended for external use. */
-	Events.EVENT_FLASH_CELLS = 'flashCells';
-	/** All the events from here down are experimental, should not be documented or used by ag-Grid customers */
-	Events.EVENT_PAGINATION_CHANGED = 'paginationChanged';
-	Events.EVENT_BODY_HEIGHT_CHANGED = 'bodyHeightChanged';
-	Events.DEPRECATED_EVENT_PAGINATION_RESET = 'paginationReset';
-	Events.DEPRECATED_EVENT_PAGINATION_PAGE_LOADED = 'paginationPageLoaded';
-	Events.DEPRECATED_EVENT_PAGINATION_PAGE_REQUESTED = 'paginationPageRequested';
-	// not documented, as it's experimental, don't want people with dependencies on this
-	Events.EVENT_DISPLAYED_COLUMNS_WIDTH_CHANGED = 'displayedColumnsWidthChanged';
-	Events.EVENT_SCROLL_VISIBILITY_CHANGED = 'scrollVisibilityChanged';
-	Events.EVENT_COMPONENT_STATE_CHANGED = 'componentStateChanged';
-	// these are used for server side group and agg - only used by CS with Viewport Row Model - intention is
-	// to design these better around server side functions and then release to general public when fully working with
-	// all the row models.
-	Events.EVENT_COLUMN_ROW_GROUP_CHANGE_REQUEST = 'columnRowGroupChangeRequest';
-	Events.EVENT_COLUMN_PIVOT_CHANGE_REQUEST = 'columnPivotChangeRequest';
-	Events.EVENT_COLUMN_VALUE_CHANGE_REQUEST = 'columnValueChangeRequest';
-	Events.EVENT_COLUMN_AGG_FUNC_CHANGE_REQUEST = 'columnAggFuncChangeRequest';
 	exports.Events = Events;
 
 
@@ -3067,7 +3056,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var csvCreator_1 = __webpack_require__(12);
 	var rowRenderer_1 = __webpack_require__(24);
 	var headerRenderer_1 = __webpack_require__(84);
@@ -3623,7 +3611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GridApi.prototype.refreshInfinitePageCache = function () {
 	        if (this.infinitePageRowModel) {
-	            this.infinitePageRowModel.refreshVirtualPageCache();
+	            this.infinitePageRowModel.refreshCache();
 	        }
 	        else {
 	            console.warn("ag-Grid: api.refreshVirtualPageCache is only available when rowModelType='virtual'.");
@@ -3635,7 +3623,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GridApi.prototype.purgeInfinitePageCache = function () {
 	        if (this.infinitePageRowModel) {
-	            this.infinitePageRowModel.purgeVirtualPageCache();
+	            this.infinitePageRowModel.purgeCache();
 	        }
 	        else {
 	            console.warn("ag-Grid: api.refreshVirtualPageCache is only available when rowModelType='virtual'.");
@@ -3679,7 +3667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    GridApi.prototype.getInfinitePageState = function () {
 	        if (this.infinitePageRowModel) {
-	            return this.infinitePageRowModel.getVirtualPageState();
+	            return this.infinitePageRowModel.getPageState();
 	        }
 	        else {
 	            console.warn("ag-Grid: api.getVirtualPageState is only available when rowModelType='virtual'.");
@@ -3721,121 +3709,122 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridApi.prototype.paginationGoToPage = function (page) {
 	        this.paginationService.goToPage(page);
 	    };
+	    __decorate([
+	        context_1.Autowired('csvCreator'), 
+	        __metadata('design:type', csvCreator_1.CsvCreator)
+	    ], GridApi.prototype, "csvCreator", void 0);
+	    __decorate([
+	        context_1.Optional('excelCreator'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "excelCreator", void 0);
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', gridCore_1.GridCore)
+	    ], GridApi.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], GridApi.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        context_1.Autowired('headerRenderer'), 
+	        __metadata('design:type', headerRenderer_1.HeaderRenderer)
+	    ], GridApi.prototype, "headerRenderer", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], GridApi.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GridApi.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], GridApi.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], GridApi.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], GridApi.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], GridApi.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('masterSlaveService'), 
+	        __metadata('design:type', masterSlaveService_1.MasterSlaveService)
+	    ], GridApi.prototype, "masterSlaveService", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], GridApi.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('floatingRowModel'), 
+	        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+	    ], GridApi.prototype, "floatingRowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], GridApi.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], GridApi.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('serverPaginationService'), 
+	        __metadata('design:type', serverPaginationService_1.ServerPaginationService)
+	    ], GridApi.prototype, "serverPaginationService", void 0);
+	    __decorate([
+	        context_1.Autowired('paginationProxy'), 
+	        __metadata('design:type', paginationProxy_1.PaginationProxy)
+	    ], GridApi.prototype, "paginationProxy", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], GridApi.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Optional('rangeController'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "rangeController", void 0);
+	    __decorate([
+	        context_1.Optional('clipboardService'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "clipboardService", void 0);
+	    __decorate([
+	        context_1.Optional('aggFuncService'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "aggFuncService", void 0);
+	    __decorate([
+	        context_1.Autowired('menuFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridApi.prototype, "menuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('cellRendererFactory'), 
+	        __metadata('design:type', cellRendererFactory_1.CellRendererFactory)
+	    ], GridApi.prototype, "cellRendererFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('cellEditorFactory'), 
+	        __metadata('design:type', cellEditorFactory_1.CellEditorFactory)
+	    ], GridApi.prototype, "cellEditorFactory", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridApi.prototype, "init", null);
+	    GridApi = __decorate([
+	        context_1.Bean('gridApi'), 
+	        __metadata('design:paramtypes', [])
+	    ], GridApi);
 	    return GridApi;
 	}());
-	__decorate([
-	    context_1.Autowired('csvCreator'),
-	    __metadata("design:type", csvCreator_1.CsvCreator)
-	], GridApi.prototype, "csvCreator", void 0);
-	__decorate([
-	    context_1.Optional('excelCreator'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "excelCreator", void 0);
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", gridCore_1.GridCore)
-	], GridApi.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], GridApi.prototype, "rowRenderer", void 0);
-	__decorate([
-	    context_1.Autowired('headerRenderer'),
-	    __metadata("design:type", headerRenderer_1.HeaderRenderer)
-	], GridApi.prototype, "headerRenderer", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], GridApi.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GridApi.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], GridApi.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], GridApi.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], GridApi.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], GridApi.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('masterSlaveService'),
-	    __metadata("design:type", masterSlaveService_1.MasterSlaveService)
-	], GridApi.prototype, "masterSlaveService", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], GridApi.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('floatingRowModel'),
-	    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-	], GridApi.prototype, "floatingRowModel", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], GridApi.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], GridApi.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('serverPaginationService'),
-	    __metadata("design:type", serverPaginationService_1.ServerPaginationService)
-	], GridApi.prototype, "serverPaginationService", void 0);
-	__decorate([
-	    context_1.Autowired('paginationProxy'),
-	    __metadata("design:type", paginationProxy_1.PaginationProxy)
-	], GridApi.prototype, "paginationProxy", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], GridApi.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Optional('rangeController'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "rangeController", void 0);
-	__decorate([
-	    context_1.Optional('clipboardService'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "clipboardService", void 0);
-	__decorate([
-	    context_1.Optional('aggFuncService'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "aggFuncService", void 0);
-	__decorate([
-	    context_1.Autowired('menuFactory'),
-	    __metadata("design:type", Object)
-	], GridApi.prototype, "menuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('cellRendererFactory'),
-	    __metadata("design:type", cellRendererFactory_1.CellRendererFactory)
-	], GridApi.prototype, "cellRendererFactory", void 0);
-	__decorate([
-	    context_1.Autowired('cellEditorFactory'),
-	    __metadata("design:type", cellEditorFactory_1.CellEditorFactory)
-	], GridApi.prototype, "cellEditorFactory", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridApi.prototype, "init", null);
-	GridApi = __decorate([
-	    context_1.Bean('gridApi')
-	], GridApi);
 	exports.GridApi = GridApi;
 
 
@@ -3850,16 +3839,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3869,7 +3853,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var gridSerializer_1 = __webpack_require__(13);
 	var downloader_1 = __webpack_require__(103);
@@ -3880,12 +3863,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var CsvSerializingSession = (function (_super) {
 	    __extends(CsvSerializingSession, _super);
 	    function CsvSerializingSession(columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback, suppressQuotes, columnSeparator) {
-	        var _this = _super.call(this, columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback) || this;
-	        _this.suppressQuotes = suppressQuotes;
-	        _this.columnSeparator = columnSeparator;
-	        _this.result = '';
-	        _this.lineOpened = false;
-	        return _this;
+	        _super.call(this, columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback);
+	        this.suppressQuotes = suppressQuotes;
+	        this.columnSeparator = columnSeparator;
+	        this.result = '';
+	        this.lineOpened = false;
 	    }
 	    CsvSerializingSession.prototype.prepare = function (columnsToExport) {
 	    };
@@ -3985,31 +3967,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    CsvCreator.prototype.getDataAsCsv = function (params) {
 	        return this.gridSerializer.serialize(new CsvSerializingSession(this.columnController, this.valueService, this.gridOptionsWrapper, params ? params.processCellCallback : null, params ? params.processHeaderCallback : null, params && params.suppressQuotes, (params && params.columnSeparator) || ','), params);
 	    };
+	    __decorate([
+	        context_1.Autowired('downloader'), 
+	        __metadata('design:type', downloader_1.Downloader)
+	    ], CsvCreator.prototype, "downloader", void 0);
+	    __decorate([
+	        context_1.Autowired('gridSerializer'), 
+	        __metadata('design:type', gridSerializer_1.GridSerializer)
+	    ], CsvCreator.prototype, "gridSerializer", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], CsvCreator.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], CsvCreator.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], CsvCreator.prototype, "gridOptionsWrapper", void 0);
+	    CsvCreator = __decorate([
+	        context_1.Bean('csvCreator'), 
+	        __metadata('design:paramtypes', [])
+	    ], CsvCreator);
 	    return CsvCreator;
 	}());
-	__decorate([
-	    context_1.Autowired('downloader'),
-	    __metadata("design:type", downloader_1.Downloader)
-	], CsvCreator.prototype, "downloader", void 0);
-	__decorate([
-	    context_1.Autowired('gridSerializer'),
-	    __metadata("design:type", gridSerializer_1.GridSerializer)
-	], CsvCreator.prototype, "gridSerializer", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], CsvCreator.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], CsvCreator.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], CsvCreator.prototype, "gridOptionsWrapper", void 0);
-	CsvCreator = __decorate([
-	    context_1.Bean('csvCreator')
-	], CsvCreator);
 	exports.CsvCreator = CsvCreator;
 
 
@@ -4033,7 +4016,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var columnController_1 = __webpack_require__(14);
 	var constants_1 = __webpack_require__(8);
@@ -4250,46 +4232,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return gridSerializingSession.parse();
 	    };
+	    __decorate([
+	        context_1.Autowired('displayedGroupCreator'), 
+	        __metadata('design:type', displayedGroupCreator_1.DisplayedGroupCreator)
+	    ], GridSerializer.prototype, "displayedGroupCreator", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GridSerializer.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], GridSerializer.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('floatingRowModel'), 
+	        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+	    ], GridSerializer.prototype, "floatingRowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], GridSerializer.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('balancedColumnTreeBuilder'), 
+	        __metadata('design:type', balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
+	    ], GridSerializer.prototype, "balancedColumnTreeBuilder", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], GridSerializer.prototype, "gridOptionsWrapper", void 0);
+	    GridSerializer = __decorate([
+	        context_1.Bean("gridSerializer"), 
+	        __metadata('design:paramtypes', [])
+	    ], GridSerializer);
 	    return GridSerializer;
 	}());
-	__decorate([
-	    context_1.Autowired('displayedGroupCreator'),
-	    __metadata("design:type", displayedGroupCreator_1.DisplayedGroupCreator)
-	], GridSerializer.prototype, "displayedGroupCreator", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GridSerializer.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], GridSerializer.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('floatingRowModel'),
-	    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-	], GridSerializer.prototype, "floatingRowModel", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], GridSerializer.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('balancedColumnTreeBuilder'),
-	    __metadata("design:type", balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
-	], GridSerializer.prototype, "balancedColumnTreeBuilder", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], GridSerializer.prototype, "gridOptionsWrapper", void 0);
-	GridSerializer = __decorate([
-	    context_1.Bean("gridSerializer")
-	], GridSerializer);
 	exports.GridSerializer = GridSerializer;
-	var RowType;
 	(function (RowType) {
 	    RowType[RowType["HEADER_GROUPING"] = 0] = "HEADER_GROUPING";
 	    RowType[RowType["HEADER"] = 1] = "HEADER";
 	    RowType[RowType["BODY"] = 2] = "BODY";
-	})(RowType = exports.RowType || (exports.RowType = {}));
+	})(exports.RowType || (exports.RowType = {}));
+	var RowType = exports.RowType;
 
 
 /***/ },
@@ -4315,7 +4298,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var columnGroup_1 = __webpack_require__(15);
 	var column_1 = __webpack_require__(16);
@@ -4463,15 +4445,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        console.error('ag-Grid: getDisplayNameForCol is deprecated, use getDisplayNameForColumn');
 	        return this.getDisplayNameForColumn(column, null);
 	    };
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', ColumnController)
+	    ], ColumnApi.prototype, "_columnController", void 0);
+	    ColumnApi = __decorate([
+	        context_1.Bean('columnApi'), 
+	        __metadata('design:paramtypes', [])
+	    ], ColumnApi);
 	    return ColumnApi;
 	}());
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", ColumnController)
-	], ColumnApi.prototype, "_columnController", void 0);
-	ColumnApi = __decorate([
-	    context_1.Bean('columnApi')
-	], ColumnApi);
 	exports.ColumnApi = ColumnApi;
 	var ColumnController = (function () {
 	    function ColumnController() {
@@ -6032,71 +6015,72 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ColumnController.prototype.getGridBalancedTree = function () {
 	        return this.gridBalancedTree;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ColumnController.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], ColumnController.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('balancedColumnTreeBuilder'), 
+	        __metadata('design:type', balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
+	    ], ColumnController.prototype, "balancedColumnTreeBuilder", void 0);
+	    __decorate([
+	        context_1.Autowired('displayedGroupCreator'), 
+	        __metadata('design:type', displayedGroupCreator_1.DisplayedGroupCreator)
+	    ], ColumnController.prototype, "displayedGroupCreator", void 0);
+	    __decorate([
+	        context_1.Autowired('autoWidthCalculator'), 
+	        __metadata('design:type', autoWidthCalculator_1.AutoWidthCalculator)
+	    ], ColumnController.prototype, "autoWidthCalculator", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], ColumnController.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnUtils'), 
+	        __metadata('design:type', columnUtils_1.ColumnUtils)
+	    ], ColumnController.prototype, "columnUtils", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], ColumnController.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], ColumnController.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('columnAnimationService'), 
+	        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+	    ], ColumnController.prototype, "columnAnimationService", void 0);
+	    __decorate([
+	        context_1.Autowired('autoGroupColService'), 
+	        __metadata('design:type', autoGroupColService_1.AutoGroupColService)
+	    ], ColumnController.prototype, "autoGroupColService", void 0);
+	    __decorate([
+	        context_1.Optional('aggFuncService'), 
+	        __metadata('design:type', Object)
+	    ], ColumnController.prototype, "aggFuncService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], ColumnController.prototype, "init", null);
+	    __decorate([
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], ColumnController.prototype, "setBeans", null);
+	    ColumnController = __decorate([
+	        context_1.Bean('columnController'), 
+	        __metadata('design:paramtypes', [])
+	    ], ColumnController);
 	    return ColumnController;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ColumnController.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], ColumnController.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('balancedColumnTreeBuilder'),
-	    __metadata("design:type", balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
-	], ColumnController.prototype, "balancedColumnTreeBuilder", void 0);
-	__decorate([
-	    context_1.Autowired('displayedGroupCreator'),
-	    __metadata("design:type", displayedGroupCreator_1.DisplayedGroupCreator)
-	], ColumnController.prototype, "displayedGroupCreator", void 0);
-	__decorate([
-	    context_1.Autowired('autoWidthCalculator'),
-	    __metadata("design:type", autoWidthCalculator_1.AutoWidthCalculator)
-	], ColumnController.prototype, "autoWidthCalculator", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], ColumnController.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('columnUtils'),
-	    __metadata("design:type", columnUtils_1.ColumnUtils)
-	], ColumnController.prototype, "columnUtils", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], ColumnController.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], ColumnController.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('columnAnimationService'),
-	    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-	], ColumnController.prototype, "columnAnimationService", void 0);
-	__decorate([
-	    context_1.Autowired('autoGroupColService'),
-	    __metadata("design:type", autoGroupColService_1.AutoGroupColService)
-	], ColumnController.prototype, "autoGroupColService", void 0);
-	__decorate([
-	    context_1.Optional('aggFuncService'),
-	    __metadata("design:type", Object)
-	], ColumnController.prototype, "aggFuncService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], ColumnController.prototype, "init", null);
-	__decorate([
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], ColumnController.prototype, "setBeans", null);
-	ColumnController = __decorate([
-	    context_1.Bean('columnController')
-	], ColumnController);
 	exports.ColumnController = ColumnController;
 
 
@@ -6120,7 +6104,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var column_1 = __webpack_require__(16);
 	var eventService_1 = __webpack_require__(4);
 	var context_1 = __webpack_require__(6);
@@ -6342,16 +6325,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.localEventService.dispatchEvent(ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED);
 	    };
+	    ColumnGroup.HEADER_GROUP_SHOW_OPEN = 'open';
+	    ColumnGroup.HEADER_GROUP_SHOW_CLOSED = 'closed';
+	    ColumnGroup.EVENT_LEFT_CHANGED = 'leftChanged';
+	    ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED = 'leftChanged';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ColumnGroup.prototype, "gridOptionsWrapper", void 0);
 	    return ColumnGroup;
 	}());
-	ColumnGroup.HEADER_GROUP_SHOW_OPEN = 'open';
-	ColumnGroup.HEADER_GROUP_SHOW_CLOSED = 'closed';
-	ColumnGroup.EVENT_LEFT_CHANGED = 'leftChanged';
-	ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED = 'leftChanged';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ColumnGroup.prototype, "gridOptionsWrapper", void 0);
 	exports.ColumnGroup = ColumnGroup;
 
 
@@ -6375,7 +6358,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var utils_1 = __webpack_require__(7);
 	var context_1 = __webpack_require__(6);
@@ -6722,53 +6704,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Column.prototype.isAllowRowGroup = function () {
 	        return this.colDef.enableRowGroup === true;
 	    };
+	    // + renderedHeaderCell - for making header cell transparent when moving
+	    Column.EVENT_MOVING_CHANGED = 'movingChanged';
+	    // + renderedCell - changing left position
+	    Column.EVENT_LEFT_CHANGED = 'leftChanged';
+	    // + renderedCell - changing width
+	    Column.EVENT_WIDTH_CHANGED = 'widthChanged';
+	    // + renderedCell - for changing pinned classes
+	    Column.EVENT_LAST_LEFT_PINNED_CHANGED = 'lastLeftPinnedChanged';
+	    Column.EVENT_FIRST_RIGHT_PINNED_CHANGED = 'firstRightPinnedChanged';
+	    // + renderedColumn - for changing visibility icon
+	    Column.EVENT_VISIBLE_CHANGED = 'visibleChanged';
+	    // + every time the filter changes, used in the floating filters
+	    Column.EVENT_FILTER_CHANGED = 'filterChanged';
+	    // + renderedHeaderCell - marks the header with filter icon
+	    Column.EVENT_FILTER_ACTIVE_CHANGED = 'filterActiveChanged';
+	    // + renderedHeaderCell - marks the header with sort icon
+	    Column.EVENT_SORT_CHANGED = 'sortChanged';
+	    // + toolpanel, for gui updates
+	    Column.EVENT_ROW_GROUP_CHANGED = 'columnRowGroupChanged';
+	    // + toolpanel, for gui updates
+	    Column.EVENT_PIVOT_CHANGED = 'columnPivotChanged';
+	    // + toolpanel, for gui updates
+	    Column.EVENT_VALUE_CHANGED = 'columnValueChanged';
+	    Column.PINNED_RIGHT = 'right';
+	    Column.PINNED_LEFT = 'left';
+	    Column.SORT_ASC = 'asc';
+	    Column.SORT_DESC = 'desc';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], Column.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnUtils'), 
+	        __metadata('design:type', columnUtils_1.ColumnUtils)
+	    ], Column.prototype, "columnUtils", void 0);
+	    __decorate([
+	        context_1.Autowired('frameworkFactory'), 
+	        __metadata('design:type', Object)
+	    ], Column.prototype, "frameworkFactory", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], Column.prototype, "initialise", null);
 	    return Column;
 	}());
-	// + renderedHeaderCell - for making header cell transparent when moving
-	Column.EVENT_MOVING_CHANGED = 'movingChanged';
-	// + renderedCell - changing left position
-	Column.EVENT_LEFT_CHANGED = 'leftChanged';
-	// + renderedCell - changing width
-	Column.EVENT_WIDTH_CHANGED = 'widthChanged';
-	// + renderedCell - for changing pinned classes
-	Column.EVENT_LAST_LEFT_PINNED_CHANGED = 'lastLeftPinnedChanged';
-	Column.EVENT_FIRST_RIGHT_PINNED_CHANGED = 'firstRightPinnedChanged';
-	// + renderedColumn - for changing visibility icon
-	Column.EVENT_VISIBLE_CHANGED = 'visibleChanged';
-	// + every time the filter changes, used in the floating filters
-	Column.EVENT_FILTER_CHANGED = 'filterChanged';
-	// + renderedHeaderCell - marks the header with filter icon
-	Column.EVENT_FILTER_ACTIVE_CHANGED = 'filterActiveChanged';
-	// + renderedHeaderCell - marks the header with sort icon
-	Column.EVENT_SORT_CHANGED = 'sortChanged';
-	// + toolpanel, for gui updates
-	Column.EVENT_ROW_GROUP_CHANGED = 'columnRowGroupChanged';
-	// + toolpanel, for gui updates
-	Column.EVENT_PIVOT_CHANGED = 'columnPivotChanged';
-	// + toolpanel, for gui updates
-	Column.EVENT_VALUE_CHANGED = 'columnValueChanged';
-	Column.PINNED_RIGHT = 'right';
-	Column.PINNED_LEFT = 'left';
-	Column.SORT_ASC = 'asc';
-	Column.SORT_DESC = 'desc';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], Column.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnUtils'),
-	    __metadata("design:type", columnUtils_1.ColumnUtils)
-	], Column.prototype, "columnUtils", void 0);
-	__decorate([
-	    context_1.Autowired('frameworkFactory'),
-	    __metadata("design:type", Object)
-	], Column.prototype, "frameworkFactory", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], Column.prototype, "initialise", null);
 	exports.Column = Column;
 
 
@@ -6792,7 +6774,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var columnGroup_1 = __webpack_require__(15);
 	var originalColumnGroup_1 = __webpack_require__(18);
@@ -6918,15 +6899,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback(child);
 	        });
 	    };
+	    __decorate([
+	        context_2.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ColumnUtils.prototype, "gridOptionsWrapper", void 0);
+	    ColumnUtils = __decorate([
+	        context_1.Bean('columnUtils'), 
+	        __metadata('design:paramtypes', [])
+	    ], ColumnUtils);
 	    return ColumnUtils;
 	}());
-	__decorate([
-	    context_2.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ColumnUtils.prototype, "gridOptionsWrapper", void 0);
-	ColumnUtils = __decorate([
-	    context_1.Bean('columnUtils')
-	], ColumnUtils);
 	exports.ColumnUtils = ColumnUtils;
 
 
@@ -6941,7 +6923,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var columnGroup_1 = __webpack_require__(15);
 	var column_1 = __webpack_require__(16);
 	var eventService_1 = __webpack_require__(4);
@@ -7042,9 +7023,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    OriginalColumnGroup.prototype.removeEventListener = function (eventType, listener) {
 	        this.localEventService.removeEventListener(eventType, listener);
 	    };
+	    OriginalColumnGroup.EVENT_EXPANDED_CHANGED = 'expandedChanged';
 	    return OriginalColumnGroup;
 	}());
-	OriginalColumnGroup.EVENT_EXPANDED_CHANGED = 'expandedChanged';
 	exports.OriginalColumnGroup = OriginalColumnGroup;
 
 
@@ -7071,7 +7052,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var logger_1 = __webpack_require__(5);
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
@@ -7119,17 +7099,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return 'return ' + expression + ';';
 	        }
 	    };
+	    __decorate([
+	        __param(0, context_2.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], ExpressionService.prototype, "setBeans", null);
+	    ExpressionService = __decorate([
+	        context_1.Bean('expressionService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ExpressionService);
 	    return ExpressionService;
 	}());
-	__decorate([
-	    __param(0, context_2.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], ExpressionService.prototype, "setBeans", null);
-	ExpressionService = __decorate([
-	    context_1.Bean('expressionService')
-	], ExpressionService);
 	exports.ExpressionService = ExpressionService;
 
 
@@ -7156,7 +7137,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var logger_1 = __webpack_require__(5);
 	var columnUtils_1 = __webpack_require__(17);
@@ -7309,29 +7289,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BalancedColumnTreeBuilder.prototype.isColumnGroup = function (abstractColDef) {
 	        return abstractColDef.children !== undefined;
 	    };
+	    __decorate([
+	        context_3.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], BalancedColumnTreeBuilder.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_3.Autowired('columnUtils'), 
+	        __metadata('design:type', columnUtils_1.ColumnUtils)
+	    ], BalancedColumnTreeBuilder.prototype, "columnUtils", void 0);
+	    __decorate([
+	        context_3.Autowired('context'), 
+	        __metadata('design:type', context_4.Context)
+	    ], BalancedColumnTreeBuilder.prototype, "context", void 0);
+	    __decorate([
+	        __param(0, context_2.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], BalancedColumnTreeBuilder.prototype, "setBeans", null);
+	    BalancedColumnTreeBuilder = __decorate([
+	        context_1.Bean('balancedColumnTreeBuilder'), 
+	        __metadata('design:paramtypes', [])
+	    ], BalancedColumnTreeBuilder);
 	    return BalancedColumnTreeBuilder;
 	}());
-	__decorate([
-	    context_3.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], BalancedColumnTreeBuilder.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_3.Autowired('columnUtils'),
-	    __metadata("design:type", columnUtils_1.ColumnUtils)
-	], BalancedColumnTreeBuilder.prototype, "columnUtils", void 0);
-	__decorate([
-	    context_3.Autowired('context'),
-	    __metadata("design:type", context_4.Context)
-	], BalancedColumnTreeBuilder.prototype, "context", void 0);
-	__decorate([
-	    __param(0, context_2.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], BalancedColumnTreeBuilder.prototype, "setBeans", null);
-	BalancedColumnTreeBuilder = __decorate([
-	    context_1.Bean('balancedColumnTreeBuilder')
-	], BalancedColumnTreeBuilder);
 	exports.BalancedColumnTreeBuilder = BalancedColumnTreeBuilder;
 
 
@@ -7346,7 +7327,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	// class returns a unique id to use for the column. it checks the existing columns, and if the requested
 	// id is already taken, it will start appending numbers until it gets a unique id.
 	// eg, if the col field is 'name', it will try ids: {name, name_1, name_2...}
@@ -7409,7 +7389,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var columnUtils_1 = __webpack_require__(17);
 	var columnGroup_1 = __webpack_require__(15);
 	var originalColumnGroup_1 = __webpack_require__(18);
@@ -7568,19 +7547,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
+	    __decorate([
+	        context_2.Autowired('columnUtils'), 
+	        __metadata('design:type', columnUtils_1.ColumnUtils)
+	    ], DisplayedGroupCreator.prototype, "columnUtils", void 0);
+	    __decorate([
+	        context_2.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], DisplayedGroupCreator.prototype, "context", void 0);
+	    DisplayedGroupCreator = __decorate([
+	        context_1.Bean('displayedGroupCreator'), 
+	        __metadata('design:paramtypes', [])
+	    ], DisplayedGroupCreator);
 	    return DisplayedGroupCreator;
 	}());
-	__decorate([
-	    context_2.Autowired('columnUtils'),
-	    __metadata("design:type", columnUtils_1.ColumnUtils)
-	], DisplayedGroupCreator.prototype, "columnUtils", void 0);
-	__decorate([
-	    context_2.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], DisplayedGroupCreator.prototype, "context", void 0);
-	DisplayedGroupCreator = __decorate([
-	    context_1.Bean('displayedGroupCreator')
-	], DisplayedGroupCreator);
 	exports.DisplayedGroupCreator = DisplayedGroupCreator;
 
 
@@ -7604,7 +7584,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var rowRenderer_1 = __webpack_require__(24);
 	var gridPanel_1 = __webpack_require__(25);
 	var context_1 = __webpack_require__(6);
@@ -7700,27 +7679,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        eCloneParent.appendChild(eCellClone);
 	        eDummyContainer.appendChild(eCloneParent);
 	    };
+	    __decorate([
+	        context_2.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], AutoWidthCalculator.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        context_2.Autowired('headerRenderer'), 
+	        __metadata('design:type', headerRenderer_1.HeaderRenderer)
+	    ], AutoWidthCalculator.prototype, "headerRenderer", void 0);
+	    __decorate([
+	        context_2.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], AutoWidthCalculator.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_2.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], AutoWidthCalculator.prototype, "gridOptionsWrapper", void 0);
+	    AutoWidthCalculator = __decorate([
+	        context_1.Bean('autoWidthCalculator'), 
+	        __metadata('design:paramtypes', [])
+	    ], AutoWidthCalculator);
 	    return AutoWidthCalculator;
 	}());
-	__decorate([
-	    context_2.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], AutoWidthCalculator.prototype, "rowRenderer", void 0);
-	__decorate([
-	    context_2.Autowired('headerRenderer'),
-	    __metadata("design:type", headerRenderer_1.HeaderRenderer)
-	], AutoWidthCalculator.prototype, "headerRenderer", void 0);
-	__decorate([
-	    context_2.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], AutoWidthCalculator.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_2.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], AutoWidthCalculator.prototype, "gridOptionsWrapper", void 0);
-	AutoWidthCalculator = __decorate([
-	    context_1.Bean('autoWidthCalculator')
-	], AutoWidthCalculator);
 	exports.AutoWidthCalculator = AutoWidthCalculator;
 
 
@@ -7735,16 +7715,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7757,7 +7732,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var gridPanel_1 = __webpack_require__(25);
@@ -7781,18 +7755,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RowRenderer = (function (_super) {
 	    __extends(RowRenderer, _super);
 	    function RowRenderer() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	        // map of row ids to row objects. keeps track of which elements
 	        // are rendered for which rows in the dom.
-	        _this.renderedRows = {};
-	        _this.renderedTopFloatingRows = [];
-	        _this.renderedBottomFloatingRows = [];
+	        this.renderedRows = {};
+	        this.renderedTopFloatingRows = [];
+	        this.renderedBottomFloatingRows = [];
 	        // we only allow one refresh at a time, otherwise the internal memory structure here
 	        // will get messed up. this can happen if the user has a cellRenderer, and inside the
 	        // renderer they call an API method that results in another pass of the refresh,
 	        // then it will be trying to draw rows in the middle of a refresh.
-	        _this.refreshInProgress = false;
-	        return _this;
+	        this.refreshInProgress = false;
 	    }
 	    RowRenderer.prototype.agWire = function (loggerFactory) {
 	        this.logger = loggerFactory.create('RowRenderer');
@@ -8397,6 +8370,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // we have to call this after ensureColumnVisible - otherwise it could be a virtual column
 	            // or row that is not currently in view, hence the renderedCell would not exist
 	            var nextRenderedCell = this.getComponentForCell(nextCell);
+	            // if next cell is fullWidth row, then no rendered cell,
+	            // as fullWidth rows have no cells, so we skip it
+	            if (utils_1.Utils.missing(nextRenderedCell)) {
+	                continue;
+	            }
 	            // if editing, but cell not editable, skip cell
 	            if (startEditing && !nextRenderedCell.isCellEditable()) {
 	                continue;
@@ -8414,97 +8392,98 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return nextRenderedCell;
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('paginationProxy'), 
+	        __metadata('design:type', paginationProxy_1.PaginationProxy)
+	    ], RowRenderer.prototype, "paginationProxy", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], RowRenderer.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RowRenderer.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', gridCore_1.GridCore)
+	    ], RowRenderer.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], RowRenderer.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('$compile'), 
+	        __metadata('design:type', Object)
+	    ], RowRenderer.prototype, "$compile", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], RowRenderer.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], RowRenderer.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('templateService'), 
+	        __metadata('design:type', templateService_1.TemplateService)
+	    ], RowRenderer.prototype, "templateService", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], RowRenderer.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], RowRenderer.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('floatingRowModel'), 
+	        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+	    ], RowRenderer.prototype, "floatingRowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RowRenderer.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('loggerFactory'), 
+	        __metadata('design:type', logger_1.LoggerFactory)
+	    ], RowRenderer.prototype, "loggerFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], RowRenderer.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Optional('rangeController'), 
+	        __metadata('design:type', Object)
+	    ], RowRenderer.prototype, "rangeController", void 0);
+	    __decorate([
+	        context_1.Autowired('cellNavigationService'), 
+	        __metadata('design:type', cellNavigationService_1.CellNavigationService)
+	    ], RowRenderer.prototype, "cellNavigationService", void 0);
+	    __decorate([
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], RowRenderer.prototype, "agWire", null);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], RowRenderer.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], RowRenderer.prototype, "destroy", null);
+	    RowRenderer = __decorate([
+	        context_1.Bean('rowRenderer'), 
+	        __metadata('design:paramtypes', [])
+	    ], RowRenderer);
 	    return RowRenderer;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('paginationProxy'),
-	    __metadata("design:type", paginationProxy_1.PaginationProxy)
-	], RowRenderer.prototype, "paginationProxy", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], RowRenderer.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RowRenderer.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", gridCore_1.GridCore)
-	], RowRenderer.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], RowRenderer.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('$compile'),
-	    __metadata("design:type", Object)
-	], RowRenderer.prototype, "$compile", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], RowRenderer.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], RowRenderer.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('templateService'),
-	    __metadata("design:type", templateService_1.TemplateService)
-	], RowRenderer.prototype, "templateService", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], RowRenderer.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], RowRenderer.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('floatingRowModel'),
-	    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-	], RowRenderer.prototype, "floatingRowModel", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RowRenderer.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('loggerFactory'),
-	    __metadata("design:type", logger_1.LoggerFactory)
-	], RowRenderer.prototype, "loggerFactory", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], RowRenderer.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Optional('rangeController'),
-	    __metadata("design:type", Object)
-	], RowRenderer.prototype, "rangeController", void 0);
-	__decorate([
-	    context_1.Autowired('cellNavigationService'),
-	    __metadata("design:type", cellNavigationService_1.CellNavigationService)
-	], RowRenderer.prototype, "cellNavigationService", void 0);
-	__decorate([
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], RowRenderer.prototype, "agWire", null);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], RowRenderer.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], RowRenderer.prototype, "destroy", null);
-	RowRenderer = __decorate([
-	    context_1.Bean('rowRenderer')
-	], RowRenderer);
 	exports.RowRenderer = RowRenderer;
 
 
@@ -8519,16 +8498,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8541,7 +8515,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var masterSlaveService_1 = __webpack_require__(26);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -8631,14 +8604,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridPanel = (function (_super) {
 	    __extends(GridPanel, _super);
 	    function GridPanel() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.requestAnimationFrameExists = typeof requestAnimationFrame === 'function';
-	        _this.scrollLagCounter = 0;
-	        _this.scrollLagTicking = false;
-	        _this.lastLeftPosition = -1;
-	        _this.lastTopPosition = -1;
-	        _this.animationThreadCount = 0;
-	        return _this;
+	        _super.apply(this, arguments);
+	        this.requestAnimationFrameExists = typeof requestAnimationFrame === 'function';
+	        this.scrollLagCounter = 0;
+	        this.scrollLagTicking = false;
+	        this.lastLeftPosition = -1;
+	        this.lastTopPosition = -1;
+	        this.animationThreadCount = 0;
 	    }
 	    GridPanel.prototype.agWire = function (loggerFactory) {
 	        this.logger = loggerFactory.create('GridPanel');
@@ -9408,7 +9380,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	        else {
-	            // otherwise, col is already in view, so do nothing
 	        }
 	        // this will happen anyway, as the move will cause a 'scroll' event on the body, however
 	        // it is possible that the ensureColumnVisible method is called from within ag-Grid and
@@ -9582,8 +9553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eFloatingBottomFullWidthCellContainer = this.queryHtmlElement('.ag-floating-bottom-full-width-container');
 	            this.eAllCellContainers = [
 	                this.ePinnedLeftColsContainer, this.ePinnedRightColsContainer, this.eBodyContainer,
-	                this.eFloatingTop, this.eFloatingBottom, this.eFullWidthCellContainer
-	            ];
+	                this.eFloatingTop, this.eFloatingBottom, this.eFullWidthCellContainer];
 	            this.rowContainerComponents = {
 	                body: new rowContainerComponent_1.RowContainerComponent({ eContainer: this.eBodyContainer, eViewport: this.eBodyViewport, useDocumentFragment: true }),
 	                fullWidth: new rowContainerComponent_1.RowContainerComponent({ eContainer: this.eFullWidthCellContainer, hideWhenNoChildren: true, eViewport: this.eFullWidthCellViewport }),
@@ -10011,101 +9981,102 @@ return /******/ (function(modules) { // webpackBootstrap
 	    GridPanel.prototype.removeScrollEventListener = function (listener) {
 	        this.eBodyViewport.removeEventListener('scroll', listener);
 	    };
+	    __decorate([
+	        context_1.Autowired('masterSlaveService'), 
+	        __metadata('design:type', masterSlaveService_1.MasterSlaveService)
+	    ], GridPanel.prototype, "masterSlaveService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], GridPanel.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GridPanel.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], GridPanel.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        context_1.Autowired('floatingRowModel'), 
+	        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+	    ], GridPanel.prototype, "floatingRowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], GridPanel.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('paginationProxy'), 
+	        __metadata('design:type', paginationProxy_1.PaginationProxy)
+	    ], GridPanel.prototype, "paginationProxy", void 0);
+	    __decorate([
+	        context_1.Optional('rangeController'), 
+	        __metadata('design:type', Object)
+	    ], GridPanel.prototype, "rangeController", void 0);
+	    __decorate([
+	        context_1.Autowired('dragService'), 
+	        __metadata('design:type', dragService_1.DragService)
+	    ], GridPanel.prototype, "dragService", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], GridPanel.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Optional('clipboardService'), 
+	        __metadata('design:type', Object)
+	    ], GridPanel.prototype, "clipboardService", void 0);
+	    __decorate([
+	        context_1.Autowired('csvCreator'), 
+	        __metadata('design:type', csvCreator_1.CsvCreator)
+	    ], GridPanel.prototype, "csvCreator", void 0);
+	    __decorate([
+	        context_1.Autowired('mouseEventService'), 
+	        __metadata('design:type', mouseEventService_1.MouseEventService)
+	    ], GridPanel.prototype, "mouseEventService", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], GridPanel.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], GridPanel.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('scrollVisibleService'), 
+	        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+	    ], GridPanel.prototype, "scrollVisibleService", void 0);
+	    __decorate([
+	        context_1.Optional('contextMenuFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridPanel.prototype, "contextMenuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('frameworkFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridPanel.prototype, "frameworkFactory", void 0);
+	    __decorate([
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], GridPanel.prototype, "agWire", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridPanel.prototype, "destroy", null);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridPanel.prototype, "init", null);
+	    GridPanel = __decorate([
+	        context_1.Bean('gridPanel'), 
+	        __metadata('design:paramtypes', [])
+	    ], GridPanel);
 	    return GridPanel;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('masterSlaveService'),
-	    __metadata("design:type", masterSlaveService_1.MasterSlaveService)
-	], GridPanel.prototype, "masterSlaveService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], GridPanel.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GridPanel.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], GridPanel.prototype, "rowRenderer", void 0);
-	__decorate([
-	    context_1.Autowired('floatingRowModel'),
-	    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-	], GridPanel.prototype, "floatingRowModel", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], GridPanel.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('paginationProxy'),
-	    __metadata("design:type", paginationProxy_1.PaginationProxy)
-	], GridPanel.prototype, "paginationProxy", void 0);
-	__decorate([
-	    context_1.Optional('rangeController'),
-	    __metadata("design:type", Object)
-	], GridPanel.prototype, "rangeController", void 0);
-	__decorate([
-	    context_1.Autowired('dragService'),
-	    __metadata("design:type", dragService_1.DragService)
-	], GridPanel.prototype, "dragService", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], GridPanel.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Optional('clipboardService'),
-	    __metadata("design:type", Object)
-	], GridPanel.prototype, "clipboardService", void 0);
-	__decorate([
-	    context_1.Autowired('csvCreator'),
-	    __metadata("design:type", csvCreator_1.CsvCreator)
-	], GridPanel.prototype, "csvCreator", void 0);
-	__decorate([
-	    context_1.Autowired('mouseEventService'),
-	    __metadata("design:type", mouseEventService_1.MouseEventService)
-	], GridPanel.prototype, "mouseEventService", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], GridPanel.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], GridPanel.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('scrollVisibleService'),
-	    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-	], GridPanel.prototype, "scrollVisibleService", void 0);
-	__decorate([
-	    context_1.Optional('contextMenuFactory'),
-	    __metadata("design:type", Object)
-	], GridPanel.prototype, "contextMenuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('frameworkFactory'),
-	    __metadata("design:type", Object)
-	], GridPanel.prototype, "frameworkFactory", void 0);
-	__decorate([
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], GridPanel.prototype, "agWire", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridPanel.prototype, "destroy", null);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridPanel.prototype, "init", null);
-	GridPanel = __decorate([
-	    context_1.Bean('gridPanel')
-	], GridPanel);
 	exports.GridPanel = GridPanel;
 	var ScrollType;
 	(function (ScrollType) {
@@ -10159,7 +10130,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var columnController_1 = __webpack_require__(14);
 	var gridPanel_1 = __webpack_require__(25);
@@ -10314,39 +10284,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	    };
+	    __decorate([
+	        context_3.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], MasterSlaveService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_3.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], MasterSlaveService.prototype, "columnController", void 0);
+	    __decorate([
+	        context_3.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], MasterSlaveService.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_3.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], MasterSlaveService.prototype, "eventService", void 0);
+	    __decorate([
+	        __param(0, context_2.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], MasterSlaveService.prototype, "setBeans", null);
+	    __decorate([
+	        context_4.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], MasterSlaveService.prototype, "init", null);
+	    MasterSlaveService = __decorate([
+	        context_1.Bean('masterSlaveService'), 
+	        __metadata('design:paramtypes', [])
+	    ], MasterSlaveService);
 	    return MasterSlaveService;
 	}());
-	__decorate([
-	    context_3.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], MasterSlaveService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_3.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], MasterSlaveService.prototype, "columnController", void 0);
-	__decorate([
-	    context_3.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], MasterSlaveService.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_3.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], MasterSlaveService.prototype, "eventService", void 0);
-	__decorate([
-	    __param(0, context_2.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], MasterSlaveService.prototype, "setBeans", null);
-	__decorate([
-	    context_4.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], MasterSlaveService.prototype, "init", null);
-	MasterSlaveService = __decorate([
-	    context_1.Bean('masterSlaveService')
-	], MasterSlaveService);
 	exports.MasterSlaveService = MasterSlaveService;
 
 
@@ -10370,7 +10341,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var rowNode_1 = __webpack_require__(28);
 	var context_1 = __webpack_require__(6);
@@ -10482,29 +10452,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return lastNode.rowTop + lastNode.rowHeight;
 	        }
 	    };
+	    __decorate([
+	        context_2.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], FloatingRowModel.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_2.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], FloatingRowModel.prototype, "eventService", void 0);
+	    __decorate([
+	        context_2.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], FloatingRowModel.prototype, "context", void 0);
+	    __decorate([
+	        context_3.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FloatingRowModel.prototype, "init", null);
+	    FloatingRowModel = __decorate([
+	        context_1.Bean('floatingRowModel'), 
+	        __metadata('design:paramtypes', [])
+	    ], FloatingRowModel);
 	    return FloatingRowModel;
 	}());
-	__decorate([
-	    context_2.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], FloatingRowModel.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_2.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], FloatingRowModel.prototype, "eventService", void 0);
-	__decorate([
-	    context_2.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], FloatingRowModel.prototype, "context", void 0);
-	__decorate([
-	    context_3.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FloatingRowModel.prototype, "init", null);
-	FloatingRowModel = __decorate([
-	    context_1.Bean('floatingRowModel')
-	], FloatingRowModel);
 	exports.FloatingRowModel = FloatingRowModel;
 
 
@@ -10528,7 +10499,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var events_1 = __webpack_require__(10);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -10926,46 +10896,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RowNode.prototype.onMouseLeave = function () {
 	        this.dispatchLocalEvent(RowNode.EVENT_MOUSE_LEAVE);
 	    };
+	    RowNode.EVENT_ROW_SELECTED = 'rowSelected';
+	    RowNode.EVENT_DATA_CHANGED = 'dataChanged';
+	    RowNode.EVENT_CELL_CHANGED = 'cellChanged';
+	    RowNode.EVENT_MOUSE_ENTER = 'mouseEnter';
+	    RowNode.EVENT_MOUSE_LEAVE = 'mouseLeave';
+	    RowNode.EVENT_HEIGHT_CHANGED = 'heightChanged';
+	    RowNode.EVENT_TOP_CHANGED = 'topChanged';
+	    RowNode.EVENT_ROW_INDEX_CHANGED = 'rowIndexChanged';
+	    RowNode.EVENT_EXPANDED_CHANGED = 'expandedChanged';
+	    RowNode.EVENT_LOADING_CHANGED = 'loadingChanged';
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], RowNode.prototype, "mainEventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RowNode.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], RowNode.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], RowNode.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], RowNode.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], RowNode.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RowNode.prototype, "context", void 0);
 	    return RowNode;
 	}());
-	RowNode.EVENT_ROW_SELECTED = 'rowSelected';
-	RowNode.EVENT_DATA_CHANGED = 'dataChanged';
-	RowNode.EVENT_CELL_CHANGED = 'cellChanged';
-	RowNode.EVENT_MOUSE_ENTER = 'mouseEnter';
-	RowNode.EVENT_MOUSE_LEAVE = 'mouseLeave';
-	RowNode.EVENT_HEIGHT_CHANGED = 'heightChanged';
-	RowNode.EVENT_TOP_CHANGED = 'topChanged';
-	RowNode.EVENT_ROW_INDEX_CHANGED = 'rowIndexChanged';
-	RowNode.EVENT_EXPANDED_CHANGED = 'expandedChanged';
-	RowNode.EVENT_LOADING_CHANGED = 'loadingChanged';
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], RowNode.prototype, "mainEventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RowNode.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], RowNode.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], RowNode.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], RowNode.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], RowNode.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RowNode.prototype, "context", void 0);
 	exports.RowNode = RowNode;
 
 
@@ -10992,7 +10962,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
@@ -11241,35 +11210,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = this.rowModel.getRow(index);
 	        this.selectNode(node, tryMulti);
 	    };
+	    __decorate([
+	        context_3.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], SelectionController.prototype, "eventService", void 0);
+	    __decorate([
+	        context_3.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], SelectionController.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_3.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], SelectionController.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        __param(0, context_2.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], SelectionController.prototype, "setBeans", null);
+	    __decorate([
+	        context_4.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], SelectionController.prototype, "init", null);
+	    SelectionController = __decorate([
+	        context_1.Bean('selectionController'), 
+	        __metadata('design:paramtypes', [])
+	    ], SelectionController);
 	    return SelectionController;
 	}());
-	__decorate([
-	    context_3.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], SelectionController.prototype, "eventService", void 0);
-	__decorate([
-	    context_3.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], SelectionController.prototype, "rowModel", void 0);
-	__decorate([
-	    context_3.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], SelectionController.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    __param(0, context_2.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], SelectionController.prototype, "setBeans", null);
-	__decorate([
-	    context_4.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], SelectionController.prototype, "init", null);
-	SelectionController = __decorate([
-	    context_1.Bean('selectionController')
-	], SelectionController);
 	exports.SelectionController = SelectionController;
 
 
@@ -11293,7 +11263,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var expressionService_1 = __webpack_require__(19);
 	var columnController_1 = __webpack_require__(14);
@@ -11435,33 +11404,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return null;
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ValueService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], ValueService.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], ValueService.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], ValueService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], ValueService.prototype, "init", null);
+	    ValueService = __decorate([
+	        context_1.Bean('valueService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ValueService);
 	    return ValueService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ValueService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], ValueService.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], ValueService.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], ValueService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], ValueService.prototype, "init", null);
-	ValueService = __decorate([
-	    context_1.Bean('valueService')
-	], ValueService);
 	exports.ValueService = ValueService;
 
 
@@ -11476,7 +11446,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var BorderLayout = (function () {
 	    function BorderLayout(params) {
@@ -11697,34 +11666,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.hideOverlay();
 	        }
 	    };
+	    BorderLayout.TEMPLATE_FULL_HEIGHT = '<div class="ag-bl ag-bl-full-height">' +
+	        '  <div class="ag-bl-west ag-bl-full-height-west" id="west"></div>' +
+	        '  <div class="ag-bl-east ag-bl-full-height-east" id="east"></div>' +
+	        '  <div class="ag-bl-center ag-bl-full-height-center" id="center"></div>' +
+	        '  <div class="ag-bl-overlay" id="overlay"></div>' +
+	        '</div>';
+	    BorderLayout.TEMPLATE_NORMAL = '<div class="ag-bl ag-bl-normal">' +
+	        '  <div id="north"></div>' +
+	        '  <div class="ag-bl-center-row ag-bl-normal-center-row" id="centerRow">' +
+	        '    <div class="ag-bl-west ag-bl-normal-west" id="west"></div>' +
+	        '    <div class="ag-bl-east ag-bl-normal-east" id="east"></div>' +
+	        '    <div class="ag-bl-center ag-bl-normal-center" id="center"></div>' +
+	        '  </div>' +
+	        '  <div id="south"></div>' +
+	        '  <div class="ag-bl-overlay" id="overlay"></div>' +
+	        '</div>';
+	    BorderLayout.TEMPLATE_DONT_FILL = '<div class="ag-bl ag-bl-dont-fill">' +
+	        '  <div id="north"></div>' +
+	        '  <div id="centerRow">' +
+	        '    <div id="west"></div>' +
+	        '    <div id="east"></div>' +
+	        '    <div id="center"></div>' +
+	        '  </div>' +
+	        '  <div id="south"></div>' +
+	        '  <div class="ag-bl-overlay" id="overlay"></div>' +
+	        '</div>';
 	    return BorderLayout;
 	}());
-	BorderLayout.TEMPLATE_FULL_HEIGHT = '<div class="ag-bl ag-bl-full-height">' +
-	    '  <div class="ag-bl-west ag-bl-full-height-west" id="west"></div>' +
-	    '  <div class="ag-bl-east ag-bl-full-height-east" id="east"></div>' +
-	    '  <div class="ag-bl-center ag-bl-full-height-center" id="center"></div>' +
-	    '  <div class="ag-bl-overlay" id="overlay"></div>' +
-	    '</div>';
-	BorderLayout.TEMPLATE_NORMAL = '<div class="ag-bl ag-bl-normal">' +
-	    '  <div id="north"></div>' +
-	    '  <div class="ag-bl-center-row ag-bl-normal-center-row" id="centerRow">' +
-	    '    <div class="ag-bl-west ag-bl-normal-west" id="west"></div>' +
-	    '    <div class="ag-bl-east ag-bl-normal-east" id="east"></div>' +
-	    '    <div class="ag-bl-center ag-bl-normal-center" id="center"></div>' +
-	    '  </div>' +
-	    '  <div id="south"></div>' +
-	    '  <div class="ag-bl-overlay" id="overlay"></div>' +
-	    '</div>';
-	BorderLayout.TEMPLATE_DONT_FILL = '<div class="ag-bl ag-bl-dont-fill">' +
-	    '  <div id="north"></div>' +
-	    '  <div id="centerRow">' +
-	    '    <div id="west"></div>' +
-	    '    <div id="east"></div>' +
-	    '    <div id="center"></div>' +
-	    '  </div>' +
-	    '  <div id="south"></div>' +
-	    '  <div class="ag-bl-overlay" id="overlay"></div>' +
-	    '</div>';
 	exports.BorderLayout = BorderLayout;
 
 
@@ -11748,7 +11717,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var logger_1 = __webpack_require__(5);
 	var utils_1 = __webpack_require__(7);
@@ -11950,35 +11918,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.dragEndFunctions.forEach(function (func) { return func(); });
 	        this.dragEndFunctions.length = 0;
 	    };
+	    __decorate([
+	        context_1.Autowired('loggerFactory'), 
+	        __metadata('design:type', logger_1.LoggerFactory)
+	    ], DragService.prototype, "loggerFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], DragService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], DragService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], DragService.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], DragService.prototype, "destroy", null);
+	    DragService = __decorate([
+	        context_1.Bean('dragService'), 
+	        __metadata('design:paramtypes', [])
+	    ], DragService);
 	    return DragService;
 	}());
-	__decorate([
-	    context_1.Autowired('loggerFactory'),
-	    __metadata("design:type", logger_1.LoggerFactory)
-	], DragService.prototype, "loggerFactory", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], DragService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], DragService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], DragService.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], DragService.prototype, "destroy", null);
-	DragService = __decorate([
-	    context_1.Bean('dragService')
-	], DragService);
 	exports.DragService = DragService;
 
 
@@ -12002,7 +11971,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
@@ -12027,15 +11995,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var renderedCell = this.getRenderedCellForEvent(event);
 	        return renderedCell ? renderedCell.getGridCell() : null;
 	    };
+	    __decorate([
+	        context_2.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], MouseEventService.prototype, "gridOptionsWrapper", void 0);
+	    MouseEventService = __decorate([
+	        context_1.Bean('mouseEventService'), 
+	        __metadata('design:paramtypes', [])
+	    ], MouseEventService);
 	    return MouseEventService;
 	}());
-	__decorate([
-	    context_2.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], MouseEventService.prototype, "gridOptionsWrapper", void 0);
-	MouseEventService = __decorate([
-	    context_1.Bean('mouseEventService')
-	], MouseEventService);
 	exports.MouseEventService = MouseEventService;
 
 
@@ -12059,7 +12028,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var eventService_1 = __webpack_require__(4);
 	var events_1 = __webpack_require__(10);
@@ -12207,29 +12175,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.eventService.dispatchEvent(events_1.Events.EVENT_CELL_FOCUSED, event);
 	    };
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], FocusedCellController.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], FocusedCellController.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], FocusedCellController.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FocusedCellController.prototype, "init", null);
+	    FocusedCellController = __decorate([
+	        context_1.Bean('focusedCellController'), 
+	        __metadata('design:paramtypes', [])
+	    ], FocusedCellController);
 	    return FocusedCellController;
 	}());
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], FocusedCellController.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], FocusedCellController.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], FocusedCellController.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FocusedCellController.prototype, "init", null);
-	FocusedCellController = __decorate([
-	    context_1.Bean('focusedCellController')
-	], FocusedCellController);
 	exports.FocusedCellController = FocusedCellController;
 
 
@@ -12244,7 +12213,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridRow_1 = __webpack_require__(36);
 	var GridCell = (function () {
@@ -12285,7 +12253,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var constants_1 = __webpack_require__(8);
 	var utils_1 = __webpack_require__(7);
 	var gridCell_1 = __webpack_require__(35);
@@ -12371,7 +12338,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
 	var eventService_1 = __webpack_require__(4);
@@ -12425,19 +12391,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return result;
 	    };
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], ScrollVisibleService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], ScrollVisibleService.prototype, "columnController", void 0);
+	    ScrollVisibleService = __decorate([
+	        context_1.Bean('scrollVisibleService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ScrollVisibleService);
 	    return ScrollVisibleService;
 	}());
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], ScrollVisibleService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], ScrollVisibleService.prototype, "columnController", void 0);
-	ScrollVisibleService = __decorate([
-	    context_1.Bean('scrollVisibleService')
-	], ScrollVisibleService);
 	exports.ScrollVisibleService = ScrollVisibleService;
 
 
@@ -12452,7 +12419,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var BeanStub = (function () {
@@ -12524,7 +12490,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	/**
 	 * There are many instances of this component covering each of the areas a row can be entered
@@ -12596,16 +12561,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12615,7 +12575,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var beanStub_1 = __webpack_require__(38);
 	var eventService_1 = __webpack_require__(4);
 	var events_1 = __webpack_require__(10);
@@ -12633,7 +12592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PaginationAutoPageSizeService = (function (_super) {
 	    __extends(PaginationAutoPageSizeService, _super);
 	    function PaginationAutoPageSizeService() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    PaginationAutoPageSizeService.prototype.notActive = function () {
 	        return !this.gridOptionsWrapper.isPaginationAutoPageSize();
@@ -12663,43 +12622,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.gridOptionsWrapper.setProperty('paginationPageSize', newPageSize);
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], PaginationAutoPageSizeService.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], PaginationAutoPageSizeService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], PaginationAutoPageSizeService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('scrollVisibleService'), 
+	        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+	    ], PaginationAutoPageSizeService.prototype, "scrollVisibleService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], PaginationAutoPageSizeService.prototype, "postConstruct", null);
+	    PaginationAutoPageSizeService = __decorate([
+	        context_1.Bean('paginationAutoPageSizeService'), 
+	        __metadata('design:paramtypes', [])
+	    ], PaginationAutoPageSizeService);
 	    return PaginationAutoPageSizeService;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], PaginationAutoPageSizeService.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], PaginationAutoPageSizeService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], PaginationAutoPageSizeService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('scrollVisibleService'),
-	    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-	], PaginationAutoPageSizeService.prototype, "scrollVisibleService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], PaginationAutoPageSizeService.prototype, "postConstruct", null);
-	PaginationAutoPageSizeService = __decorate([
-	    context_1.Bean('paginationAutoPageSizeService')
-	], PaginationAutoPageSizeService);
 	exports.PaginationAutoPageSizeService = PaginationAutoPageSizeService;
 	var PaginationProxy = (function (_super) {
 	    __extends(PaginationProxy, _super);
 	    function PaginationProxy() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.currentPage = 0;
-	        _this.topRowIndex = 0;
-	        _this.bottomRowIndex = 0;
-	        _this.pixelOffset = 0;
-	        return _this;
+	        _super.apply(this, arguments);
+	        this.currentPage = 0;
+	        this.topRowIndex = 0;
+	        this.bottomRowIndex = 0;
+	        this.pixelOffset = 0;
 	    }
 	    PaginationProxy.prototype.postConstruct = function () {
 	        this.active = this.gridOptionsWrapper.isPagination();
@@ -12863,33 +12822,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.bottomRowBounds = this.rowModel.getRowBounds(this.bottomRowIndex);
 	        this.pixelOffset = utils_1._.exists(this.topRowBounds) ? this.topRowBounds.rowTop : 0;
 	    };
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], PaginationProxy.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], PaginationProxy.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], PaginationProxy.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], PaginationProxy.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], PaginationProxy.prototype, "postConstruct", null);
+	    PaginationProxy = __decorate([
+	        context_1.Bean('paginationProxy'), 
+	        __metadata('design:paramtypes', [])
+	    ], PaginationProxy);
 	    return PaginationProxy;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], PaginationProxy.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], PaginationProxy.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], PaginationProxy.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], PaginationProxy.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], PaginationProxy.prototype, "postConstruct", null);
-	PaginationProxy = __decorate([
-	    context_1.Bean('paginationProxy')
-	], PaginationProxy);
 	exports.PaginationProxy = PaginationProxy;
 
 
@@ -12913,7 +12873,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var context_2 = __webpack_require__(6);
 	var TemplateService = (function () {
@@ -12973,15 +12932,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }, 0);
 	        }
 	    };
+	    __decorate([
+	        context_2.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], TemplateService.prototype, "$scope", void 0);
+	    TemplateService = __decorate([
+	        context_1.Bean('templateService'), 
+	        __metadata('design:paramtypes', [])
+	    ], TemplateService);
 	    return TemplateService;
 	}());
-	__decorate([
-	    context_2.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], TemplateService.prototype, "$scope", void 0);
-	TemplateService = __decorate([
-	    context_1.Bean('templateService')
-	], TemplateService);
 	exports.TemplateService = TemplateService;
 
 
@@ -12996,16 +12956,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -13015,7 +12970,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var renderedCell_1 = __webpack_require__(43);
 	var rowNode_1 = __webpack_require__(28);
@@ -13036,31 +12990,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RenderedRow = (function (_super) {
 	    __extends(RenderedRow, _super);
 	    function RenderedRow(parentScope, rowRenderer, bodyContainerComp, fullWidthContainerComp, pinnedLeftContainerComp, pinnedRightContainerComp, node, animateIn) {
-	        var _this = _super.call(this) || this;
-	        _this.eAllRowContainers = [];
-	        _this.renderedCells = {};
+	        _super.call(this);
+	        this.eAllRowContainers = [];
+	        this.renderedCells = {};
 	        // for animations, there are bits we want done in the next VM turn, to all DOM to update first.
 	        // instead of each row doing a setTimeout(func,0), we put the functions here and the rowRenderer
 	        // executes them all in one timeout
-	        _this.nextVmTurnFunctions = [];
+	        this.nextVmTurnFunctions = [];
 	        // for animations, these functions get called 400ms after the row is cleared, called by the rowRenderer
 	        // so each row isn't setting up it's own timeout
-	        _this.delayedDestroyFunctions = [];
+	        this.delayedDestroyFunctions = [];
 	        // these get called before the row is destroyed - they set up the DOM for the remove animation (ie they
 	        // set the DOM up for the animation), then the delayedDestroyFunctions get called when the animation is
 	        // complete (ie removes from the dom).
-	        _this.startRemoveAnimationFunctions = [];
-	        _this.editingRow = false;
-	        _this.initialised = false;
-	        _this.parentScope = parentScope;
-	        _this.rowRenderer = rowRenderer;
-	        _this.bodyContainerComp = bodyContainerComp;
-	        _this.fullWidthContainerComp = fullWidthContainerComp;
-	        _this.pinnedLeftContainerComp = pinnedLeftContainerComp;
-	        _this.pinnedRightContainerComp = pinnedRightContainerComp;
-	        _this.rowNode = node;
-	        _this.animateIn = animateIn;
-	        return _this;
+	        this.startRemoveAnimationFunctions = [];
+	        this.editingRow = false;
+	        this.initialised = false;
+	        this.parentScope = parentScope;
+	        this.rowRenderer = rowRenderer;
+	        this.bodyContainerComp = bodyContainerComp;
+	        this.fullWidthContainerComp = fullWidthContainerComp;
+	        this.pinnedLeftContainerComp = pinnedLeftContainerComp;
+	        this.pinnedRightContainerComp = pinnedRightContainerComp;
+	        this.rowNode = node;
+	        this.animateIn = animateIn;
 	    }
 	    RenderedRow.prototype.setupRowContainers = function (animateInRowTop) {
 	        var isFullWidthCellFunc = this.gridOptionsWrapper.getIsFullWidthCellFunc();
@@ -13285,7 +13238,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	            else {
-	                // otherwise nothing, the floating fullWidth containers are not impacted by column changes
 	            }
 	        }
 	        else {
@@ -13978,55 +13930,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.eAllRowContainers.forEach(function (row) { return utils_1.Utils.addCssClass(row, classStr); });
 	        });
 	    };
+	    RenderedRow.EVENT_RENDERED_ROW_REMOVED = 'renderedRowRemoved';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RenderedRow.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], RenderedRow.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('columnAnimationService'), 
+	        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+	    ], RenderedRow.prototype, "columnAnimationService", void 0);
+	    __decorate([
+	        context_1.Autowired('$compile'), 
+	        __metadata('design:type', Object)
+	    ], RenderedRow.prototype, "$compile", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], RenderedRow.prototype, "mainEventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RenderedRow.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], RenderedRow.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Autowired('cellRendererService'), 
+	        __metadata('design:type', cellRendererService_1.CellRendererService)
+	    ], RenderedRow.prototype, "cellRendererService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], RenderedRow.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('paginationProxy'), 
+	        __metadata('design:type', paginationProxy_1.PaginationProxy)
+	    ], RenderedRow.prototype, "paginationProxy", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], RenderedRow.prototype, "init", null);
 	    return RenderedRow;
 	}(beanStub_1.BeanStub));
-	RenderedRow.EVENT_RENDERED_ROW_REMOVED = 'renderedRowRemoved';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RenderedRow.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], RenderedRow.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('columnAnimationService'),
-	    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-	], RenderedRow.prototype, "columnAnimationService", void 0);
-	__decorate([
-	    context_1.Autowired('$compile'),
-	    __metadata("design:type", Object)
-	], RenderedRow.prototype, "$compile", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], RenderedRow.prototype, "mainEventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RenderedRow.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], RenderedRow.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Autowired('cellRendererService'),
-	    __metadata("design:type", cellRendererService_1.CellRendererService)
-	], RenderedRow.prototype, "cellRendererService", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], RenderedRow.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('paginationProxy'),
-	    __metadata("design:type", paginationProxy_1.PaginationProxy)
-	], RenderedRow.prototype, "paginationProxy", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], RenderedRow.prototype, "init", null);
 	exports.RenderedRow = RenderedRow;
 
 
@@ -14041,16 +13993,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -14060,7 +14007,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var column_1 = __webpack_require__(16);
 	var rowNode_1 = __webpack_require__(28);
@@ -14093,20 +14039,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RenderedCell = (function (_super) {
 	    __extends(RenderedCell, _super);
 	    function RenderedCell(column, node, scope, renderedRow) {
-	        var _this = _super.call(this, '<div/>') || this;
+	        _super.call(this, '<div/>');
 	        // set to null, not false, as we need to set 'ag-cell-no-focus' first time around
-	        _this.cellFocused = null;
-	        _this.firstRightPinned = false;
-	        _this.lastLeftPinned = false;
+	        this.cellFocused = null;
+	        this.firstRightPinned = false;
+	        this.lastLeftPinned = false;
 	        // because we reference eGridCell everywhere in this class,
 	        // we keep a local reference
-	        _this.eGridCell = _this.getGui();
-	        _this.column = column;
-	        _this.node = node;
-	        _this.scope = scope;
-	        _this.renderedRow = renderedRow;
-	        _this.setupGridCell();
-	        return _this;
+	        this.eGridCell = this.getGui();
+	        this.column = column;
+	        this.node = node;
+	        this.scope = scope;
+	        this.renderedRow = renderedRow;
+	        this.setupGridCell();
 	    }
 	    RenderedCell.prototype.createGridCell = function () {
 	        var gridCellDef = {
@@ -14985,7 +14930,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (template) {
 	                this.eParentOfValue.innerHTML = template;
 	            }
-	            // use cell renderer if it exists
 	        }
 	        else if (floatingCellRenderer && this.node.floating) {
 	            // if floating, then give preference to floating cell renderer
@@ -15062,107 +15006,107 @@ return /******/ (function(modules) { // webpackBootstrap
 	            utils_1.Utils.addCssClass(this.eGridCell, 'ag-group-cell');
 	        }
 	    };
+	    RenderedCell.PRINTABLE_CHARACTERS = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!"£$%^&*()_+-=[];\'#,./\|<>?:@~{}';
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RenderedCell.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('columnApi'), 
+	        __metadata('design:type', columnController_1.ColumnApi)
+	    ], RenderedCell.prototype, "columnApi", void 0);
+	    __decorate([
+	        context_1.Autowired('gridApi'), 
+	        __metadata('design:type', gridApi_1.GridApi)
+	    ], RenderedCell.prototype, "gridApi", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RenderedCell.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], RenderedCell.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], RenderedCell.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        context_1.Autowired('$compile'), 
+	        __metadata('design:type', Object)
+	    ], RenderedCell.prototype, "$compile", void 0);
+	    __decorate([
+	        context_1.Autowired('templateService'), 
+	        __metadata('design:type', templateService_1.TemplateService)
+	    ], RenderedCell.prototype, "templateService", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], RenderedCell.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], RenderedCell.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], RenderedCell.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('columnAnimationService'), 
+	        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+	    ], RenderedCell.prototype, "columnAnimationService", void 0);
+	    __decorate([
+	        context_1.Optional('rangeController'), 
+	        __metadata('design:type', Object)
+	    ], RenderedCell.prototype, "rangeController", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], RenderedCell.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Optional('contextMenuFactory'), 
+	        __metadata('design:type', Object)
+	    ], RenderedCell.prototype, "contextMenuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('focusService'), 
+	        __metadata('design:type', focusService_1.FocusService)
+	    ], RenderedCell.prototype, "focusService", void 0);
+	    __decorate([
+	        context_1.Autowired('cellEditorFactory'), 
+	        __metadata('design:type', cellEditorFactory_1.CellEditorFactory)
+	    ], RenderedCell.prototype, "cellEditorFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('cellRendererFactory'), 
+	        __metadata('design:type', cellRendererFactory_1.CellRendererFactory)
+	    ], RenderedCell.prototype, "cellRendererFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('popupService'), 
+	        __metadata('design:type', popupService_1.PopupService)
+	    ], RenderedCell.prototype, "popupService", void 0);
+	    __decorate([
+	        context_1.Autowired('cellRendererService'), 
+	        __metadata('design:type', cellRendererService_1.CellRendererService)
+	    ], RenderedCell.prototype, "cellRendererService", void 0);
+	    __decorate([
+	        context_1.Autowired('valueFormatterService'), 
+	        __metadata('design:type', valueFormatterService_1.ValueFormatterService)
+	    ], RenderedCell.prototype, "valueFormatterService", void 0);
+	    __decorate([
+	        context_1.Autowired('stylingService'), 
+	        __metadata('design:type', stylingService_1.StylingService)
+	    ], RenderedCell.prototype, "stylingService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnHoverService'), 
+	        __metadata('design:type', columnHoverService_1.ColumnHoverService)
+	    ], RenderedCell.prototype, "columnHoverService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], RenderedCell.prototype, "init", null);
 	    return RenderedCell;
 	}(component_1.Component));
-	RenderedCell.PRINTABLE_CHARACTERS = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!"£$%^&*()_+-=[];\'#,./\|<>?:@~{}';
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RenderedCell.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('columnApi'),
-	    __metadata("design:type", columnController_1.ColumnApi)
-	], RenderedCell.prototype, "columnApi", void 0);
-	__decorate([
-	    context_1.Autowired('gridApi'),
-	    __metadata("design:type", gridApi_1.GridApi)
-	], RenderedCell.prototype, "gridApi", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RenderedCell.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], RenderedCell.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], RenderedCell.prototype, "rowRenderer", void 0);
-	__decorate([
-	    context_1.Autowired('$compile'),
-	    __metadata("design:type", Object)
-	], RenderedCell.prototype, "$compile", void 0);
-	__decorate([
-	    context_1.Autowired('templateService'),
-	    __metadata("design:type", templateService_1.TemplateService)
-	], RenderedCell.prototype, "templateService", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], RenderedCell.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], RenderedCell.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], RenderedCell.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('columnAnimationService'),
-	    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-	], RenderedCell.prototype, "columnAnimationService", void 0);
-	__decorate([
-	    context_1.Optional('rangeController'),
-	    __metadata("design:type", Object)
-	], RenderedCell.prototype, "rangeController", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], RenderedCell.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Optional('contextMenuFactory'),
-	    __metadata("design:type", Object)
-	], RenderedCell.prototype, "contextMenuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('focusService'),
-	    __metadata("design:type", focusService_1.FocusService)
-	], RenderedCell.prototype, "focusService", void 0);
-	__decorate([
-	    context_1.Autowired('cellEditorFactory'),
-	    __metadata("design:type", cellEditorFactory_1.CellEditorFactory)
-	], RenderedCell.prototype, "cellEditorFactory", void 0);
-	__decorate([
-	    context_1.Autowired('cellRendererFactory'),
-	    __metadata("design:type", cellRendererFactory_1.CellRendererFactory)
-	], RenderedCell.prototype, "cellRendererFactory", void 0);
-	__decorate([
-	    context_1.Autowired('popupService'),
-	    __metadata("design:type", popupService_1.PopupService)
-	], RenderedCell.prototype, "popupService", void 0);
-	__decorate([
-	    context_1.Autowired('cellRendererService'),
-	    __metadata("design:type", cellRendererService_1.CellRendererService)
-	], RenderedCell.prototype, "cellRendererService", void 0);
-	__decorate([
-	    context_1.Autowired('valueFormatterService'),
-	    __metadata("design:type", valueFormatterService_1.ValueFormatterService)
-	], RenderedCell.prototype, "valueFormatterService", void 0);
-	__decorate([
-	    context_1.Autowired('stylingService'),
-	    __metadata("design:type", stylingService_1.StylingService)
-	], RenderedCell.prototype, "stylingService", void 0);
-	__decorate([
-	    context_1.Autowired('columnHoverService'),
-	    __metadata("design:type", columnHoverService_1.ColumnHoverService)
-	], RenderedCell.prototype, "columnHoverService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], RenderedCell.prototype, "init", null);
 	exports.RenderedCell = RenderedCell;
 
 
@@ -15186,7 +15130,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
 	var gridCore_1 = __webpack_require__(45);
@@ -15274,31 +15217,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    FocusService.prototype.destroy = function () {
 	        this.destroyMethods.forEach(function (destroyMethod) { return destroyMethod(); });
 	    };
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', gridCore_1.GridCore)
+	    ], FocusService.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], FocusService.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FocusService.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FocusService.prototype, "destroy", null);
+	    FocusService = __decorate([
+	        context_1.Bean('focusService'), 
+	        __metadata('design:paramtypes', [])
+	    ], FocusService);
 	    return FocusService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", gridCore_1.GridCore)
-	], FocusService.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], FocusService.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FocusService.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FocusService.prototype, "destroy", null);
-	FocusService = __decorate([
-	    context_1.Bean('focusService')
-	], FocusService);
 	exports.FocusService = FocusService;
 
 
@@ -15325,7 +15269,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var columnController_1 = __webpack_require__(14);
 	var rowRenderer_1 = __webpack_require__(24);
@@ -15568,101 +15511,101 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventService.dispatchEvent(events_1.Events.EVENT_GRID_SIZE_CHANGED, event);
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptions'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "gridOptions", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], GridCore.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('frameworkFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "frameworkFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GridCore.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], GridCore.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], GridCore.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], GridCore.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], GridCore.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('eGridDiv'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GridCore.prototype, "eGridDiv", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('quickFilterOnScope'), 
+	        __metadata('design:type', String)
+	    ], GridCore.prototype, "quickFilterOnScope", void 0);
+	    __decorate([
+	        context_1.Autowired('popupService'), 
+	        __metadata('design:type', popupService_1.PopupService)
+	    ], GridCore.prototype, "popupService", void 0);
+	    __decorate([
+	        context_1.Autowired('focusedCellController'), 
+	        __metadata('design:type', focusedCellController_1.FocusedCellController)
+	    ], GridCore.prototype, "focusedCellController", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], GridCore.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Optional('rowGroupCompFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "rowGroupCompFactory", void 0);
+	    __decorate([
+	        context_1.Optional('pivotCompFactory'), 
+	        __metadata('design:type', Object)
+	    ], GridCore.prototype, "pivotCompFactory", void 0);
+	    __decorate([
+	        context_1.Optional('toolPanel'), 
+	        __metadata('design:type', component_1.Component)
+	    ], GridCore.prototype, "toolPanel", void 0);
+	    __decorate([
+	        context_1.Optional('statusBar'), 
+	        __metadata('design:type', component_1.Component)
+	    ], GridCore.prototype, "statusBar", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridCore.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], GridCore.prototype, "destroy", null);
+	    GridCore = __decorate([
+	        context_1.Bean('gridCore'),
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory])
+	    ], GridCore);
 	    return GridCore;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptions'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "gridOptions", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], GridCore.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('frameworkFactory'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "frameworkFactory", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GridCore.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], GridCore.prototype, "rowRenderer", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], GridCore.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], GridCore.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], GridCore.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('eGridDiv'),
-	    __metadata("design:type", HTMLElement)
-	], GridCore.prototype, "eGridDiv", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('quickFilterOnScope'),
-	    __metadata("design:type", String)
-	], GridCore.prototype, "quickFilterOnScope", void 0);
-	__decorate([
-	    context_1.Autowired('popupService'),
-	    __metadata("design:type", popupService_1.PopupService)
-	], GridCore.prototype, "popupService", void 0);
-	__decorate([
-	    context_1.Autowired('focusedCellController'),
-	    __metadata("design:type", focusedCellController_1.FocusedCellController)
-	], GridCore.prototype, "focusedCellController", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], GridCore.prototype, "context", void 0);
-	__decorate([
-	    context_1.Optional('rowGroupCompFactory'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "rowGroupCompFactory", void 0);
-	__decorate([
-	    context_1.Optional('pivotCompFactory'),
-	    __metadata("design:type", Object)
-	], GridCore.prototype, "pivotCompFactory", void 0);
-	__decorate([
-	    context_1.Optional('toolPanel'),
-	    __metadata("design:type", component_1.Component)
-	], GridCore.prototype, "toolPanel", void 0);
-	__decorate([
-	    context_1.Optional('statusBar'),
-	    __metadata("design:type", component_1.Component)
-	], GridCore.prototype, "statusBar", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridCore.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], GridCore.prototype, "destroy", null);
-	GridCore = __decorate([
-	    context_1.Bean('gridCore'),
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory])
-	], GridCore);
 	exports.GridCore = GridCore;
 
 
@@ -15686,7 +15629,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var popupService_1 = __webpack_require__(47);
@@ -16086,71 +16028,72 @@ return /******/ (function(modules) { // webpackBootstrap
 	            console.warn('ag-grid: From ag-grid 1.14, the constructor should take no parameters and init() used instead.');
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('$compile'), 
+	        __metadata('design:type', Object)
+	    ], FilterManager.prototype, "$compile", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], FilterManager.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], FilterManager.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', Object)
+	    ], FilterManager.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('popupService'), 
+	        __metadata('design:type', popupService_1.PopupService)
+	    ], FilterManager.prototype, "popupService", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], FilterManager.prototype, "valueService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], FilterManager.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], FilterManager.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], FilterManager.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('enterprise'), 
+	        __metadata('design:type', Boolean)
+	    ], FilterManager.prototype, "enterprise", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], FilterManager.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], FilterManager.prototype, "componentProvider", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FilterManager.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], FilterManager.prototype, "destroy", null);
+	    FilterManager = __decorate([
+	        context_1.Bean('filterManager'), 
+	        __metadata('design:paramtypes', [])
+	    ], FilterManager);
 	    return FilterManager;
 	}());
-	__decorate([
-	    context_1.Autowired('$compile'),
-	    __metadata("design:type", Object)
-	], FilterManager.prototype, "$compile", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], FilterManager.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], FilterManager.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", Object)
-	], FilterManager.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('popupService'),
-	    __metadata("design:type", popupService_1.PopupService)
-	], FilterManager.prototype, "popupService", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], FilterManager.prototype, "valueService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], FilterManager.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], FilterManager.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], FilterManager.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('enterprise'),
-	    __metadata("design:type", Boolean)
-	], FilterManager.prototype, "enterprise", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], FilterManager.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], FilterManager.prototype, "componentProvider", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FilterManager.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], FilterManager.prototype, "destroy", null);
-	FilterManager = __decorate([
-	    context_1.Bean('filterManager')
-	], FilterManager);
 	exports.FilterManager = FilterManager;
 
 
@@ -16174,7 +16117,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var constants_1 = __webpack_require__(8);
 	var context_1 = __webpack_require__(6);
@@ -16402,19 +16344,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return hidePopup;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', gridCore_1.GridCore)
+	    ], PopupService.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], PopupService.prototype, "gridOptionsWrapper", void 0);
+	    PopupService = __decorate([
+	        context_1.Bean('popupService'), 
+	        __metadata('design:paramtypes', [])
+	    ], PopupService);
 	    return PopupService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", gridCore_1.GridCore)
-	], PopupService.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], PopupService.prototype, "gridOptionsWrapper", void 0);
-	PopupService = __decorate([
-	    context_1.Bean('popupService')
-	], PopupService);
 	exports.PopupService = PopupService;
 
 
@@ -16429,16 +16372,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -16448,14 +16386,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var baseFilter_1 = __webpack_require__(49);
 	var componentAnnotations_1 = __webpack_require__(51);
 	var TextFilter = (function (_super) {
 	    __extends(TextFilter, _super);
 	    function TextFilter() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    TextFilter.prototype.modelFromFloatingFilter = function (from) {
 	        return {
@@ -16569,12 +16506,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TextFilter.prototype.setType = function (filterType) {
 	        this.setFilterType(filterType);
 	    };
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterText'), 
+	        __metadata('design:type', HTMLInputElement)
+	    ], TextFilter.prototype, "eFilterTextField", void 0);
 	    return TextFilter;
 	}(baseFilter_1.ComparableBaseFilter));
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterText'),
-	    __metadata("design:type", HTMLInputElement)
-	], TextFilter.prototype, "eFilterTextField", void 0);
 	exports.TextFilter = TextFilter;
 
 
@@ -16589,16 +16526,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -16608,7 +16540,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var componentAnnotations_1 = __webpack_require__(51);
 	var context_1 = __webpack_require__(6);
@@ -16644,9 +16575,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var BaseFilter = (function (_super) {
 	    __extends(BaseFilter, _super);
 	    function BaseFilter() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.filter = 'equals';
-	        return _this;
+	        _super.apply(this, arguments);
+	        this.filter = 'equals';
 	    }
 	    BaseFilter.prototype.init = function (params) {
 	        this.filterParams = params;
@@ -16740,39 +16670,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var translate = this.gridOptionsWrapper.getLocaleTextFunc();
 	        return translate(toTranslate, DEFAULT_TRANSLATIONS[toTranslate]);
 	    };
+	    BaseFilter.EQUALS = 'equals';
+	    BaseFilter.NOT_EQUAL = 'notEqual';
+	    BaseFilter.LESS_THAN = 'lessThan';
+	    BaseFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual';
+	    BaseFilter.GREATER_THAN = 'greaterThan';
+	    BaseFilter.GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual';
+	    BaseFilter.IN_RANGE = 'inRange';
+	    BaseFilter.CONTAINS = 'contains'; //1;
+	    BaseFilter.NOT_CONTAINS = 'notContains'; //1;
+	    BaseFilter.STARTS_WITH = 'startsWith'; //4;
+	    BaseFilter.ENDS_WITH = 'endsWith'; //5;
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#applyPanel'), 
+	        __metadata('design:type', HTMLElement)
+	    ], BaseFilter.prototype, "eButtonsPanel", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#applyButton'), 
+	        __metadata('design:type', HTMLElement)
+	    ], BaseFilter.prototype, "eApplyButton", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#clearButton'), 
+	        __metadata('design:type', HTMLElement)
+	    ], BaseFilter.prototype, "eClearButton", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], BaseFilter.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], BaseFilter.prototype, "gridOptionsWrapper", void 0);
 	    return BaseFilter;
 	}(component_1.Component));
-	BaseFilter.EQUALS = 'equals';
-	BaseFilter.NOT_EQUAL = 'notEqual';
-	BaseFilter.LESS_THAN = 'lessThan';
-	BaseFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual';
-	BaseFilter.GREATER_THAN = 'greaterThan';
-	BaseFilter.GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual';
-	BaseFilter.IN_RANGE = 'inRange';
-	BaseFilter.CONTAINS = 'contains'; //1;
-	BaseFilter.NOT_CONTAINS = 'notContains'; //1;
-	BaseFilter.STARTS_WITH = 'startsWith'; //4;
-	BaseFilter.ENDS_WITH = 'endsWith'; //5;
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#applyPanel'),
-	    __metadata("design:type", HTMLElement)
-	], BaseFilter.prototype, "eButtonsPanel", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#applyButton'),
-	    __metadata("design:type", HTMLElement)
-	], BaseFilter.prototype, "eApplyButton", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#clearButton'),
-	    __metadata("design:type", HTMLElement)
-	], BaseFilter.prototype, "eClearButton", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], BaseFilter.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], BaseFilter.prototype, "gridOptionsWrapper", void 0);
 	exports.BaseFilter = BaseFilter;
 	/**
 	 * Every filter with a dropdown where the user can specify a comparing type against the filter values
@@ -16780,7 +16710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ComparableBaseFilter = (function (_super) {
 	    __extends(ComparableBaseFilter, _super);
 	    function ComparableBaseFilter() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    ComparableBaseFilter.prototype.init = function (params) {
 	        _super.prototype.init.call(this, params);
@@ -16815,12 +16745,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.filter = filterType;
 	        this.eTypeSelector.value = filterType;
 	    };
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterType'), 
+	        __metadata('design:type', HTMLSelectElement)
+	    ], ComparableBaseFilter.prototype, "eTypeSelector", void 0);
 	    return ComparableBaseFilter;
 	}(BaseFilter));
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterType'),
-	    __metadata("design:type", HTMLSelectElement)
-	], ComparableBaseFilter.prototype, "eTypeSelector", void 0);
 	exports.ComparableBaseFilter = ComparableBaseFilter;
 	/**
 	 * Comparable filter with scalar underlying values (ie numbers and dates. Strings are not scalar so have to extend
@@ -16829,7 +16759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ScalarBaseFilter = (function (_super) {
 	    __extends(ScalarBaseFilter, _super);
 	    function ScalarBaseFilter() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    ScalarBaseFilter.prototype.doesFilterPass = function (params) {
 	        var value = this.filterParams.valueGetter(params.node);
@@ -16885,30 +16815,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var utils_1 = __webpack_require__(7);
 	var beanStub_1 = __webpack_require__(38);
 	var Component = (function (_super) {
 	    __extends(Component, _super);
 	    function Component(template) {
-	        var _this = _super.call(this) || this;
-	        _this.childComponents = [];
-	        _this.annotatedEventListeners = [];
-	        _this.visible = true;
+	        _super.call(this);
+	        this.childComponents = [];
+	        this.annotatedEventListeners = [];
+	        this.visible = true;
 	        if (template) {
-	            _this.setTemplate(template);
+	            this.setTemplate(template);
 	        }
-	        return _this;
 	    }
 	    Component.prototype.instantiate = function (context) {
 	        this.instantiateRecurse(this.getGui(), context);
@@ -16979,7 +16902,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	            else {
-	                // put debug msg in here if query selector fails???
 	            }
 	        });
 	    };
@@ -17087,9 +17009,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Component.prototype.getRefElement = function (refName) {
 	        return this.queryForHtmlElement('[ref="' + refName + '"]');
 	    };
+	    Component.EVENT_VISIBLE_CHANGED = 'visibleChanged';
 	    return Component;
 	}(beanStub_1.BeanStub));
-	Component.EVENT_VISIBLE_CHANGED = 'visibleChanged';
 	exports.Component = Component;
 
 
@@ -17104,7 +17026,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	function QuerySelector(selector) {
 	    return querySelectorFunc.bind(this, selector);
 	}
@@ -17172,16 +17093,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -17191,14 +17107,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var componentAnnotations_1 = __webpack_require__(51);
 	var baseFilter_1 = __webpack_require__(49);
 	var NumberFilter = (function (_super) {
 	    __extends(NumberFilter, _super);
 	    function NumberFilter() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    NumberFilter.prototype.modelFromFloatingFilter = function (from) {
 	        return {
@@ -17311,23 +17226,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NumberFilter.prototype.setType = function (filterType) {
 	        this.setFilterType(filterType);
 	    };
+	    NumberFilter.EQUALS = 'equals'; // 1;
+	    NumberFilter.NOT_EQUAL = 'notEqual'; //2;
+	    NumberFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual'; //4;
+	    NumberFilter.GREATER_THAN = 'greaterThan'; //5;
+	    NumberFilter.GREATER_THAN_OR_EQUAL = 'greaterThan'; //6;
+	    NumberFilter.IN_RANGE = 'inRange';
+	    NumberFilter.LESS_THAN = 'lessThan'; //3;
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterNumberToPanel'), 
+	        __metadata('design:type', HTMLElement)
+	    ], NumberFilter.prototype, "eNumberToPanel", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterToText'), 
+	        __metadata('design:type', HTMLInputElement)
+	    ], NumberFilter.prototype, "eFilterToTextField", void 0);
 	    return NumberFilter;
 	}(baseFilter_1.ScalarBaseFilter));
-	NumberFilter.EQUALS = 'equals'; // 1;
-	NumberFilter.NOT_EQUAL = 'notEqual'; //2;
-	NumberFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual'; //4;
-	NumberFilter.GREATER_THAN = 'greaterThan'; //5;
-	NumberFilter.GREATER_THAN_OR_EQUAL = 'greaterThan'; //6;
-	NumberFilter.IN_RANGE = 'inRange';
-	NumberFilter.LESS_THAN = 'lessThan'; //3;
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterNumberToPanel'),
-	    __metadata("design:type", HTMLElement)
-	], NumberFilter.prototype, "eNumberToPanel", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterToText'),
-	    __metadata("design:type", HTMLInputElement)
-	], NumberFilter.prototype, "eFilterToTextField", void 0);
 	exports.NumberFilter = NumberFilter;
 
 
@@ -17342,16 +17257,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -17361,7 +17271,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var componentAnnotations_1 = __webpack_require__(51);
 	var utils_1 = __webpack_require__(7);
@@ -17371,7 +17280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var DateFilter = (function (_super) {
 	    __extends(DateFilter, _super);
 	    function DateFilter() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    DateFilter.prototype.modelFromFloatingFilter = function (from) {
 	        return {
@@ -17476,25 +17385,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return null;
 	        return new Date(from.getFullYear(), from.getMonth(), from.getDate());
 	    };
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], DateFilter.prototype, "componentProvider", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterDateFromPanel'), 
+	        __metadata('design:type', HTMLElement)
+	    ], DateFilter.prototype, "eDateFromPanel", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('#filterDateToPanel'), 
+	        __metadata('design:type', HTMLElement)
+	    ], DateFilter.prototype, "eDateToPanel", void 0);
 	    return DateFilter;
 	}(baseFilter_1.ScalarBaseFilter));
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], DateFilter.prototype, "componentProvider", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterDateFromPanel'),
-	    __metadata("design:type", HTMLElement)
-	], DateFilter.prototype, "eDateFromPanel", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('#filterDateToPanel'),
-	    __metadata("design:type", HTMLElement)
-	], DateFilter.prototype, "eDateToPanel", void 0);
 	exports.DateFilter = DateFilter;
 	var DefaultDateComponent = (function (_super) {
 	    __extends(DefaultDateComponent, _super);
 	    function DefaultDateComponent() {
-	        return _super.call(this, "<input class=\"ag-filter-filter\" type=\"text\" placeholder=\"yyyy-mm-dd\">") || this;
+	        _super.call(this, "<input class=\"ag-filter-filter\" type=\"text\" placeholder=\"yyyy-mm-dd\">");
 	    }
 	    DefaultDateComponent.prototype.init = function (params) {
 	        this.eDateInput = this.getGui();
@@ -17535,7 +17444,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var headerGroupComp_1 = __webpack_require__(55);
 	var headerComp_1 = __webpack_require__(58);
@@ -17712,37 +17620,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return this.createAgGridComponent(column.getColDef(), "floatingFilterWrapperComponent", "emptyFloatingFilterWrapperComponent", floatingFilterWrapperComponentParams);
 	    };
+	    __decorate([
+	        context_1.Autowired("gridOptions"), 
+	        __metadata('design:type', Object)
+	    ], ComponentProvider.prototype, "gridOptions", void 0);
+	    __decorate([
+	        context_1.Autowired("gridOptionsWrapper"), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ComponentProvider.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], ComponentProvider.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired("context"), 
+	        __metadata('design:type', context_1.Context)
+	    ], ComponentProvider.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Optional("frameworkComponentWrapper"), 
+	        __metadata('design:type', Object)
+	    ], ComponentProvider.prototype, "frameworkComponentWrapper", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], ComponentProvider.prototype, "postContruct", null);
+	    ComponentProvider = __decorate([
+	        context_1.Bean('componentProvider'), 
+	        __metadata('design:paramtypes', [])
+	    ], ComponentProvider);
 	    return ComponentProvider;
 	}());
-	__decorate([
-	    context_1.Autowired("gridOptions"),
-	    __metadata("design:type", Object)
-	], ComponentProvider.prototype, "gridOptions", void 0);
-	__decorate([
-	    context_1.Autowired("gridOptionsWrapper"),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ComponentProvider.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], ComponentProvider.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired("context"),
-	    __metadata("design:type", context_1.Context)
-	], ComponentProvider.prototype, "context", void 0);
-	__decorate([
-	    context_1.Optional("frameworkComponentWrapper"),
-	    __metadata("design:type", Object)
-	], ComponentProvider.prototype, "frameworkComponentWrapper", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], ComponentProvider.prototype, "postContruct", null);
-	ComponentProvider = __decorate([
-	    context_1.Bean('componentProvider')
-	], ComponentProvider);
 	exports.ComponentProvider = ComponentProvider;
 
 
@@ -17757,16 +17666,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -17776,7 +17680,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var svgFactory_1 = __webpack_require__(56);
 	var utils_1 = __webpack_require__(7);
@@ -17790,7 +17693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var HeaderGroupComp = (function (_super) {
 	    __extends(HeaderGroupComp, _super);
 	    function HeaderGroupComp() {
-	        return _super.call(this, HeaderGroupComp.TEMPLATE) || this;
+	        _super.call(this, HeaderGroupComp.TEMPLATE);
 	    }
 	    HeaderGroupComp.prototype.init = function (params) {
 	        this.params = params;
@@ -17852,29 +17755,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            eInnerText.innerHTML = this.params.displayName;
 	        }
 	    };
+	    HeaderGroupComp.TEMPLATE = "<div class=\"ag-header-group-cell-label\">" +
+	        "<span ref=\"agLabel\" class=\"ag-header-group-text\"></span>" +
+	        "<span ref=\"agOpened\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-expanded\"></span>" +
+	        "<span ref=\"agClosed\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-collapsed\"></span>" +
+	        "</div>";
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderGroupComp.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderGroupComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('agOpened'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderGroupComp.prototype, "eOpenIcon", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('agClosed'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderGroupComp.prototype, "eCloseIcon", void 0);
 	    return HeaderGroupComp;
 	}(component_1.Component));
-	HeaderGroupComp.TEMPLATE = "<div class=\"ag-header-group-cell-label\">" +
-	    "<span ref=\"agLabel\" class=\"ag-header-group-text\"></span>" +
-	    "<span ref=\"agOpened\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-expanded\"></span>" +
-	    "<span ref=\"agClosed\" class=\"ag-header-icon ag-header-expand-icon ag-header-expand-icon-collapsed\"></span>" +
-	    "</div>";
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderGroupComp.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderGroupComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('agOpened'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderGroupComp.prototype, "eOpenIcon", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('agClosed'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderGroupComp.prototype, "eCloseIcon", void 0);
 	exports.HeaderGroupComp = HeaderGroupComp;
 
 
@@ -17889,7 +17792,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var SVG_NS = "http://www.w3.org/2000/svg";
 	var SvgFactory = (function () {
 	    function SvgFactory() {
@@ -18097,9 +17999,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SvgFactory.prototype.createGroupLoadingIcon = function () {
 	        return SvgFactory.getFromCacheOrCreate('GroupLoadingIcon', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6M0I3QUY0MjAwQTM2MTFFNzkzQzNGQUI2NDhCM0RBRTEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6M0I3QUY0MjEwQTM2MTFFNzkzQzNGQUI2NDhCM0RBRTEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozQjdBRjQxRTBBMzYxMUU3OTNDM0ZBQjY0OEIzREFFMSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozQjdBRjQxRjBBMzYxMUU3OTNDM0ZBQjY0OEIzREFFMSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Ps9zjP8AAADESURBVHjadNDJCoFRGMbxj4xlyhBJGSNla+0KLNhKYaXIwsbKXbgDd2PjHtjYYUVS/I+exdfBqV9neN8zvMdxvlsOOzTsgFf9BGONQ2gjofkAM/emBV4YwY87UuhpfW3f0legjBYymo/dSVkUNDaJUY2DqMKjuKnlU8wZJ0R+FHxUfG921VXUQf0VN709rfebkx/uEzp4ooKS3mw2de2rpipmjgAuSGKo9ZVJ8rn+e4kNioijhi1iCDt/Wt4Ug6YdeAswAEquIINwlr6iAAAAAElFTkSuQmCC');
 	    };
+	    SvgFactory.imageCache = {};
 	    return SvgFactory;
 	}());
-	SvgFactory.imageCache = {};
 	exports.SvgFactory = SvgFactory;
 	// i couldn't figure out how to not make these blurry
 	/*function createPlusMinus(plus: boolean) {
@@ -18195,7 +18097,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var utils_1 = __webpack_require__(7);
 	var TouchListener = (function () {
@@ -18275,11 +18176,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TouchListener.prototype.destroy = function () {
 	        this.destroyFuncs.forEach(function (func) { return func(); });
 	    };
+	    // private mostRecentTouch: Touch;
+	    TouchListener.EVENT_TAP = 'tap';
+	    TouchListener.EVENT_LONG_TAP = 'longTap';
 	    return TouchListener;
 	}());
-	// private mostRecentTouch: Touch;
-	TouchListener.EVENT_TAP = 'tap';
-	TouchListener.EVENT_LONG_TAP = 'longTap';
 	exports.TouchListener = TouchListener;
 
 
@@ -18294,16 +18195,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18313,7 +18209,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var column_1 = __webpack_require__(16);
 	var utils_1 = __webpack_require__(7);
@@ -18329,7 +18224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var HeaderComp = (function (_super) {
 	    __extends(HeaderComp, _super);
 	    function HeaderComp() {
-	        return _super.call(this, HeaderComp.TEMPLATE) || this;
+	        _super.call(this, HeaderComp.TEMPLATE);
 	    }
 	    HeaderComp.prototype.init = function (params) {
 	        this.params = params;
@@ -18467,67 +18362,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var filterPresent = this.params.column.isFilterActive();
 	        utils_1.Utils.addOrRemoveCssClass(this.eFilter, 'ag-hidden', !filterPresent);
 	    };
+	    HeaderComp.TEMPLATE = '<div>' +
+	        '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+	        '  <div ref="eLabel" class="ag-header-cell-label">' +
+	        '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
+	        '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+	        '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+	        '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
+	        '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+	        '    <span ref="eText" class="ag-header-cell-text"></span>' +
+	        '  </div>' +
+	        '</div>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], HeaderComp.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('menuFactory'), 
+	        __metadata('design:type', Object)
+	    ], HeaderComp.prototype, "menuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], HeaderComp.prototype, "eventService", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eFilter'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eFilter", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eSortAsc'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eSortAsc", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eSortDesc'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eSortDesc", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eSortNone'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eSortNone", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eSortOrder'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eSortOrder", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eMenu'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eMenu", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eLabel'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eLabel", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eText'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderComp.prototype, "eText", void 0);
 	    return HeaderComp;
 	}(component_1.Component));
-	HeaderComp.TEMPLATE = '<div>' +
-	    '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
-	    '  <div ref="eLabel" class="ag-header-cell-label">' +
-	    '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order"></span>' +
-	    '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
-	    '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
-	    '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon"></span>' +
-	    '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
-	    '    <span ref="eText" class="ag-header-cell-text"></span>' +
-	    '  </div>' +
-	    '</div>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], HeaderComp.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('menuFactory'),
-	    __metadata("design:type", Object)
-	], HeaderComp.prototype, "menuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], HeaderComp.prototype, "eventService", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eFilter'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eFilter", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eSortAsc'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eSortAsc", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eSortDesc'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eSortDesc", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eSortNone'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eSortNone", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eSortOrder'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eSortOrder", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eMenu'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eMenu", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eLabel'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eLabel", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eText'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderComp.prototype, "eText", void 0);
 	exports.HeaderComp = HeaderComp;
 
 
@@ -18551,7 +18446,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var column_1 = __webpack_require__(16);
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -18560,7 +18454,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var events_1 = __webpack_require__(10);
 	var context_2 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
-	var SortController = SortController_1 = (function () {
+	var SortController = (function () {
 	    function SortController() {
 	    }
 	    SortController.prototype.progressSort = function (column, multiSort) {
@@ -18616,7 +18510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortingOrder = this.gridOptionsWrapper.getSortingOrder();
 	        }
 	        else {
-	            sortingOrder = SortController_1.DEFAULT_SORTING_ORDER;
+	            sortingOrder = SortController.DEFAULT_SORTING_ORDER;
 	        }
 	        if (!Array.isArray(sortingOrder) || sortingOrder.length <= 0) {
 	            console.warn('ag-grid: sortingOrder must be an array with at least one element, currently it\'s ' + sortingOrder);
@@ -18633,7 +18527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            result = sortingOrder[currentIndex + 1];
 	        }
 	        // verify the sort type exists, as the user could provide the sortOrder, need to make sure it's valid
-	        if (SortController_1.DEFAULT_SORTING_ORDER.indexOf(result) < 0) {
+	        if (SortController.DEFAULT_SORTING_ORDER.indexOf(result) < 0) {
 	            console.warn('ag-grid: invalid sort type ' + result);
 	            return null;
 	        }
@@ -18701,26 +18595,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	        });
 	    };
+	    SortController.DEFAULT_SORTING_ORDER = [column_1.Column.SORT_ASC, column_1.Column.SORT_DESC, null];
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], SortController.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], SortController.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], SortController.prototype, "eventService", void 0);
+	    SortController = __decorate([
+	        context_2.Bean('sortController'), 
+	        __metadata('design:paramtypes', [])
+	    ], SortController);
 	    return SortController;
 	}());
-	SortController.DEFAULT_SORTING_ORDER = [column_1.Column.SORT_ASC, column_1.Column.SORT_DESC, null];
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], SortController.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], SortController.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], SortController.prototype, "eventService", void 0);
-	SortController = SortController_1 = __decorate([
-	    context_2.Bean('sortController')
-	], SortController);
 	exports.SortController = SortController;
-	var SortController_1;
 
 
 /***/ },
@@ -18734,16 +18628,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18753,7 +18642,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var dateFilter_1 = __webpack_require__(53);
 	var componentAnnotations_1 = __webpack_require__(51);
@@ -18764,7 +18652,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var InputTextFloatingFilterComp = (function (_super) {
 	    __extends(InputTextFloatingFilterComp, _super);
 	    function InputTextFloatingFilterComp() {
-	        return _super.call(this, "<div><input  ref=\"eColumnFloatingFilter\" class=\"ag-floating-filter-input\"></div>") || this;
+	        _super.call(this, "<div><input  ref=\"eColumnFloatingFilter\" class=\"ag-floating-filter-input\"></div>");
 	    }
 	    InputTextFloatingFilterComp.prototype.init = function (params) {
 	        this.onFloatingFilterChanged = params.onFloatingFilterChanged;
@@ -18789,17 +18677,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 	    };
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eColumnFloatingFilter'), 
+	        __metadata('design:type', HTMLInputElement)
+	    ], InputTextFloatingFilterComp.prototype, "eColumnFloatingFilter", void 0);
 	    return InputTextFloatingFilterComp;
 	}(component_1.Component));
-	__decorate([
-	    componentAnnotations_1.RefSelector('eColumnFloatingFilter'),
-	    __metadata("design:type", HTMLInputElement)
-	], InputTextFloatingFilterComp.prototype, "eColumnFloatingFilter", void 0);
 	exports.InputTextFloatingFilterComp = InputTextFloatingFilterComp;
 	var TextFloatingFilterComp = (function (_super) {
 	    __extends(TextFloatingFilterComp, _super);
 	    function TextFloatingFilterComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    TextFloatingFilterComp.prototype.asFloatingFilterText = function (parentModel) {
 	        if (!parentModel)
@@ -18820,7 +18708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var DateFloatingFilterComp = (function (_super) {
 	    __extends(DateFloatingFilterComp, _super);
 	    function DateFloatingFilterComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    DateFloatingFilterComp.prototype.init = function (params) {
 	        this.onFloatingFilterChanged = params.onFloatingFilterChanged;
@@ -18864,17 +18752,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.dateComponent.setDate(utils_1._.parseYyyyMmDdToDate(parentModel.dateFrom, '-'));
 	    };
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], DateFloatingFilterComp.prototype, "componentProvider", void 0);
 	    return DateFloatingFilterComp;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], DateFloatingFilterComp.prototype, "componentProvider", void 0);
 	exports.DateFloatingFilterComp = DateFloatingFilterComp;
 	var NumberFloatingFilterComp = (function (_super) {
 	    __extends(NumberFloatingFilterComp, _super);
 	    function NumberFloatingFilterComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    NumberFloatingFilterComp.prototype.asFloatingFilterText = function (parentModel) {
 	        var rawParentModel = this.currentParentModel();
@@ -18927,7 +18815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SetFloatingFilterComp = (function (_super) {
 	    __extends(SetFloatingFilterComp, _super);
 	    function SetFloatingFilterComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    SetFloatingFilterComp.prototype.init = function (params) {
 	        _super.prototype.init.call(this, params);
@@ -18950,7 +18838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ReadModelAsStringFloatingFilterComp = (function (_super) {
 	    __extends(ReadModelAsStringFloatingFilterComp, _super);
 	    function ReadModelAsStringFloatingFilterComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    ReadModelAsStringFloatingFilterComp.prototype.init = function (params) {
 	        _super.prototype.init.call(this, params);
@@ -18981,16 +18869,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19000,7 +18883,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var column_1 = __webpack_require__(16);
 	var utils_1 = __webpack_require__(7);
@@ -19010,7 +18892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var BaseFilterWrapperComp = (function (_super) {
 	    __extends(BaseFilterWrapperComp, _super);
 	    function BaseFilterWrapperComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    BaseFilterWrapperComp.prototype.init = function (params) {
 	        this.column = params.column;
@@ -19027,17 +18909,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BaseFilterWrapperComp.prototype.onColumnWidthChanged = function () {
 	        this.getGui().style.width = this.column.getActualWidth() + 'px';
 	    };
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], BaseFilterWrapperComp.prototype, "context", void 0);
 	    return BaseFilterWrapperComp;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], BaseFilterWrapperComp.prototype, "context", void 0);
 	exports.BaseFilterWrapperComp = BaseFilterWrapperComp;
 	var FloatingFilterWrapperComp = (function (_super) {
 	    __extends(FloatingFilterWrapperComp, _super);
 	    function FloatingFilterWrapperComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    FloatingFilterWrapperComp.prototype.init = function (params) {
 	        this.floatingFilterComp = params.floatingFilterComp;
@@ -19065,21 +18947,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    FloatingFilterWrapperComp.prototype.showParentFilter = function () {
 	        this.menuFactory.showMenuAfterButtonClick(this.column, this.eButtonShowMainFilter, 'filter');
 	    };
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eButtonShowMainFilter'), 
+	        __metadata('design:type', HTMLInputElement)
+	    ], FloatingFilterWrapperComp.prototype, "eButtonShowMainFilter", void 0);
+	    __decorate([
+	        context_1.Autowired('menuFactory'), 
+	        __metadata('design:type', Object)
+	    ], FloatingFilterWrapperComp.prototype, "menuFactory", void 0);
 	    return FloatingFilterWrapperComp;
 	}(BaseFilterWrapperComp));
-	__decorate([
-	    componentAnnotations_1.RefSelector('eButtonShowMainFilter'),
-	    __metadata("design:type", HTMLInputElement)
-	], FloatingFilterWrapperComp.prototype, "eButtonShowMainFilter", void 0);
-	__decorate([
-	    context_1.Autowired('menuFactory'),
-	    __metadata("design:type", Object)
-	], FloatingFilterWrapperComp.prototype, "menuFactory", void 0);
 	exports.FloatingFilterWrapperComp = FloatingFilterWrapperComp;
 	var EmptyFloatingFilterWrapperComp = (function (_super) {
 	    __extends(EmptyFloatingFilterWrapperComp, _super);
 	    function EmptyFloatingFilterWrapperComp() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    EmptyFloatingFilterWrapperComp.prototype.enrichBody = function (body) {
 	    };
@@ -19101,16 +18983,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19120,7 +18997,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var column_1 = __webpack_require__(16);
 	var beanStub_1 = __webpack_require__(38);
@@ -19130,10 +19006,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SetLeftFeature = (function (_super) {
 	    __extends(SetLeftFeature, _super);
 	    function SetLeftFeature(columnOrGroup, eCell) {
-	        var _this = _super.call(this) || this;
-	        _this.columnOrGroup = columnOrGroup;
-	        _this.eCell = eCell;
-	        return _this;
+	        _super.call(this);
+	        this.columnOrGroup = columnOrGroup;
+	        this.eCell = eCell;
 	    }
 	    SetLeftFeature.prototype.init = function () {
 	        this.addDestroyableEventListener(this.columnOrGroup, column_1.Column.EVENT_LEFT_CHANGED, this.onLeftChanged.bind(this));
@@ -19180,22 +19055,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eCell.style.left = value + 'px';
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], SetLeftFeature.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnAnimationService'), 
+	        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+	    ], SetLeftFeature.prototype, "columnAnimationService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], SetLeftFeature.prototype, "init", null);
 	    return SetLeftFeature;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], SetLeftFeature.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnAnimationService'),
-	    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-	], SetLeftFeature.prototype, "columnAnimationService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], SetLeftFeature.prototype, "init", null);
 	exports.SetLeftFeature = SetLeftFeature;
 
 
@@ -19219,7 +19094,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var gridPanel_1 = __webpack_require__(25);
@@ -19298,19 +19172,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setTimeout(function () { return nowFuncs.forEach(function (func) { return func(); }); }, 0);
 	        setTimeout(function () { return waitFuncs.forEach(function (func) { return func(); }); }, 300);
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ColumnAnimationService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], ColumnAnimationService.prototype, "gridPanel", void 0);
+	    ColumnAnimationService = __decorate([
+	        context_1.Bean('columnAnimationService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ColumnAnimationService);
 	    return ColumnAnimationService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ColumnAnimationService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], ColumnAnimationService.prototype, "gridPanel", void 0);
-	ColumnAnimationService = __decorate([
-	    context_1.Bean('columnAnimationService')
-	], ColumnAnimationService);
 	exports.ColumnAnimationService = ColumnAnimationService;
 
 
@@ -19325,16 +19200,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19344,7 +19214,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -19358,7 +19227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PaginationComp = (function (_super) {
 	    __extends(PaginationComp, _super);
 	    function PaginationComp() {
-	        return _super.call(this) || this;
+	        _super.call(this);
 	    }
 	    PaginationComp.prototype.postConstruct = function () {
 	        this.setTemplate(this.getTemplate());
@@ -19464,74 +19333,74 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lbRecordCount.innerHTML = moreText;
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], PaginationComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], PaginationComp.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('serverPaginationService'), 
+	        __metadata('design:type', serverPaginationService_1.ServerPaginationService)
+	    ], PaginationComp.prototype, "serverPaginationService", void 0);
+	    __decorate([
+	        context_1.Autowired('paginationProxy'), 
+	        __metadata('design:type', paginationProxy_1.PaginationProxy)
+	    ], PaginationComp.prototype, "paginationProxy", void 0);
+	    __decorate([
+	        context_1.Autowired('rowRenderer'), 
+	        __metadata('design:type', rowRenderer_1.RowRenderer)
+	    ], PaginationComp.prototype, "rowRenderer", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('btFirst'), 
+	        __metadata('design:type', HTMLButtonElement)
+	    ], PaginationComp.prototype, "btFirst", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('btPrevious'), 
+	        __metadata('design:type', HTMLButtonElement)
+	    ], PaginationComp.prototype, "btPrevious", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('btNext'), 
+	        __metadata('design:type', HTMLButtonElement)
+	    ], PaginationComp.prototype, "btNext", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('btLast'), 
+	        __metadata('design:type', HTMLButtonElement)
+	    ], PaginationComp.prototype, "btLast", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('lbRecordCount'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "lbRecordCount", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('lbFirstRowOnPage'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "lbFirstRowOnPage", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('lbLastRowOnPage'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "lbLastRowOnPage", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eSummaryPanel'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "eSummaryPanel", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('lbCurrent'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "lbCurrent", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('lbTotal'), 
+	        __metadata('design:type', Object)
+	    ], PaginationComp.prototype, "lbTotal", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], PaginationComp.prototype, "postConstruct", null);
 	    return PaginationComp;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], PaginationComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], PaginationComp.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('serverPaginationService'),
-	    __metadata("design:type", serverPaginationService_1.ServerPaginationService)
-	], PaginationComp.prototype, "serverPaginationService", void 0);
-	__decorate([
-	    context_1.Autowired('paginationProxy'),
-	    __metadata("design:type", paginationProxy_1.PaginationProxy)
-	], PaginationComp.prototype, "paginationProxy", void 0);
-	__decorate([
-	    context_1.Autowired('rowRenderer'),
-	    __metadata("design:type", rowRenderer_1.RowRenderer)
-	], PaginationComp.prototype, "rowRenderer", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('btFirst'),
-	    __metadata("design:type", HTMLButtonElement)
-	], PaginationComp.prototype, "btFirst", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('btPrevious'),
-	    __metadata("design:type", HTMLButtonElement)
-	], PaginationComp.prototype, "btPrevious", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('btNext'),
-	    __metadata("design:type", HTMLButtonElement)
-	], PaginationComp.prototype, "btNext", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('btLast'),
-	    __metadata("design:type", HTMLButtonElement)
-	], PaginationComp.prototype, "btLast", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('lbRecordCount'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "lbRecordCount", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('lbFirstRowOnPage'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "lbFirstRowOnPage", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('lbLastRowOnPage'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "lbLastRowOnPage", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eSummaryPanel'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "eSummaryPanel", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('lbCurrent'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "lbCurrent", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('lbTotal'),
-	    __metadata("design:type", Object)
-	], PaginationComp.prototype, "lbTotal", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], PaginationComp.prototype, "postConstruct", null);
 	exports.PaginationComp = PaginationComp;
 
 
@@ -19546,16 +19415,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19565,7 +19429,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
@@ -19580,14 +19443,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ServerPaginationService = (function (_super) {
 	    __extends(ServerPaginationService, _super);
 	    function ServerPaginationService() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.callVersion = 0;
-	        _this.pageSize = 100;
-	        _this.rowCount = 0;
-	        _this.lastPageFound = false;
-	        _this.totalPages = 0;
-	        _this.currentPage = 0;
-	        return _this;
+	        _super.apply(this, arguments);
+	        this.callVersion = 0;
+	        this.pageSize = 100;
+	        this.rowCount = 0;
+	        this.lastPageFound = false;
+	        this.totalPages = 0;
+	        this.currentPage = 0;
 	    }
 	    ServerPaginationService.prototype.isLastPageFound = function () {
 	        return this.lastPageFound;
@@ -19796,45 +19658,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ServerPaginationService.prototype.isCallDaemon = function (versionCopy) {
 	        return versionCopy !== this.callVersion;
 	    };
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], ServerPaginationService.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], ServerPaginationService.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ServerPaginationService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], ServerPaginationService.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], ServerPaginationService.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], ServerPaginationService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], ServerPaginationService.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], ServerPaginationService.prototype, "init", null);
+	    ServerPaginationService = __decorate([
+	        context_1.Bean('serverPaginationService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ServerPaginationService);
 	    return ServerPaginationService;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], ServerPaginationService.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], ServerPaginationService.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ServerPaginationService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], ServerPaginationService.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], ServerPaginationService.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], ServerPaginationService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], ServerPaginationService.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], ServerPaginationService.prototype, "init", null);
-	ServerPaginationService = __decorate([
-	    context_1.Bean('serverPaginationService')
-	], ServerPaginationService);
 	exports.ServerPaginationService = ServerPaginationService;
 
 
@@ -19858,7 +19721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
 	var textCellEditor_1 = __webpack_require__(67);
@@ -19868,16 +19730,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	var popupSelectCellEditor_1 = __webpack_require__(71);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var largeTextCellEditor_1 = __webpack_require__(72);
-	var CellEditorFactory = CellEditorFactory_1 = (function () {
+	var CellEditorFactory = (function () {
 	    function CellEditorFactory() {
 	        this.cellEditorMap = {};
 	    }
 	    CellEditorFactory.prototype.init = function () {
-	        this.cellEditorMap[CellEditorFactory_1.TEXT] = textCellEditor_1.TextCellEditor;
-	        this.cellEditorMap[CellEditorFactory_1.SELECT] = selectCellEditor_1.SelectCellEditor;
-	        this.cellEditorMap[CellEditorFactory_1.POPUP_TEXT] = popupTextCellEditor_1.PopupTextCellEditor;
-	        this.cellEditorMap[CellEditorFactory_1.POPUP_SELECT] = popupSelectCellEditor_1.PopupSelectCellEditor;
-	        this.cellEditorMap[CellEditorFactory_1.LARGE_TEXT] = largeTextCellEditor_1.LargeTextCellEditor;
+	        this.cellEditorMap[CellEditorFactory.TEXT] = textCellEditor_1.TextCellEditor;
+	        this.cellEditorMap[CellEditorFactory.SELECT] = selectCellEditor_1.SelectCellEditor;
+	        this.cellEditorMap[CellEditorFactory.POPUP_TEXT] = popupTextCellEditor_1.PopupTextCellEditor;
+	        this.cellEditorMap[CellEditorFactory.POPUP_SELECT] = popupSelectCellEditor_1.PopupSelectCellEditor;
+	        this.cellEditorMap[CellEditorFactory.LARGE_TEXT] = largeTextCellEditor_1.LargeTextCellEditor;
 	    };
 	    CellEditorFactory.prototype.addCellEditor = function (key, cellEditor) {
 	        this.cellEditorMap[key] = cellEditor;
@@ -19891,13 +19753,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    CellEditorFactory.prototype.createCellEditor = function (key, params) {
 	        var CellEditorClass;
 	        if (utils_1.Utils.missing(key)) {
-	            CellEditorClass = this.cellEditorMap[CellEditorFactory_1.TEXT];
+	            CellEditorClass = this.cellEditorMap[CellEditorFactory.TEXT];
 	        }
 	        else if (typeof key === 'string') {
 	            CellEditorClass = this.cellEditorMap[key];
 	            if (utils_1.Utils.missing(CellEditorClass)) {
 	                console.warn('ag-Grid: unable to find cellEditor for key ' + key);
-	                CellEditorClass = this.cellEditorMap[CellEditorFactory_1.TEXT];
+	                CellEditorClass = this.cellEditorMap[CellEditorFactory.TEXT];
 	            }
 	        }
 	        else {
@@ -19920,32 +19782,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return cellEditor;
 	    };
+	    CellEditorFactory.TEXT = 'text';
+	    CellEditorFactory.SELECT = 'select';
+	    CellEditorFactory.POPUP_TEXT = 'popupText';
+	    CellEditorFactory.POPUP_SELECT = 'popupSelect';
+	    CellEditorFactory.LARGE_TEXT = 'largeText';
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], CellEditorFactory.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], CellEditorFactory.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], CellEditorFactory.prototype, "init", null);
+	    CellEditorFactory = __decorate([
+	        context_1.Bean('cellEditorFactory'), 
+	        __metadata('design:paramtypes', [])
+	    ], CellEditorFactory);
 	    return CellEditorFactory;
 	}());
-	CellEditorFactory.TEXT = 'text';
-	CellEditorFactory.SELECT = 'select';
-	CellEditorFactory.POPUP_TEXT = 'popupText';
-	CellEditorFactory.POPUP_SELECT = 'popupSelect';
-	CellEditorFactory.LARGE_TEXT = 'largeText';
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], CellEditorFactory.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], CellEditorFactory.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], CellEditorFactory.prototype, "init", null);
-	CellEditorFactory = CellEditorFactory_1 = __decorate([
-	    context_1.Bean('cellEditorFactory')
-	], CellEditorFactory);
 	exports.CellEditorFactory = CellEditorFactory;
-	var CellEditorFactory_1;
 
 
 /***/ },
@@ -19959,24 +19821,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var constants_1 = __webpack_require__(8);
 	var component_1 = __webpack_require__(50);
 	var utils_1 = __webpack_require__(7);
 	var TextCellEditor = (function (_super) {
 	    __extends(TextCellEditor, _super);
 	    function TextCellEditor() {
-	        return _super.call(this, TextCellEditor.TEMPLATE) || this;
+	        _super.call(this, TextCellEditor.TEMPLATE);
 	    }
 	    TextCellEditor.prototype.init = function (params) {
 	        var eInput = this.getGui();
@@ -20043,9 +19899,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var eInput = this.getGui();
 	        return eInput.value;
 	    };
+	    TextCellEditor.TEMPLATE = '<input class="ag-cell-edit-input" type="text"/>';
 	    return TextCellEditor;
 	}(component_1.Component));
-	TextCellEditor.TEMPLATE = '<input class="ag-cell-edit-input" type="text"/>';
 	exports.TextCellEditor = TextCellEditor;
 
 
@@ -20060,26 +19916,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var component_1 = __webpack_require__(50);
 	var utils_1 = __webpack_require__(7);
 	var constants_1 = __webpack_require__(8);
 	var SelectCellEditor = (function (_super) {
 	    __extends(SelectCellEditor, _super);
 	    function SelectCellEditor() {
-	        var _this = _super.call(this, '<div class="ag-cell-edit-input"><select class="ag-cell-edit-input"/></div>') || this;
-	        _this.eSelect = _this.getGui().querySelector('select');
-	        return _this;
+	        _super.call(this, '<div class="ag-cell-edit-input"><select class="ag-cell-edit-input"/></div>');
+	        this.eSelect = this.getGui().querySelector('select');
 	    }
 	    SelectCellEditor.prototype.init = function (params) {
 	        var _this = this;
@@ -20135,31 +19984,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var component_1 = __webpack_require__(50);
 	var PopupEditorWrapper = (function (_super) {
 	    __extends(PopupEditorWrapper, _super);
 	    function PopupEditorWrapper(cellEditor) {
-	        var _this = _super.call(this, '<div class="ag-popup-editor"/>') || this;
-	        _this.getGuiCalledOnChild = false;
-	        _this.cellEditor = cellEditor;
-	        _this.addDestroyFunc(function () { return cellEditor.destroy(); });
-	        _this.addDestroyableEventListener(
+	        _super.call(this, '<div class="ag-popup-editor"/>');
+	        this.getGuiCalledOnChild = false;
+	        this.cellEditor = cellEditor;
+	        this.addDestroyFunc(function () { return cellEditor.destroy(); });
+	        this.addDestroyableEventListener(
 	        // this needs to be 'super' and not 'this' as if we call 'this',
 	        // it ends up called 'getGui()' on the child before 'init' was called,
 	        // which is not good
-	        _super.prototype.getGui.call(_this), 'keydown', _this.onKeyDown.bind(_this));
-	        return _this;
+	        _super.prototype.getGui.call(this), 'keydown', this.onKeyDown.bind(this));
 	    }
 	    PopupEditorWrapper.prototype.onKeyDown = function (event) {
 	        this.params.onKeyDown(event);
@@ -20223,22 +20065,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var textCellEditor_1 = __webpack_require__(67);
 	var PopupTextCellEditor = (function (_super) {
 	    __extends(PopupTextCellEditor, _super);
 	    function PopupTextCellEditor() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    PopupTextCellEditor.prototype.isPopup = function () {
 	        return true;
@@ -20259,22 +20095,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var selectCellEditor_1 = __webpack_require__(68);
 	var PopupSelectCellEditor = (function (_super) {
 	    __extends(PopupSelectCellEditor, _super);
 	    function PopupSelectCellEditor() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    PopupSelectCellEditor.prototype.isPopup = function () {
 	        return true;
@@ -20295,24 +20125,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var component_1 = __webpack_require__(50);
 	var constants_1 = __webpack_require__(8);
 	var utils_1 = __webpack_require__(7);
 	var LargeTextCellEditor = (function (_super) {
 	    __extends(LargeTextCellEditor, _super);
 	    function LargeTextCellEditor() {
-	        return _super.call(this, LargeTextCellEditor.TEMPLATE) || this;
+	        _super.call(this, LargeTextCellEditor.TEMPLATE);
 	    }
 	    LargeTextCellEditor.prototype.init = function (params) {
 	        this.params = params;
@@ -20348,13 +20172,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    LargeTextCellEditor.prototype.isPopup = function () {
 	        return true;
 	    };
+	    LargeTextCellEditor.TEMPLATE = 
+	    // tab index is needed so we can focus, which is needed for keyboard events
+	    '<div class="ag-large-text" tabindex="0">' +
+	        '<div class="ag-large-textarea"></div>' +
+	        '</div>';
 	    return LargeTextCellEditor;
 	}(component_1.Component));
-	LargeTextCellEditor.TEMPLATE = 
-	// tab index is needed so we can focus, which is needed for keyboard events
-	'<div class="ag-large-text" tabindex="0">' +
-	    '<div class="ag-large-textarea"></div>' +
-	    '</div>';
 	exports.LargeTextCellEditor = LargeTextCellEditor;
 
 
@@ -20378,7 +20202,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -20387,14 +20210,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var animateSlideCellRenderer_1 = __webpack_require__(74);
 	var animateShowChangeCellRenderer_1 = __webpack_require__(75);
 	var groupCellRenderer_1 = __webpack_require__(76);
-	var CellRendererFactory = CellRendererFactory_1 = (function () {
+	var CellRendererFactory = (function () {
 	    function CellRendererFactory() {
 	        this.cellRendererMap = {};
 	    }
 	    CellRendererFactory.prototype.init = function () {
-	        this.cellRendererMap[CellRendererFactory_1.ANIMATE_SLIDE] = animateSlideCellRenderer_1.AnimateSlideCellRenderer;
-	        this.cellRendererMap[CellRendererFactory_1.ANIMATE_SHOW_CHANGE] = animateShowChangeCellRenderer_1.AnimateShowChangeCellRenderer;
-	        this.cellRendererMap[CellRendererFactory_1.GROUP] = groupCellRenderer_1.GroupCellRenderer;
+	        this.cellRendererMap[CellRendererFactory.ANIMATE_SLIDE] = animateSlideCellRenderer_1.AnimateSlideCellRenderer;
+	        this.cellRendererMap[CellRendererFactory.ANIMATE_SHOW_CHANGE] = animateShowChangeCellRenderer_1.AnimateShowChangeCellRenderer;
+	        this.cellRendererMap[CellRendererFactory.GROUP] = groupCellRenderer_1.GroupCellRenderer;
 	        // this.registerRenderersFromGridOptions();
 	    };
 	    // private registerRenderersFromGridOptions(): void {
@@ -20414,34 +20237,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return result;
 	    };
+	    CellRendererFactory.ANIMATE_SLIDE = 'animateSlide';
+	    CellRendererFactory.ANIMATE_SHOW_CHANGE = 'animateShowChange';
+	    CellRendererFactory.GROUP = 'group';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], CellRendererFactory.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], CellRendererFactory.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], CellRendererFactory.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], CellRendererFactory.prototype, "init", null);
+	    CellRendererFactory = __decorate([
+	        context_1.Bean('cellRendererFactory'), 
+	        __metadata('design:paramtypes', [])
+	    ], CellRendererFactory);
 	    return CellRendererFactory;
 	}());
-	CellRendererFactory.ANIMATE_SLIDE = 'animateSlide';
-	CellRendererFactory.ANIMATE_SHOW_CHANGE = 'animateShowChange';
-	CellRendererFactory.GROUP = 'group';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], CellRendererFactory.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], CellRendererFactory.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], CellRendererFactory.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], CellRendererFactory.prototype, "init", null);
-	CellRendererFactory = CellRendererFactory_1 = __decorate([
-	    context_1.Bean('cellRendererFactory')
-	], CellRendererFactory);
 	exports.CellRendererFactory = CellRendererFactory;
-	var CellRendererFactory_1;
 
 
 /***/ },
@@ -20455,26 +20278,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var utils_1 = __webpack_require__(7);
 	var component_1 = __webpack_require__(50);
 	var AnimateSlideCellRenderer = (function (_super) {
 	    __extends(AnimateSlideCellRenderer, _super);
 	    function AnimateSlideCellRenderer() {
-	        var _this = _super.call(this, AnimateSlideCellRenderer.TEMPLATE) || this;
-	        _this.refreshCount = 0;
-	        _this.eCurrent = _this.queryForHtmlElement('.ag-value-slide-current');
-	        return _this;
+	        _super.call(this, AnimateSlideCellRenderer.TEMPLATE);
+	        this.refreshCount = 0;
+	        this.eCurrent = this.queryForHtmlElement('.ag-value-slide-current');
 	    }
 	    AnimateSlideCellRenderer.prototype.init = function (params) {
 	        this.params = params;
@@ -20531,11 +20347,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eCurrent.innerHTML = '';
 	        }
 	    };
+	    AnimateSlideCellRenderer.TEMPLATE = '<span>' +
+	        '<span class="ag-value-slide-current"></span>' +
+	        '</span>';
 	    return AnimateSlideCellRenderer;
 	}(component_1.Component));
-	AnimateSlideCellRenderer.TEMPLATE = '<span>' +
-	    '<span class="ag-value-slide-current"></span>' +
-	    '</span>';
 	exports.AnimateSlideCellRenderer = AnimateSlideCellRenderer;
 
 
@@ -20550,17 +20366,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var utils_1 = __webpack_require__(7);
 	var component_1 = __webpack_require__(50);
 	var ARROW_UP = '&#65514;';
@@ -20568,9 +20378,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var AnimateShowChangeCellRenderer = (function (_super) {
 	    __extends(AnimateShowChangeCellRenderer, _super);
 	    function AnimateShowChangeCellRenderer() {
-	        var _this = _super.call(this, AnimateShowChangeCellRenderer.TEMPLATE) || this;
-	        _this.refreshCount = 0;
-	        return _this;
+	        _super.call(this, AnimateShowChangeCellRenderer.TEMPLATE);
+	        this.refreshCount = 0;
 	    }
 	    AnimateShowChangeCellRenderer.prototype.init = function (params) {
 	        this.params = params;
@@ -20638,12 +20447,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setTimerToRemoveDelta();
 	        this.lastValue = value;
 	    };
+	    AnimateShowChangeCellRenderer.TEMPLATE = '<span>' +
+	        '<span class="ag-value-change-delta"></span>' +
+	        '<span class="ag-value-change-value"></span>' +
+	        '</span>';
 	    return AnimateShowChangeCellRenderer;
 	}(component_1.Component));
-	AnimateShowChangeCellRenderer.TEMPLATE = '<span>' +
-	    '<span class="ag-value-change-delta"></span>' +
-	    '<span class="ag-value-change-value"></span>' +
-	    '</span>';
 	exports.AnimateShowChangeCellRenderer = AnimateShowChangeCellRenderer;
 
 
@@ -20658,16 +20467,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20677,7 +20481,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var svgFactory_1 = __webpack_require__(56);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var expressionService_1 = __webpack_require__(19);
@@ -20698,7 +20501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GroupCellRenderer = (function (_super) {
 	    __extends(GroupCellRenderer, _super);
 	    function GroupCellRenderer() {
-	        return _super.call(this, GroupCellRenderer.TEMPLATE) || this;
+	        _super.call(this, GroupCellRenderer.TEMPLATE);
 	    }
 	    GroupCellRenderer.prototype.init = function (params) {
 	        this.setParams(params);
@@ -20890,18 +20693,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (utils_1.Utils.missing(columnOfGroupedCol)) {
 	            columnOfGroupedCol = params.column;
 	        }
-	        var colDefOfGroupedCol = columnOfGroupedCol.getColDef();
 	        var groupName = this.getGroupName();
 	        var valueFormatted = this.valueFormatterService.formatValue(columnOfGroupedCol, params.node, params.scope, params.rowIndex, groupName);
+	        var groupedColCellRenderer = columnOfGroupedCol.getCellRenderer();
 	        // reuse the params but change the value
-	        if (colDefOfGroupedCol && typeof colDefOfGroupedCol.cellRenderer === 'function') {
+	        if (typeof groupedColCellRenderer === 'function') {
 	            // reuse the params but change the value
 	            params.value = groupName;
 	            params.valueFormatted = valueFormatted;
+	            var colDefOfGroupedCol = columnOfGroupedCol.getColDef();
+	            var groupedColCellRendererParams = colDefOfGroupedCol ? colDefOfGroupedCol.cellRendererParams : null;
 	            // because we are talking about the different column to the original, any user provided params
 	            // are for the wrong column, so need to copy them in again.
-	            if (colDefOfGroupedCol.cellRendererParams) {
-	                utils_1.Utils.assign(params, colDefOfGroupedCol.cellRendererParams);
+	            if (groupedColCellRendererParams) {
+	                utils_1.Utils.assign(params, groupedColCellRenderer);
 	            }
 	            this.cellRendererService.useCellRenderer(colDefOfGroupedCol.cellRenderer, this.eValue, params);
 	        }
@@ -21024,68 +20829,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	            utils_1.Utils.setVisible(this.eLoading, false);
 	        }
 	    };
+	    GroupCellRenderer.TEMPLATE = '<span>' +
+	        '<span class="ag-group-expanded" ref="eExpanded"></span>' +
+	        '<span class="ag-group-contracted" ref="eContracted"></span>' +
+	        '<span class="ag-group-loading" ref="eLoading"></span>' +
+	        '<span class="ag-group-checkbox" ref="eCheckbox"></span>' +
+	        '<span class="ag-group-value" ref="eValue"></span>' +
+	        '<span class="ag-group-child-count" ref="eChildCount"></span>' +
+	        '</span>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], GroupCellRenderer.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], GroupCellRenderer.prototype, "expressionService", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], GroupCellRenderer.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('cellRendererService'), 
+	        __metadata('design:type', cellRendererService_1.CellRendererService)
+	    ], GroupCellRenderer.prototype, "cellRendererService", void 0);
+	    __decorate([
+	        context_1.Autowired('valueFormatterService'), 
+	        __metadata('design:type', valueFormatterService_1.ValueFormatterService)
+	    ], GroupCellRenderer.prototype, "valueFormatterService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], GroupCellRenderer.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], GroupCellRenderer.prototype, "columnController", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eExpanded'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eExpanded", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eContracted'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eContracted", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eLoading'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eLoading", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eCheckbox'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eCheckbox", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eValue'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eValue", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eChildCount'), 
+	        __metadata('design:type', HTMLElement)
+	    ], GroupCellRenderer.prototype, "eChildCount", void 0);
 	    return GroupCellRenderer;
 	}(component_1.Component));
-	GroupCellRenderer.TEMPLATE = '<span>' +
-	    '<span class="ag-group-expanded" ref="eExpanded"></span>' +
-	    '<span class="ag-group-contracted" ref="eContracted"></span>' +
-	    '<span class="ag-group-loading" ref="eLoading"></span>' +
-	    '<span class="ag-group-checkbox" ref="eCheckbox"></span>' +
-	    '<span class="ag-group-value" ref="eValue"></span>' +
-	    '<span class="ag-group-child-count" ref="eChildCount"></span>' +
-	    '</span>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], GroupCellRenderer.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], GroupCellRenderer.prototype, "expressionService", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], GroupCellRenderer.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('cellRendererService'),
-	    __metadata("design:type", cellRendererService_1.CellRendererService)
-	], GroupCellRenderer.prototype, "cellRendererService", void 0);
-	__decorate([
-	    context_1.Autowired('valueFormatterService'),
-	    __metadata("design:type", valueFormatterService_1.ValueFormatterService)
-	], GroupCellRenderer.prototype, "valueFormatterService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], GroupCellRenderer.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], GroupCellRenderer.prototype, "columnController", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eExpanded'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eExpanded", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eContracted'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eContracted", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eLoading'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eLoading", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eCheckbox'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eCheckbox", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eValue'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eValue", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eChildCount'),
-	    __metadata("design:type", HTMLElement)
-	], GroupCellRenderer.prototype, "eChildCount", void 0);
 	exports.GroupCellRenderer = GroupCellRenderer;
 
 
@@ -21109,7 +20914,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var context_1 = __webpack_require__(6);
 	var cellRendererFactory_1 = __webpack_require__(73);
@@ -21182,19 +20986,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return cellRendererKey;
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('cellRendererFactory'), 
+	        __metadata('design:type', cellRendererFactory_1.CellRendererFactory)
+	    ], CellRendererService.prototype, "cellRendererFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], CellRendererService.prototype, "context", void 0);
+	    CellRendererService = __decorate([
+	        context_1.Bean('cellRendererService'), 
+	        __metadata('design:paramtypes', [])
+	    ], CellRendererService);
 	    return CellRendererService;
 	}());
-	__decorate([
-	    context_1.Autowired('cellRendererFactory'),
-	    __metadata("design:type", cellRendererFactory_1.CellRendererFactory)
-	], CellRendererService.prototype, "cellRendererFactory", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], CellRendererService.prototype, "context", void 0);
-	CellRendererService = __decorate([
-	    context_1.Bean('cellRendererService')
-	], CellRendererService);
 	exports.CellRendererService = CellRendererService;
 
 
@@ -21218,7 +21023,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var ValueFormatterService = (function () {
@@ -21249,15 +21053,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return result;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], ValueFormatterService.prototype, "gridOptionsWrapper", void 0);
+	    ValueFormatterService = __decorate([
+	        context_1.Bean('valueFormatterService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ValueFormatterService);
 	    return ValueFormatterService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], ValueFormatterService.prototype, "gridOptionsWrapper", void 0);
-	ValueFormatterService = __decorate([
-	    context_1.Bean('valueFormatterService')
-	], ValueFormatterService);
 	exports.ValueFormatterService = ValueFormatterService;
 
 
@@ -21272,16 +21077,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21291,7 +21091,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var rowNode_1 = __webpack_require__(28);
 	var utils_1 = __webpack_require__(7);
@@ -21306,7 +21105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var CheckboxSelectionComponent = (function (_super) {
 	    __extends(CheckboxSelectionComponent, _super);
 	    function CheckboxSelectionComponent() {
-	        return _super.call(this, "<span class=\"ag-selection-checkbox\"/>") || this;
+	        _super.call(this, "<span class=\"ag-selection-checkbox\"/>");
 	    }
 	    CheckboxSelectionComponent.prototype.createAndAddIcons = function () {
 	        this.eCheckedIcon = utils_1.Utils.createIconNoSpan('checkboxChecked', this.gridOptionsWrapper, null, svgFactory.createCheckboxCheckedIcon);
@@ -21376,24 +21175,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return params;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], CheckboxSelectionComponent.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], CheckboxSelectionComponent.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridApi'), 
+	        __metadata('design:type', gridApi_1.GridApi)
+	    ], CheckboxSelectionComponent.prototype, "gridApi", void 0);
+	    __decorate([
+	        context_1.Autowired('columnApi'), 
+	        __metadata('design:type', columnController_1.ColumnApi)
+	    ], CheckboxSelectionComponent.prototype, "columnApi", void 0);
 	    return CheckboxSelectionComponent;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], CheckboxSelectionComponent.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], CheckboxSelectionComponent.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('gridApi'),
-	    __metadata("design:type", gridApi_1.GridApi)
-	], CheckboxSelectionComponent.prototype, "gridApi", void 0);
-	__decorate([
-	    context_1.Autowired('columnApi'),
-	    __metadata("design:type", columnController_1.ColumnApi)
-	], CheckboxSelectionComponent.prototype, "columnApi", void 0);
 	exports.CheckboxSelectionComponent = CheckboxSelectionComponent;
 
 
@@ -21408,7 +21207,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var MethodNotImplementedException = (function () {
 	    function MethodNotImplementedException() {
 	    }
@@ -21437,7 +21235,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var expressionService_1 = __webpack_require__(19);
 	var StylingService = (function () {
@@ -21491,15 +21288,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('expressionService'), 
+	        __metadata('design:type', expressionService_1.ExpressionService)
+	    ], StylingService.prototype, "expressionService", void 0);
+	    StylingService = __decorate([
+	        context_1.Bean('stylingService'), 
+	        __metadata('design:paramtypes', [])
+	    ], StylingService);
 	    return StylingService;
 	}());
-	__decorate([
-	    context_1.Autowired('expressionService'),
-	    __metadata("design:type", expressionService_1.ExpressionService)
-	], StylingService.prototype, "expressionService", void 0);
-	StylingService = __decorate([
-	    context_1.Bean('stylingService')
-	], StylingService);
 	exports.StylingService = StylingService;
 
 
@@ -21514,16 +21312,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21533,7 +21326,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var eventService_1 = __webpack_require__(4);
 	var context_1 = __webpack_require__(6);
 	var events_1 = __webpack_require__(10);
@@ -21541,7 +21333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnHoverService = (function (_super) {
 	    __extends(ColumnHoverService, _super);
 	    function ColumnHoverService() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        _super.apply(this, arguments);
 	    }
 	    ColumnHoverService.prototype.init = function () {
 	        this.addDestroyableEventListener(this.eventService, events_1.Events.EVENT_CELL_MOUSE_OVER, this.onCellMouseOver.bind(this));
@@ -21558,21 +21350,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ColumnHoverService.prototype.isHovered = function (column) {
 	        return column == this.currentlySelectedColumn;
 	    };
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], ColumnHoverService.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], ColumnHoverService.prototype, "init", null);
+	    ColumnHoverService = __decorate([
+	        context_1.Bean('columnHoverService'), 
+	        __metadata('design:paramtypes', [])
+	    ], ColumnHoverService);
 	    return ColumnHoverService;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], ColumnHoverService.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], ColumnHoverService.prototype, "init", null);
-	ColumnHoverService = __decorate([
-	    context_1.Bean('columnHoverService')
-	], ColumnHoverService);
 	exports.ColumnHoverService = ColumnHoverService;
 
 
@@ -21596,7 +21389,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var constants_1 = __webpack_require__(8);
 	var columnController_1 = __webpack_require__(14);
@@ -21799,27 +21591,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var gridCellDef = { rowIndex: newRowIndex, column: newColumn, floating: newFloating };
 	        return new gridCell_1.GridCell(gridCellDef);
 	    };
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], CellNavigationService.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], CellNavigationService.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('floatingRowModel'), 
+	        __metadata('design:type', floatingRowModel_1.FloatingRowModel)
+	    ], CellNavigationService.prototype, "floatingRowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], CellNavigationService.prototype, "gridOptionsWrapper", void 0);
+	    CellNavigationService = __decorate([
+	        context_1.Bean('cellNavigationService'), 
+	        __metadata('design:paramtypes', [])
+	    ], CellNavigationService);
 	    return CellNavigationService;
 	}());
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], CellNavigationService.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], CellNavigationService.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('floatingRowModel'),
-	    __metadata("design:type", floatingRowModel_1.FloatingRowModel)
-	], CellNavigationService.prototype, "floatingRowModel", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], CellNavigationService.prototype, "gridOptionsWrapper", void 0);
-	CellNavigationService = __decorate([
-	    context_1.Bean('cellNavigationService')
-	], CellNavigationService);
 	exports.CellNavigationService = CellNavigationService;
 
 
@@ -21843,7 +21636,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var columnController_1 = __webpack_require__(14);
 	var gridPanel_1 = __webpack_require__(25);
@@ -21921,47 +21713,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eHeaderViewport.style.marginLeft = pinnedLeftWidthWithScroll + 'px';
 	        this.eHeaderViewport.style.marginRight = pinnedRightWidthWithScroll + 'px';
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderRenderer.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderRenderer.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], HeaderRenderer.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], HeaderRenderer.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], HeaderRenderer.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('scrollVisibleService'), 
+	        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+	    ], HeaderRenderer.prototype, "scrollVisibleService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderRenderer.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderRenderer.prototype, "destroy", null);
+	    HeaderRenderer = __decorate([
+	        context_1.Bean('headerRenderer'), 
+	        __metadata('design:paramtypes', [])
+	    ], HeaderRenderer);
 	    return HeaderRenderer;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderRenderer.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderRenderer.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], HeaderRenderer.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], HeaderRenderer.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], HeaderRenderer.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('scrollVisibleService'),
-	    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-	], HeaderRenderer.prototype, "scrollVisibleService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderRenderer.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderRenderer.prototype, "destroy", null);
-	HeaderRenderer = __decorate([
-	    context_1.Bean('headerRenderer')
-	], HeaderRenderer);
 	exports.HeaderRenderer = HeaderRenderer;
 
 
@@ -21985,7 +21778,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
@@ -22093,46 +21885,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eContainer.appendChild(headerRowComp.getGui());
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderContainer.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], HeaderContainer.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], HeaderContainer.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], HeaderContainer.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderContainer.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], HeaderContainer.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], HeaderContainer.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('scrollVisibleService'), 
+	        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+	    ], HeaderContainer.prototype, "scrollVisibleService", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderContainer.prototype, "init", null);
 	    return HeaderContainer;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderContainer.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], HeaderContainer.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], HeaderContainer.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], HeaderContainer.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderContainer.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], HeaderContainer.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], HeaderContainer.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('scrollVisibleService'),
-	    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-	], HeaderContainer.prototype, "scrollVisibleService", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderContainer.prototype, "init", null);
 	exports.HeaderContainer = HeaderContainer;
 
 
@@ -22159,7 +21951,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var logger_1 = __webpack_require__(5);
 	var context_1 = __webpack_require__(6);
 	var utils_1 = __webpack_require__(7);
@@ -22168,22 +21959,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	var dragService_1 = __webpack_require__(32);
 	var columnController_1 = __webpack_require__(14);
 	var svgFactory = svgFactory_1.SvgFactory.getInstance();
-	var DragSourceType;
 	(function (DragSourceType) {
 	    DragSourceType[DragSourceType["ToolPanel"] = 0] = "ToolPanel";
 	    DragSourceType[DragSourceType["HeaderCell"] = 1] = "HeaderCell";
-	})(DragSourceType = exports.DragSourceType || (exports.DragSourceType = {}));
-	var VDirection;
+	})(exports.DragSourceType || (exports.DragSourceType = {}));
+	var DragSourceType = exports.DragSourceType;
 	(function (VDirection) {
 	    VDirection[VDirection["Up"] = 0] = "Up";
 	    VDirection[VDirection["Down"] = 1] = "Down";
-	})(VDirection = exports.VDirection || (exports.VDirection = {}));
-	var HDirection;
+	})(exports.VDirection || (exports.VDirection = {}));
+	var VDirection = exports.VDirection;
 	(function (HDirection) {
 	    HDirection[HDirection["Left"] = 0] = "Left";
 	    HDirection[HDirection["Right"] = 1] = "Right";
-	})(HDirection = exports.HDirection || (exports.HDirection = {}));
-	var DragAndDropService = DragAndDropService_1 = (function () {
+	})(exports.HDirection || (exports.HDirection = {}));
+	var HDirection = exports.HDirection;
+	var DragAndDropService = (function () {
 	    function DragAndDropService() {
 	        this.dragSourceAndParamsList = [];
 	        this.dropTargets = [];
@@ -22400,7 +22191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eGhost = null;
 	    };
 	    DragAndDropService.prototype.createGhost = function () {
-	        this.eGhost = utils_1.Utils.loadTemplate(DragAndDropService_1.GHOST_TEMPLATE);
+	        this.eGhost = utils_1.Utils.loadTemplate(DragAndDropService.GHOST_TEMPLATE);
 	        this.eGhostIcon = this.eGhost.querySelector('.ag-dnd-ghost-icon');
 	        this.setGhostIcon(null);
 	        var eText = this.eGhost.querySelector('.ag-dnd-ghost-label');
@@ -22422,31 +22213,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        utils_1.Utils.removeAllChildren(this.eGhostIcon);
 	        var eIcon;
 	        switch (iconName) {
-	            case DragAndDropService_1.ICON_ADD:
+	            case DragAndDropService.ICON_ADD:
 	                eIcon = this.ePlusIcon;
 	                break;
-	            case DragAndDropService_1.ICON_PINNED:
+	            case DragAndDropService.ICON_PINNED:
 	                eIcon = this.ePinnedIcon;
 	                break;
-	            case DragAndDropService_1.ICON_MOVE:
+	            case DragAndDropService.ICON_MOVE:
 	                eIcon = this.eMoveIcon;
 	                break;
-	            case DragAndDropService_1.ICON_LEFT:
+	            case DragAndDropService.ICON_LEFT:
 	                eIcon = this.eLeftIcon;
 	                break;
-	            case DragAndDropService_1.ICON_RIGHT:
+	            case DragAndDropService.ICON_RIGHT:
 	                eIcon = this.eRightIcon;
 	                break;
-	            case DragAndDropService_1.ICON_GROUP:
+	            case DragAndDropService.ICON_GROUP:
 	                eIcon = this.eGroupIcon;
 	                break;
-	            case DragAndDropService_1.ICON_AGGREGATE:
+	            case DragAndDropService.ICON_AGGREGATE:
 	                eIcon = this.eAggregateIcon;
 	                break;
-	            case DragAndDropService_1.ICON_PIVOT:
+	            case DragAndDropService.ICON_PIVOT:
 	                eIcon = this.ePivotIcon;
 	                break;
-	            case DragAndDropService_1.ICON_NOT_ALLOWED:
+	            case DragAndDropService.ICON_NOT_ALLOWED:
 	                eIcon = this.eDropNotAllowedIcon;
 	                break;
 	            default:
@@ -22456,57 +22247,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eGhostIcon.appendChild(eIcon);
 	        utils_1.Utils.addOrRemoveCssClass(this.eGhostIcon, 'ag-shake-left-to-right', shake);
 	    };
+	    DragAndDropService.ICON_PINNED = 'pinned';
+	    DragAndDropService.ICON_ADD = 'add';
+	    DragAndDropService.ICON_MOVE = 'move';
+	    DragAndDropService.ICON_LEFT = 'left';
+	    DragAndDropService.ICON_RIGHT = 'right';
+	    DragAndDropService.ICON_GROUP = 'group';
+	    DragAndDropService.ICON_AGGREGATE = 'aggregate';
+	    DragAndDropService.ICON_PIVOT = 'pivot';
+	    DragAndDropService.ICON_NOT_ALLOWED = 'notAllowed';
+	    DragAndDropService.GHOST_TEMPLATE = '<div class="ag-dnd-ghost">' +
+	        '  <span class="ag-dnd-ghost-icon ag-shake-left-to-right"></span>' +
+	        '  <div class="ag-dnd-ghost-label">' +
+	        '  </div>' +
+	        '</div>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], DragAndDropService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('dragService'), 
+	        __metadata('design:type', dragService_1.DragService)
+	    ], DragAndDropService.prototype, "dragService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], DragAndDropService.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], DragAndDropService.prototype, "init", null);
+	    __decorate([
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], DragAndDropService.prototype, "setBeans", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], DragAndDropService.prototype, "destroy", null);
+	    DragAndDropService = __decorate([
+	        context_1.Bean('dragAndDropService'), 
+	        __metadata('design:paramtypes', [])
+	    ], DragAndDropService);
 	    return DragAndDropService;
 	}());
-	DragAndDropService.ICON_PINNED = 'pinned';
-	DragAndDropService.ICON_ADD = 'add';
-	DragAndDropService.ICON_MOVE = 'move';
-	DragAndDropService.ICON_LEFT = 'left';
-	DragAndDropService.ICON_RIGHT = 'right';
-	DragAndDropService.ICON_GROUP = 'group';
-	DragAndDropService.ICON_AGGREGATE = 'aggregate';
-	DragAndDropService.ICON_PIVOT = 'pivot';
-	DragAndDropService.ICON_NOT_ALLOWED = 'notAllowed';
-	DragAndDropService.GHOST_TEMPLATE = '<div class="ag-dnd-ghost">' +
-	    '  <span class="ag-dnd-ghost-icon ag-shake-left-to-right"></span>' +
-	    '  <div class="ag-dnd-ghost-label">' +
-	    '  </div>' +
-	    '</div>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], DragAndDropService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('dragService'),
-	    __metadata("design:type", dragService_1.DragService)
-	], DragAndDropService.prototype, "dragService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], DragAndDropService.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], DragAndDropService.prototype, "init", null);
-	__decorate([
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], DragAndDropService.prototype, "setBeans", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], DragAndDropService.prototype, "destroy", null);
-	DragAndDropService = DragAndDropService_1 = __decorate([
-	    context_1.Bean('dragAndDropService')
-	], DragAndDropService);
 	exports.DragAndDropService = DragAndDropService;
-	var DragAndDropService_1;
 
 
 /***/ },
@@ -22520,16 +22311,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -22539,7 +22325,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -22554,23 +22339,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	var headerGroupWrapperComp_1 = __webpack_require__(95);
 	var filterManager_1 = __webpack_require__(46);
 	var componentProvider_1 = __webpack_require__(54);
-	var HeaderRowType;
 	(function (HeaderRowType) {
 	    HeaderRowType[HeaderRowType["COLUMN_GROUP"] = 0] = "COLUMN_GROUP";
 	    HeaderRowType[HeaderRowType["COLUMN"] = 1] = "COLUMN";
 	    HeaderRowType[HeaderRowType["FLOATING_FILTER"] = 2] = "FLOATING_FILTER";
-	})(HeaderRowType = exports.HeaderRowType || (exports.HeaderRowType = {}));
+	})(exports.HeaderRowType || (exports.HeaderRowType = {}));
+	var HeaderRowType = exports.HeaderRowType;
 	var HeaderRowComp = (function (_super) {
 	    __extends(HeaderRowComp, _super);
 	    function HeaderRowComp(dept, type, pinned, eRoot, dropTarget) {
-	        var _this = _super.call(this, "<div class=\"ag-header-row\"/>") || this;
-	        _this.headerElements = {};
-	        _this.dept = dept;
-	        _this.type = type;
-	        _this.pinned = pinned;
-	        _this.eRoot = eRoot;
-	        _this.dropTarget = dropTarget;
-	        return _this;
+	        _super.call(this, "<div class=\"ag-header-row\"/>");
+	        this.headerElements = {};
+	        this.dept = dept;
+	        this.type = type;
+	        this.pinned = pinned;
+	        this.eRoot = eRoot;
+	        this.dropTarget = dropTarget;
 	    }
 	    HeaderRowComp.prototype.forEachHeaderElement = function (callback) {
 	        var _this = this;
@@ -22745,38 +22529,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return baseParams;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderRowComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderRowComp.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], HeaderRowComp.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], HeaderRowComp.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], HeaderRowComp.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], HeaderRowComp.prototype, "componentProvider", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderRowComp.prototype, "init", null);
 	    return HeaderRowComp;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderRowComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderRowComp.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], HeaderRowComp.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], HeaderRowComp.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], HeaderRowComp.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], HeaderRowComp.prototype, "componentProvider", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderRowComp.prototype, "init", null);
 	exports.HeaderRowComp = HeaderRowComp;
 	// remove this in v9, when we take out support for the old headers
 	var warningGiven = false;
@@ -22793,16 +22577,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -22812,7 +22591,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var column_1 = __webpack_require__(16);
 	var filterManager_1 = __webpack_require__(46);
@@ -22831,12 +22609,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RenderedHeaderCell = (function (_super) {
 	    __extends(RenderedHeaderCell, _super);
 	    function RenderedHeaderCell(column, eRoot, dragSourceDropTarget, pinned) {
-	        var _this = _super.call(this) || this;
-	        _this.column = column;
-	        _this.eRoot = eRoot;
-	        _this.dragSourceDropTarget = dragSourceDropTarget;
-	        _this.pinned = pinned;
-	        return _this;
+	        _super.call(this);
+	        this.column = column;
+	        this.eRoot = eRoot;
+	        this.dragSourceDropTarget = dragSourceDropTarget;
+	        this.pinned = pinned;
 	    }
 	    RenderedHeaderCell.prototype.getColumn = function () {
 	        return this.column;
@@ -23133,62 +22910,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var newWidth = this.startWidth + dragChangeNormalised;
 	        this.columnController.setColumnWidth(this.column, newWidth, finished);
 	    };
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RenderedHeaderCell.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], RenderedHeaderCell.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], RenderedHeaderCell.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('$compile'), 
+	        __metadata('design:type', Object)
+	    ], RenderedHeaderCell.prototype, "$compile", void 0);
+	    __decorate([
+	        context_1.Autowired('gridCore'), 
+	        __metadata('design:type', gridCore_1.GridCore)
+	    ], RenderedHeaderCell.prototype, "gridCore", void 0);
+	    __decorate([
+	        context_1.Autowired('headerTemplateLoader'), 
+	        __metadata('design:type', headerTemplateLoader_1.HeaderTemplateLoader)
+	    ], RenderedHeaderCell.prototype, "headerTemplateLoader", void 0);
+	    __decorate([
+	        context_1.Autowired('horizontalDragService'), 
+	        __metadata('design:type', horizontalDragService_1.HorizontalDragService)
+	    ], RenderedHeaderCell.prototype, "horizontalDragService", void 0);
+	    __decorate([
+	        context_1.Autowired('menuFactory'), 
+	        __metadata('design:type', Object)
+	    ], RenderedHeaderCell.prototype, "menuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RenderedHeaderCell.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], RenderedHeaderCell.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], RenderedHeaderCell.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], RenderedHeaderCell.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], RenderedHeaderCell.prototype, "init", null);
 	    return RenderedHeaderCell;
 	}(component_1.Component));
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RenderedHeaderCell.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], RenderedHeaderCell.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], RenderedHeaderCell.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('$compile'),
-	    __metadata("design:type", Object)
-	], RenderedHeaderCell.prototype, "$compile", void 0);
-	__decorate([
-	    context_1.Autowired('gridCore'),
-	    __metadata("design:type", gridCore_1.GridCore)
-	], RenderedHeaderCell.prototype, "gridCore", void 0);
-	__decorate([
-	    context_1.Autowired('headerTemplateLoader'),
-	    __metadata("design:type", headerTemplateLoader_1.HeaderTemplateLoader)
-	], RenderedHeaderCell.prototype, "headerTemplateLoader", void 0);
-	__decorate([
-	    context_1.Autowired('horizontalDragService'),
-	    __metadata("design:type", horizontalDragService_1.HorizontalDragService)
-	], RenderedHeaderCell.prototype, "horizontalDragService", void 0);
-	__decorate([
-	    context_1.Autowired('menuFactory'),
-	    __metadata("design:type", Object)
-	], RenderedHeaderCell.prototype, "menuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RenderedHeaderCell.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], RenderedHeaderCell.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], RenderedHeaderCell.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], RenderedHeaderCell.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], RenderedHeaderCell.prototype, "init", null);
 	exports.RenderedHeaderCell = RenderedHeaderCell;
 
 
@@ -23212,13 +22989,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var svgFactory_1 = __webpack_require__(56);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
 	var svgFactory = svgFactory_1.SvgFactory.getInstance();
-	var HeaderTemplateLoader = HeaderTemplateLoader_1 = (function () {
+	var HeaderTemplateLoader = (function () {
 	    function HeaderTemplateLoader() {
 	    }
 	    HeaderTemplateLoader.prototype.createHeaderElement = function (column) {
@@ -23261,7 +23037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return result;
 	    };
 	    HeaderTemplateLoader.prototype.createDefaultHeaderElement = function (column) {
-	        var eTemplate = utils_1.Utils.loadTemplate(HeaderTemplateLoader_1.HEADER_CELL_TEMPLATE);
+	        var eTemplate = utils_1.Utils.loadTemplate(HeaderTemplateLoader.HEADER_CELL_TEMPLATE);
 	        this.addInIcon(eTemplate, 'sortAscending', '#agSortAsc', column, svgFactory.createArrowUpSvg);
 	        this.addInIcon(eTemplate, 'sortDescending', '#agSortDesc', column, svgFactory.createArrowDownSvg);
 	        this.addInIcon(eTemplate, 'sortUnSort', '#agNoSort', column, svgFactory.createArrowUpDownSvg);
@@ -23273,28 +23049,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var eIcon = utils_1.Utils.createIconNoSpan(iconName, this.gridOptionsWrapper, column, defaultIconFactory);
 	        eTemplate.querySelector(cssSelector).appendChild(eIcon);
 	    };
+	    HeaderTemplateLoader.HEADER_CELL_TEMPLATE = '<div class="ag-header-cell">' +
+	        '  <div id="agResizeBar" class="ag-header-cell-resize"></div>' +
+	        '  <span id="agMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+	        '  <div id="agHeaderCellLabel" class="ag-header-cell-label">' +
+	        '    <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
+	        '    <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
+	        '    <span id="agNoSort" class="ag-header-icon ag-sort-none-icon"></span>' +
+	        '    <span id="agFilter" class="ag-header-icon ag-filter-icon"></span>' +
+	        '    <span id="agText" class="ag-header-cell-text"></span>' +
+	        '  </div>' +
+	        '</div>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderTemplateLoader.prototype, "gridOptionsWrapper", void 0);
+	    HeaderTemplateLoader = __decorate([
+	        context_1.Bean('headerTemplateLoader'), 
+	        __metadata('design:paramtypes', [])
+	    ], HeaderTemplateLoader);
 	    return HeaderTemplateLoader;
 	}());
-	HeaderTemplateLoader.HEADER_CELL_TEMPLATE = '<div class="ag-header-cell">' +
-	    '  <div id="agResizeBar" class="ag-header-cell-resize"></div>' +
-	    '  <span id="agMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
-	    '  <div id="agHeaderCellLabel" class="ag-header-cell-label">' +
-	    '    <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>' +
-	    '    <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>' +
-	    '    <span id="agNoSort" class="ag-header-icon ag-sort-none-icon"></span>' +
-	    '    <span id="agFilter" class="ag-header-icon ag-filter-icon"></span>' +
-	    '    <span id="agText" class="ag-header-cell-text"></span>' +
-	    '  </div>' +
-	    '</div>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderTemplateLoader.prototype, "gridOptionsWrapper", void 0);
-	HeaderTemplateLoader = HeaderTemplateLoader_1 = __decorate([
-	    context_1.Bean('headerTemplateLoader')
-	], HeaderTemplateLoader);
 	exports.HeaderTemplateLoader = HeaderTemplateLoader;
-	var HeaderTemplateLoader_1;
 
 
 /***/ },
@@ -23317,7 +23093,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
 	var HorizontalDragService = (function () {
@@ -23331,15 +23106,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            new DragInstance(params, startEvent, eBody);
 	        });
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HorizontalDragService.prototype, "gridOptionsWrapper", void 0);
+	    HorizontalDragService = __decorate([
+	        context_1.Bean('horizontalDragService'), 
+	        __metadata('design:paramtypes', [])
+	    ], HorizontalDragService);
 	    return HorizontalDragService;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HorizontalDragService.prototype, "gridOptionsWrapper", void 0);
-	HorizontalDragService = __decorate([
-	    context_1.Bean('horizontalDragService')
-	], HorizontalDragService);
 	exports.HorizontalDragService = HorizontalDragService;
 	var DragInstance = (function () {
 	    function DragInstance(params, startEvent, eBody) {
@@ -23423,7 +23199,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var CssClassApplier = (function () {
 	    function CssClassApplier() {
@@ -23487,16 +23262,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -23506,7 +23276,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var context_1 = __webpack_require__(6);
 	var column_1 = __webpack_require__(16);
@@ -23529,12 +23298,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var HeaderWrapperComp = (function (_super) {
 	    __extends(HeaderWrapperComp, _super);
 	    function HeaderWrapperComp(column, eRoot, dragSourceDropTarget, pinned) {
-	        var _this = _super.call(this, HeaderWrapperComp.TEMPLATE) || this;
-	        _this.column = column;
-	        _this.eRoot = eRoot;
-	        _this.dragSourceDropTarget = dragSourceDropTarget;
-	        _this.pinned = pinned;
-	        return _this;
+	        _super.call(this, HeaderWrapperComp.TEMPLATE);
+	        this.column = column;
+	        this.eRoot = eRoot;
+	        this.dragSourceDropTarget = dragSourceDropTarget;
+	        this.pinned = pinned;
 	    }
 	    HeaderWrapperComp.prototype.getColumn = function () {
 	        return this.column;
@@ -23593,7 +23361,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            setSort: function (sort, multiSort) {
 	                _this.sortController.setSortForColumn(_this.column, sort, !!multiSort);
 	            },
-	            eventService: this.eventService
+	            api: this.gridApi,
+	            columnApi: this.columnApi,
+	            context: this.gridOptionsWrapper.getContext()
 	        };
 	        var headerComp = this.componentProvider.newHeaderComponent(params);
 	        this.appendChild(headerComp);
@@ -23704,71 +23474,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return result;
 	    };
+	    HeaderWrapperComp.TEMPLATE = '<div class="ag-header-cell">' +
+	        '<div ref="eResize" class="ag-header-cell-resize"></div>' +
+	        '<ag-checkbox ref="cbSelectAll" class="ag-header-select-all"></ag-checkbox>' +
+	        // <inner component goes here>
+	        '</div>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderWrapperComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], HeaderWrapperComp.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderWrapperComp.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('horizontalDragService'), 
+	        __metadata('design:type', horizontalDragService_1.HorizontalDragService)
+	    ], HeaderWrapperComp.prototype, "horizontalDragService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], HeaderWrapperComp.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('menuFactory'), 
+	        __metadata('design:type', Object)
+	    ], HeaderWrapperComp.prototype, "menuFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('gridApi'), 
+	        __metadata('design:type', gridApi_1.GridApi)
+	    ], HeaderWrapperComp.prototype, "gridApi", void 0);
+	    __decorate([
+	        context_1.Autowired('columnApi'), 
+	        __metadata('design:type', columnController_1.ColumnApi)
+	    ], HeaderWrapperComp.prototype, "columnApi", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], HeaderWrapperComp.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], HeaderWrapperComp.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], HeaderWrapperComp.prototype, "componentProvider", void 0);
+	    __decorate([
+	        context_1.Autowired('columnHoverService'), 
+	        __metadata('design:type', columnHoverService_1.ColumnHoverService)
+	    ], HeaderWrapperComp.prototype, "columnHoverService", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('eResize'), 
+	        __metadata('design:type', HTMLElement)
+	    ], HeaderWrapperComp.prototype, "eResize", void 0);
+	    __decorate([
+	        componentAnnotations_1.RefSelector('cbSelectAll'), 
+	        __metadata('design:type', agCheckbox_1.AgCheckbox)
+	    ], HeaderWrapperComp.prototype, "cbSelectAll", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderWrapperComp.prototype, "init", null);
 	    return HeaderWrapperComp;
 	}(component_1.Component));
-	HeaderWrapperComp.TEMPLATE = '<div class="ag-header-cell">' +
-	    '<div ref="eResize" class="ag-header-cell-resize"></div>' +
-	    '<ag-checkbox ref="cbSelectAll" class="ag-header-select-all"></ag-checkbox>' +
-	    // <inner component goes here>
-	    '</div>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderWrapperComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], HeaderWrapperComp.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderWrapperComp.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('horizontalDragService'),
-	    __metadata("design:type", horizontalDragService_1.HorizontalDragService)
-	], HeaderWrapperComp.prototype, "horizontalDragService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], HeaderWrapperComp.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('menuFactory'),
-	    __metadata("design:type", Object)
-	], HeaderWrapperComp.prototype, "menuFactory", void 0);
-	__decorate([
-	    context_1.Autowired('gridApi'),
-	    __metadata("design:type", gridApi_1.GridApi)
-	], HeaderWrapperComp.prototype, "gridApi", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], HeaderWrapperComp.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], HeaderWrapperComp.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], HeaderWrapperComp.prototype, "componentProvider", void 0);
-	__decorate([
-	    context_1.Autowired('columnHoverService'),
-	    __metadata("design:type", columnHoverService_1.ColumnHoverService)
-	], HeaderWrapperComp.prototype, "columnHoverService", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('eResize'),
-	    __metadata("design:type", HTMLElement)
-	], HeaderWrapperComp.prototype, "eResize", void 0);
-	__decorate([
-	    componentAnnotations_1.RefSelector('cbSelectAll'),
-	    __metadata("design:type", agCheckbox_1.AgCheckbox)
-	], HeaderWrapperComp.prototype, "cbSelectAll", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderWrapperComp.prototype, "init", null);
 	exports.HeaderWrapperComp = HeaderWrapperComp;
 
 
@@ -23783,16 +23557,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -23802,7 +23571,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var componentAnnotations_1 = __webpack_require__(51);
 	var utils_1 = __webpack_require__(7);
@@ -23813,11 +23581,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var AgCheckbox = (function (_super) {
 	    __extends(AgCheckbox, _super);
 	    function AgCheckbox() {
-	        var _this = _super.call(this) || this;
-	        _this.selected = false;
-	        _this.readOnly = false;
-	        _this.passive = false;
-	        return _this;
+	        _super.call(this);
+	        this.selected = false;
+	        this.readOnly = false;
+	        this.passive = false;
 	    }
 	    AgCheckbox.prototype.postConstruct = function () {
 	        this.setTemplate(AgCheckbox.TEMPLATE);
@@ -23902,47 +23669,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	        utils_1.Utils.setVisible(this.eUnchecked, this.selected === false);
 	        utils_1.Utils.setVisible(this.eIndeterminate, this.selected === undefined);
 	    };
+	    AgCheckbox.EVENT_CHANGED = 'change';
+	    AgCheckbox.TEMPLATE = '<span class="ag-checkbox">' +
+	        '  <span class="ag-checkbox-checked"></span>' +
+	        '  <span class="ag-checkbox-unchecked"></span>' +
+	        '  <span class="ag-checkbox-indeterminate"></span>' +
+	        '  <span class="ag-checkbox-label"></span>' +
+	        '</span>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], AgCheckbox.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('.ag-checkbox-checked'), 
+	        __metadata('design:type', HTMLElement)
+	    ], AgCheckbox.prototype, "eChecked", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('.ag-checkbox-unchecked'), 
+	        __metadata('design:type', HTMLElement)
+	    ], AgCheckbox.prototype, "eUnchecked", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('.ag-checkbox-indeterminate'), 
+	        __metadata('design:type', HTMLElement)
+	    ], AgCheckbox.prototype, "eIndeterminate", void 0);
+	    __decorate([
+	        componentAnnotations_1.QuerySelector('.ag-checkbox-label'), 
+	        __metadata('design:type', HTMLElement)
+	    ], AgCheckbox.prototype, "eLabel", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], AgCheckbox.prototype, "postConstruct", null);
+	    __decorate([
+	        componentAnnotations_1.Listener('click'), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], AgCheckbox.prototype, "onClick", null);
 	    return AgCheckbox;
 	}(component_1.Component));
-	AgCheckbox.EVENT_CHANGED = 'change';
-	AgCheckbox.TEMPLATE = '<span class="ag-checkbox">' +
-	    '  <span class="ag-checkbox-checked"></span>' +
-	    '  <span class="ag-checkbox-unchecked"></span>' +
-	    '  <span class="ag-checkbox-indeterminate"></span>' +
-	    '  <span class="ag-checkbox-label"></span>' +
-	    '</span>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], AgCheckbox.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('.ag-checkbox-checked'),
-	    __metadata("design:type", HTMLElement)
-	], AgCheckbox.prototype, "eChecked", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('.ag-checkbox-unchecked'),
-	    __metadata("design:type", HTMLElement)
-	], AgCheckbox.prototype, "eUnchecked", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('.ag-checkbox-indeterminate'),
-	    __metadata("design:type", HTMLElement)
-	], AgCheckbox.prototype, "eIndeterminate", void 0);
-	__decorate([
-	    componentAnnotations_1.QuerySelector('.ag-checkbox-label'),
-	    __metadata("design:type", HTMLElement)
-	], AgCheckbox.prototype, "eLabel", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], AgCheckbox.prototype, "postConstruct", null);
-	__decorate([
-	    componentAnnotations_1.Listener('click'),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], AgCheckbox.prototype, "onClick", null);
 	exports.AgCheckbox = AgCheckbox;
 
 
@@ -23957,16 +23724,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -23976,7 +23738,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var agCheckbox_1 = __webpack_require__(93);
 	var beanStub_1 = __webpack_require__(38);
 	var context_1 = __webpack_require__(6);
@@ -23989,14 +23750,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SelectAllFeature = (function (_super) {
 	    __extends(SelectAllFeature, _super);
 	    function SelectAllFeature(cbSelectAll, column) {
-	        var _this = _super.call(this) || this;
-	        _this.cbSelectAllVisible = false;
-	        _this.processingEventFromCheckbox = false;
-	        _this.cbSelectAll = cbSelectAll;
-	        _this.column = column;
+	        _super.call(this);
+	        this.cbSelectAllVisible = false;
+	        this.processingEventFromCheckbox = false;
+	        this.cbSelectAll = cbSelectAll;
+	        this.column = column;
 	        var colDef = column.getColDef();
-	        _this.filteredOnly = colDef ? !!colDef.headerCheckboxSelectionFilteredOnly : false;
-	        return _this;
+	        this.filteredOnly = colDef ? !!colDef.headerCheckboxSelectionFilteredOnly : false;
 	    }
 	    SelectAllFeature.prototype.postConstruct = function () {
 	        this.showOrHideSelectAll();
@@ -24115,34 +23875,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return false;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridApi'), 
+	        __metadata('design:type', gridApi_1.GridApi)
+	    ], SelectAllFeature.prototype, "gridApi", void 0);
+	    __decorate([
+	        context_1.Autowired('columnApi'), 
+	        __metadata('design:type', columnController_1.ColumnApi)
+	    ], SelectAllFeature.prototype, "columnApi", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], SelectAllFeature.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('rowModel'), 
+	        __metadata('design:type', Object)
+	    ], SelectAllFeature.prototype, "rowModel", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], SelectAllFeature.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], SelectAllFeature.prototype, "postConstruct", null);
 	    return SelectAllFeature;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('gridApi'),
-	    __metadata("design:type", gridApi_1.GridApi)
-	], SelectAllFeature.prototype, "gridApi", void 0);
-	__decorate([
-	    context_1.Autowired('columnApi'),
-	    __metadata("design:type", columnController_1.ColumnApi)
-	], SelectAllFeature.prototype, "columnApi", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], SelectAllFeature.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('rowModel'),
-	    __metadata("design:type", Object)
-	], SelectAllFeature.prototype, "rowModel", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], SelectAllFeature.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], SelectAllFeature.prototype, "postConstruct", null);
 	exports.SelectAllFeature = SelectAllFeature;
 
 
@@ -24157,16 +23917,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24176,7 +23931,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var component_1 = __webpack_require__(50);
 	var column_1 = __webpack_require__(16);
 	var utils_1 = __webpack_require__(7);
@@ -24189,17 +23943,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var dragAndDropService_1 = __webpack_require__(86);
 	var setLeftFeature_1 = __webpack_require__(62);
 	var componentProvider_1 = __webpack_require__(54);
+	var gridApi_1 = __webpack_require__(11);
 	var HeaderGroupWrapperComp = (function (_super) {
 	    __extends(HeaderGroupWrapperComp, _super);
 	    function HeaderGroupWrapperComp(columnGroup, eRoot, dragSourceDropTarget, pinned) {
-	        var _this = _super.call(this, HeaderGroupWrapperComp.TEMPLATE) || this;
+	        _super.call(this, HeaderGroupWrapperComp.TEMPLATE);
 	        // the children can change, we keep destroy functions related to listening to the children here
-	        _this.childColumnsDestroyFuncs = [];
-	        _this.columnGroup = columnGroup;
-	        _this.eRoot = eRoot;
-	        _this.dragSourceDropTarget = dragSourceDropTarget;
-	        _this.pinned = pinned;
-	        return _this;
+	        this.childColumnsDestroyFuncs = [];
+	        this.columnGroup = columnGroup;
+	        this.eRoot = eRoot;
+	        this.dragSourceDropTarget = dragSourceDropTarget;
+	        this.pinned = pinned;
 	    }
 	    HeaderGroupWrapperComp.prototype.postConstruct = function () {
 	        cssClassApplier_1.CssClassApplier.addHeaderClassesFromColDef(this.columnGroup.getColGroupDef(), this.getGui(), this.gridOptionsWrapper, null, this.columnGroup);
@@ -24222,7 +23976,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columnGroup: this.columnGroup,
 	            setExpanded: function (expanded) {
 	                _this.columnController.setColumnGroupOpened(_this.columnGroup, expanded);
-	            }
+	            },
+	            api: this.gridApi,
+	            columnApi: this.columnApi,
+	            context: this.gridOptionsWrapper.getContext()
 	        };
 	        var headerComp = this.componentProvider.newHeaderGroupComponent(params);
 	        this.appendChild(headerComp);
@@ -24415,41 +24172,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return result;
 	    };
+	    HeaderGroupWrapperComp.TEMPLATE = '<div class="ag-header-group-cell">' +
+	        '<div ref="agResize" class="ag-header-cell-resize"></div>' +
+	        '</div>';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], HeaderGroupWrapperComp.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], HeaderGroupWrapperComp.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('horizontalDragService'), 
+	        __metadata('design:type', horizontalDragService_1.HorizontalDragService)
+	    ], HeaderGroupWrapperComp.prototype, "dragService", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], HeaderGroupWrapperComp.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], HeaderGroupWrapperComp.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('componentProvider'), 
+	        __metadata('design:type', componentProvider_1.ComponentProvider)
+	    ], HeaderGroupWrapperComp.prototype, "componentProvider", void 0);
+	    __decorate([
+	        context_1.Autowired('gridApi'), 
+	        __metadata('design:type', gridApi_1.GridApi)
+	    ], HeaderGroupWrapperComp.prototype, "gridApi", void 0);
+	    __decorate([
+	        context_1.Autowired('columnApi'), 
+	        __metadata('design:type', columnController_1.ColumnApi)
+	    ], HeaderGroupWrapperComp.prototype, "columnApi", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], HeaderGroupWrapperComp.prototype, "postConstruct", null);
 	    return HeaderGroupWrapperComp;
 	}(component_1.Component));
-	HeaderGroupWrapperComp.TEMPLATE = '<div class="ag-header-group-cell">' +
-	    '<div ref="agResize" class="ag-header-cell-resize"></div>' +
-	    '</div>';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], HeaderGroupWrapperComp.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], HeaderGroupWrapperComp.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('horizontalDragService'),
-	    __metadata("design:type", horizontalDragService_1.HorizontalDragService)
-	], HeaderGroupWrapperComp.prototype, "dragService", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], HeaderGroupWrapperComp.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], HeaderGroupWrapperComp.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('componentProvider'),
-	    __metadata("design:type", componentProvider_1.ComponentProvider)
-	], HeaderGroupWrapperComp.prototype, "componentProvider", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], HeaderGroupWrapperComp.prototype, "postConstruct", null);
 	exports.HeaderGroupWrapperComp = HeaderGroupWrapperComp;
 
 
@@ -24473,7 +24238,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var dragAndDropService_1 = __webpack_require__(86);
 	var context_1 = __webpack_require__(6);
 	var moveColumnController_1 = __webpack_require__(97);
@@ -24547,30 +24311,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BodyDropTarget.prototype.onDragStop = function (params) {
 	        this.currentDropListener.onDragStop(params);
 	    };
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], BodyDropTarget.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], BodyDropTarget.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], BodyDropTarget.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], BodyDropTarget.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], BodyDropTarget.prototype, "init", null);
 	    return BodyDropTarget;
 	}());
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], BodyDropTarget.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], BodyDropTarget.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], BodyDropTarget.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], BodyDropTarget.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], BodyDropTarget.prototype, "init", null);
 	exports.BodyDropTarget = BodyDropTarget;
 
 
@@ -24594,7 +24358,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var logger_1 = __webpack_require__(5);
 	var columnController_1 = __webpack_require__(14);
@@ -24720,7 +24483,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // under the mouse pointer
 	        if (draggingLeft) {
 	            dragColumn = displayedMovingColumns[0];
-	            // if dragging right, we want to keep the right most column under the mouse pointer
 	        }
 	        else {
 	            dragColumn = displayedMovingColumns[displayedMovingColumns.length - 1];
@@ -24853,34 +24615,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('loggerFactory'), 
+	        __metadata('design:type', logger_1.LoggerFactory)
+	    ], MoveColumnController.prototype, "loggerFactory", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], MoveColumnController.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridPanel'), 
+	        __metadata('design:type', gridPanel_1.GridPanel)
+	    ], MoveColumnController.prototype, "gridPanel", void 0);
+	    __decorate([
+	        context_1.Autowired('dragAndDropService'), 
+	        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+	    ], MoveColumnController.prototype, "dragAndDropService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], MoveColumnController.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], MoveColumnController.prototype, "init", null);
 	    return MoveColumnController;
 	}());
-	__decorate([
-	    context_1.Autowired('loggerFactory'),
-	    __metadata("design:type", logger_1.LoggerFactory)
-	], MoveColumnController.prototype, "loggerFactory", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], MoveColumnController.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridPanel'),
-	    __metadata("design:type", gridPanel_1.GridPanel)
-	], MoveColumnController.prototype, "gridPanel", void 0);
-	__decorate([
-	    context_1.Autowired('dragAndDropService'),
-	    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-	], MoveColumnController.prototype, "dragAndDropService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], MoveColumnController.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], MoveColumnController.prototype, "init", null);
 	exports.MoveColumnController = MoveColumnController;
 
 
@@ -24904,7 +24666,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var dragAndDropService_1 = __webpack_require__(86);
 	var columnController_1 = __webpack_require__(14);
 	var context_1 = __webpack_require__(6);
@@ -24978,16 +24739,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.columnController.addPivotColumns(this.columnsToPivot);
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], BodyDropPivotTarget.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], BodyDropPivotTarget.prototype, "gridOptionsWrapper", void 0);
 	    return BodyDropPivotTarget;
 	}());
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], BodyDropPivotTarget.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], BodyDropPivotTarget.prototype, "gridOptionsWrapper", void 0);
 	exports.BodyDropPivotTarget = BodyDropPivotTarget;
 
 
@@ -25002,7 +24763,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var ColumnChangeEvent = (function () {
 	    function ColumnChangeEvent(type) {
 	        this.type = type;
@@ -25098,7 +24858,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	// class returns unique instance id's for columns.
 	// eg, the following calls (in this order) will result in:
 	//
@@ -25152,13 +24911,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var column_1 = __webpack_require__(16);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var utils_1 = __webpack_require__(7);
 	var functions_1 = __webpack_require__(102);
-	var AutoGroupColService = AutoGroupColService_1 = (function () {
+	var AutoGroupColService = (function () {
 	    function AutoGroupColService() {
 	    }
 	    AutoGroupColService.prototype.createAutoGroupColumns = function (rowGroupColumns) {
@@ -25223,31 +24981,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                autoColDef.headerCheckboxSelection = false;
 	                autoColDef.cellRendererParams.checkbox = false;
 	            }
-	            colId = AutoGroupColService_1.GROUP_AUTO_COLUMN_ID + "-" + Math.random() + "-" + rowGroupCol.getId();
+	            colId = AutoGroupColService.GROUP_AUTO_COLUMN_ID + "-" + Math.random() + "-" + rowGroupCol.getId();
 	        }
 	        else {
-	            colId = AutoGroupColService_1.GROUP_AUTO_COLUMN_ID + "-" + Math.random();
+	            colId = AutoGroupColService.GROUP_AUTO_COLUMN_ID + "-" + Math.random();
 	        }
 	        var newCol = new column_1.Column(autoColDef, colId, true);
 	        this.context.wireBean(newCol);
 	        return newCol;
 	    };
+	    AutoGroupColService.GROUP_AUTO_COLUMN_ID = 'ag-Grid-AutoColumn';
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], AutoGroupColService.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], AutoGroupColService.prototype, "context", void 0);
+	    AutoGroupColService = __decorate([
+	        context_1.Bean('autoGroupColService'), 
+	        __metadata('design:paramtypes', [])
+	    ], AutoGroupColService);
 	    return AutoGroupColService;
 	}());
-	AutoGroupColService.GROUP_AUTO_COLUMN_ID = 'ag-Grid-AutoColumn';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], AutoGroupColService.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], AutoGroupColService.prototype, "context", void 0);
-	AutoGroupColService = AutoGroupColService_1 = __decorate([
-	    context_1.Bean('autoGroupColService')
-	], AutoGroupColService);
 	exports.AutoGroupColService = AutoGroupColService;
-	var AutoGroupColService_1;
 
 
 /***/ },
@@ -25261,7 +25019,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	function defaultGroupComparator(valueA, valueB, nodeA, nodeB) {
 	    var nodeAIsGroup = utils_1.Utils.exists(nodeA) && nodeA.group;
@@ -25301,7 +25058,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
 	var context_1 = __webpack_require__(6);
 	var Downloader = (function () {
 	    function Downloader() {
@@ -25326,11 +25085,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            document.body.removeChild(downloadLink);
 	        }
 	    };
+	    Downloader = __decorate([
+	        context_1.Bean('downloader'), 
+	        __metadata('design:paramtypes', [])
+	    ], Downloader);
 	    return Downloader;
 	}());
-	Downloader = __decorate([
-	    context_1.Bean('downloader')
-	], Downloader);
 	exports.Downloader = Downloader;
 
 
@@ -25354,7 +25114,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var filterManager_1 = __webpack_require__(46);
 	var utils_1 = __webpack_require__(7);
@@ -25411,27 +25170,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // for standard, we show menu if filter is enabled, and he menu is not suppressed
 	        return this.gridOptionsWrapper.isEnableFilter() && column.isFilterAllowed();
 	    };
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], StandardMenuFactory.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], StandardMenuFactory.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('popupService'), 
+	        __metadata('design:type', popupService_1.PopupService)
+	    ], StandardMenuFactory.prototype, "popupService", void 0);
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], StandardMenuFactory.prototype, "gridOptionsWrapper", void 0);
+	    StandardMenuFactory = __decorate([
+	        context_1.Bean('menuFactory'), 
+	        __metadata('design:paramtypes', [])
+	    ], StandardMenuFactory);
 	    return StandardMenuFactory;
 	}());
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], StandardMenuFactory.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], StandardMenuFactory.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('popupService'),
-	    __metadata("design:type", popupService_1.PopupService)
-	], StandardMenuFactory.prototype, "popupService", void 0);
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], StandardMenuFactory.prototype, "gridOptionsWrapper", void 0);
-	StandardMenuFactory = __decorate([
-	    context_1.Bean('menuFactory')
-	], StandardMenuFactory);
 	exports.StandardMenuFactory = StandardMenuFactory;
 
 
@@ -25455,7 +25215,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var filterService_1 = __webpack_require__(106);
@@ -25471,19 +25230,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.filterService.filterAccordingToColumnState(rowNode);
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], FilterStage.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('filterService'), 
+	        __metadata('design:type', filterService_1.FilterService)
+	    ], FilterStage.prototype, "filterService", void 0);
+	    FilterStage = __decorate([
+	        context_1.Bean('filterStage'), 
+	        __metadata('design:paramtypes', [])
+	    ], FilterStage);
 	    return FilterStage;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], FilterStage.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('filterService'),
-	    __metadata("design:type", filterService_1.FilterService)
-	], FilterStage.prototype, "filterService", void 0);
-	FilterStage = __decorate([
-	    context_1.Bean('filterStage')
-	], FilterStage);
 	exports.FilterStage = FilterStage;
 
 
@@ -25507,7 +25267,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var filterManager_1 = __webpack_require__(46);
 	var FilterService = (function () {
@@ -25564,15 +25323,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        rowNode.allChildrenCount = allChildrenCount;
 	    };
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], FilterService.prototype, "filterManager", void 0);
+	    FilterService = __decorate([
+	        context_1.Bean("filterService"), 
+	        __metadata('design:paramtypes', [])
+	    ], FilterService);
 	    return FilterService;
 	}());
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], FilterService.prototype, "filterManager", void 0);
-	FilterService = __decorate([
-	    context_1.Bean("filterService")
-	], FilterService);
 	exports.FilterService = FilterService;
 
 
@@ -25596,7 +25356,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var sortService_1 = __webpack_require__(108);
@@ -25612,19 +25371,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.sortService.sortAccordingToColumnsState(params.rowNode);
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], SortStage.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('sortService'), 
+	        __metadata('design:type', sortService_1.SortService)
+	    ], SortStage.prototype, "sortService", void 0);
+	    SortStage = __decorate([
+	        context_1.Bean('sortStage'), 
+	        __metadata('design:paramtypes', [])
+	    ], SortStage);
 	    return SortStage;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], SortStage.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('sortService'),
-	    __metadata("design:type", sortService_1.SortService)
-	], SortStage.prototype, "sortService", void 0);
-	SortStage = __decorate([
-	    context_1.Bean('sortStage')
-	], SortStage);
 	exports.SortStage = SortStage;
 
 
@@ -25648,7 +25408,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var sortController_1 = __webpack_require__(59);
 	var utils_1 = __webpack_require__(7);
@@ -25709,19 +25468,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            child.childIndex = index;
 	        });
 	    };
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], SortService.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('valueService'), 
+	        __metadata('design:type', valueService_1.ValueService)
+	    ], SortService.prototype, "valueService", void 0);
+	    SortService = __decorate([
+	        context_1.Bean('sortService'), 
+	        __metadata('design:paramtypes', [])
+	    ], SortService);
 	    return SortService;
 	}());
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], SortService.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('valueService'),
-	    __metadata("design:type", valueService_1.ValueService)
-	], SortService.prototype, "valueService", void 0);
-	SortService = __decorate([
-	    context_1.Bean('sortService')
-	], SortService);
 	exports.SortService = SortService;
 
 
@@ -25745,7 +25505,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var context_1 = __webpack_require__(6);
 	var rowNode_1 = __webpack_require__(28);
 	var utils_1 = __webpack_require__(7);
@@ -25871,31 +25630,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return flowerNode;
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], FlattenStage.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], FlattenStage.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], FlattenStage.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], FlattenStage.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], FlattenStage.prototype, "columnController", void 0);
+	    FlattenStage = __decorate([
+	        context_1.Bean('flattenStage'), 
+	        __metadata('design:paramtypes', [])
+	    ], FlattenStage);
 	    return FlattenStage;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], FlattenStage.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], FlattenStage.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], FlattenStage.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], FlattenStage.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], FlattenStage.prototype, "columnController", void 0);
-	FlattenStage = __decorate([
-	    context_1.Bean('flattenStage')
-	], FlattenStage);
 	exports.FlattenStage = FlattenStage;
 
 
@@ -25910,16 +25670,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -25929,7 +25684,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var context_1 = __webpack_require__(6);
@@ -25939,50 +25693,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	var sortController_1 = __webpack_require__(59);
 	var filterManager_1 = __webpack_require__(46);
 	var constants_1 = __webpack_require__(8);
-	var infinitePageCache_1 = __webpack_require__(111);
+	var infiniteCache_1 = __webpack_require__(111);
 	var beanStub_1 = __webpack_require__(38);
-	var InfinitePageRowModel = (function (_super) {
-	    __extends(InfinitePageRowModel, _super);
-	    function InfinitePageRowModel() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	var InfiniteRowModel = (function (_super) {
+	    __extends(InfiniteRowModel, _super);
+	    function InfiniteRowModel() {
+	        _super.apply(this, arguments);
 	    }
-	    InfinitePageRowModel.prototype.getRowBounds = function (index) {
-	        if (utils_1.Utils.missing(this.virtualPageCache)) {
+	    InfiniteRowModel.prototype.getRowBounds = function (index) {
+	        if (utils_1.Utils.missing(this.infiniteCache)) {
 	            return null;
 	        }
-	        return this.virtualPageCache.getRowBounds(index);
+	        return this.infiniteCache.getRowBounds(index);
 	    };
-	    InfinitePageRowModel.prototype.init = function () {
+	    InfiniteRowModel.prototype.init = function () {
 	        if (!this.gridOptionsWrapper.isRowModelInfinite()) {
 	            return;
 	        }
 	        this.addEventListeners();
 	        this.setDatasource(this.gridOptionsWrapper.getDatasource());
 	    };
-	    InfinitePageRowModel.prototype.isLastRowFound = function () {
-	        return this.virtualPageCache ? this.virtualPageCache.isMaxRowFound() : false;
+	    InfiniteRowModel.prototype.isLastRowFound = function () {
+	        return this.infiniteCache ? this.infiniteCache.isMaxRowFound() : false;
 	    };
-	    InfinitePageRowModel.prototype.addEventListeners = function () {
+	    InfiniteRowModel.prototype.addEventListeners = function () {
 	        this.addDestroyableEventListener(this.eventService, events_1.Events.EVENT_FILTER_CHANGED, this.onFilterChanged.bind(this));
 	        this.addDestroyableEventListener(this.eventService, events_1.Events.EVENT_SORT_CHANGED, this.onSortChanged.bind(this));
 	    };
-	    InfinitePageRowModel.prototype.onFilterChanged = function () {
+	    InfiniteRowModel.prototype.onFilterChanged = function () {
 	        if (this.gridOptionsWrapper.isEnableServerSideFilter()) {
 	            this.reset();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.onSortChanged = function () {
+	    InfiniteRowModel.prototype.onSortChanged = function () {
 	        if (this.gridOptionsWrapper.isEnableServerSideSorting()) {
 	            this.reset();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.destroy = function () {
+	    InfiniteRowModel.prototype.destroy = function () {
 	        _super.prototype.destroy.call(this);
 	    };
-	    InfinitePageRowModel.prototype.getType = function () {
+	    InfiniteRowModel.prototype.getType = function () {
 	        return constants_1.Constants.ROW_MODEL_TYPE_INFINITE;
 	    };
-	    InfinitePageRowModel.prototype.setDatasource = function (datasource) {
+	    InfiniteRowModel.prototype.setDatasource = function (datasource) {
 	        this.datasource = datasource;
 	        // only reset if we have a valid datasource to working with
 	        if (datasource) {
@@ -25990,7 +25744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.reset();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.checkForDeprecated = function () {
+	    InfiniteRowModel.prototype.checkForDeprecated = function () {
 	        var ds = this.datasource;
 	        // the number of concurrent loads we are allowed to the server
 	        if (utils_1.Utils.exists(ds.maxConcurrentRequests)) {
@@ -26006,13 +25760,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            console.error('ag-Grid: since version 5.1.x, pageSize is replaced with grid property infinitePageSize');
 	        }
 	    };
-	    InfinitePageRowModel.prototype.isEmpty = function () {
-	        return utils_1.Utils.missing(this.virtualPageCache);
+	    InfiniteRowModel.prototype.isEmpty = function () {
+	        return utils_1.Utils.missing(this.infiniteCache);
 	    };
-	    InfinitePageRowModel.prototype.isRowsToRender = function () {
-	        return utils_1.Utils.exists(this.virtualPageCache);
+	    InfiniteRowModel.prototype.isRowsToRender = function () {
+	        return utils_1.Utils.exists(this.infiniteCache);
 	    };
-	    InfinitePageRowModel.prototype.reset = function () {
+	    InfiniteRowModel.prototype.reset = function () {
 	        // important to return here, as the user could be setting filter or sort before
 	        // data-source is set
 	        if (utils_1.Utils.missing(this.datasource)) {
@@ -26021,14 +25775,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // if user is providing id's, then this means we can keep the selection between datsource hits,
 	        // as the rows will keep their unique id's even if, for example, server side sorting or filtering
 	        // is done.
-	        var userGeneratingRows = utils_1.Utils.exists(this.gridOptionsWrapper.getRowNodeIdFunc());
-	        if (!userGeneratingRows) {
+	        var userGeneratingIds = utils_1.Utils.exists(this.gridOptionsWrapper.getRowNodeIdFunc());
+	        if (!userGeneratingIds) {
 	            this.selectionController.reset();
 	        }
 	        this.resetCache();
 	        this.eventService.dispatchEvent(events_1.Events.EVENT_MODEL_UPDATED);
 	    };
-	    InfinitePageRowModel.prototype.resetCache = function () {
+	    InfiniteRowModel.prototype.resetCache = function () {
 	        var cacheSettings = {
 	            // the user provided datasource
 	            datasource: this.datasource,
@@ -26038,10 +25792,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // properties - this way we take a snapshot of them, so if user changes any, they will be
 	            // used next time we create a new cache, which is generally after a filter or sort change,
 	            // or a new datasource is set
-	            maxConcurrentDatasourceRequests: this.gridOptionsWrapper.getMaxConcurrentDatasourceRequests(),
-	            paginationOverflowSize: this.gridOptionsWrapper.getPaginationOverflowSize(),
-	            paginationInitialRowCount: this.gridOptionsWrapper.getInfiniteInitialRowCount(),
-	            maxPagesInCache: this.gridOptionsWrapper.getMaxPagesInCache(),
+	            maxConcurrentRequests: this.gridOptionsWrapper.getMaxConcurrentDatasourceRequests(),
+	            overflowSize: this.gridOptionsWrapper.getPaginationOverflowSize(),
+	            initialRowCount: this.gridOptionsWrapper.getInfiniteInitialRowCount(),
+	            maxBlocksInCache: this.gridOptionsWrapper.getMaxPagesInCache(),
 	            pageSize: this.gridOptionsWrapper.getInfiniteBlockSize(),
 	            rowHeight: this.gridOptionsWrapper.getRowHeightAsNumber(),
 	            // the cache could create this, however it is also used by the pages, so handy to create it
@@ -26049,8 +25803,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            lastAccessedSequence: new utils_1.NumberSequence()
 	        };
 	        // set defaults
-	        if (!(cacheSettings.maxConcurrentDatasourceRequests >= 1)) {
-	            cacheSettings.maxConcurrentDatasourceRequests = 2;
+	        if (!(cacheSettings.maxConcurrentRequests >= 1)) {
+	            cacheSettings.maxConcurrentRequests = 2;
 	        }
 	        // page size needs to be 1 or greater. having it at 1 would be silly, as you would be hitting the
 	        // server for one page at a time. so the default if not specified is 100.
@@ -26058,139 +25812,140 @@ return /******/ (function(modules) { // webpackBootstrap
 	            cacheSettings.pageSize = 100;
 	        }
 	        // if user doesn't give initial rows to display, we assume zero
-	        if (!(cacheSettings.paginationInitialRowCount >= 1)) {
-	            cacheSettings.paginationInitialRowCount = 0;
+	        if (!(cacheSettings.initialRowCount >= 1)) {
+	            cacheSettings.initialRowCount = 0;
 	        }
 	        // if user doesn't provide overflow, we use default overflow of 1, so user can scroll past
 	        // the current page and request first row of next page
-	        if (!(cacheSettings.paginationOverflowSize >= 1)) {
-	            cacheSettings.paginationOverflowSize = 1;
+	        if (!(cacheSettings.overflowSize >= 1)) {
+	            cacheSettings.overflowSize = 1;
 	        }
 	        // if not first time creating a cache, need to destroy the old one
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.destroy();
+	        if (this.infiniteCache) {
+	            this.infiniteCache.destroy();
 	        }
-	        this.virtualPageCache = new infinitePageCache_1.InfinitePageCache(cacheSettings);
-	        this.context.wireBean(this.virtualPageCache);
+	        this.infiniteCache = new infiniteCache_1.InfiniteCache(cacheSettings);
+	        this.context.wireBean(this.infiniteCache);
 	    };
-	    InfinitePageRowModel.prototype.getRow = function (rowIndex) {
-	        return this.virtualPageCache ? this.virtualPageCache.getRow(rowIndex) : null;
+	    InfiniteRowModel.prototype.getRow = function (rowIndex) {
+	        return this.infiniteCache ? this.infiniteCache.getRow(rowIndex) : null;
 	    };
-	    InfinitePageRowModel.prototype.forEachNode = function (callback) {
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.forEachNode(callback);
+	    InfiniteRowModel.prototype.forEachNode = function (callback) {
+	        if (this.infiniteCache) {
+	            this.infiniteCache.forEachNode(callback);
 	        }
 	    };
-	    InfinitePageRowModel.prototype.getCurrentPageHeight = function () {
-	        return this.virtualPageCache ? this.virtualPageCache.getCurrentPageHeight() : 0;
+	    InfiniteRowModel.prototype.getCurrentPageHeight = function () {
+	        return this.infiniteCache ? this.infiniteCache.getCurrentPageHeight() : 0;
 	    };
-	    InfinitePageRowModel.prototype.getRowIndexAtPixel = function (pixel) {
-	        return this.virtualPageCache ? this.virtualPageCache.getRowIndexAtPixel(pixel) : -1;
+	    InfiniteRowModel.prototype.getRowIndexAtPixel = function (pixel) {
+	        return this.infiniteCache ? this.infiniteCache.getRowIndexAtPixel(pixel) : -1;
 	    };
-	    InfinitePageRowModel.prototype.getPageFirstRow = function () {
+	    InfiniteRowModel.prototype.getPageFirstRow = function () {
 	        return 0;
 	    };
-	    InfinitePageRowModel.prototype.getPageLastRow = function () {
-	        return this.virtualPageCache ? this.virtualPageCache.getRowCount() - 1 : 0;
+	    InfiniteRowModel.prototype.getPageLastRow = function () {
+	        return this.infiniteCache ? this.infiniteCache.getRowCount() - 1 : 0;
 	    };
-	    InfinitePageRowModel.prototype.getRowCount = function () {
-	        return this.virtualPageCache ? this.virtualPageCache.getRowCount() : 0;
+	    InfiniteRowModel.prototype.getRowCount = function () {
+	        return this.infiniteCache ? this.infiniteCache.getRowCount() : 0;
 	    };
-	    InfinitePageRowModel.prototype.insertItemsAtIndex = function (index, items, skipRefresh) {
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.insertItemsAtIndex(index, items);
+	    InfiniteRowModel.prototype.insertItemsAtIndex = function (index, items, skipRefresh) {
+	        if (this.infiniteCache) {
+	            this.infiniteCache.insertItemsAtIndex(index, items);
 	        }
 	    };
-	    InfinitePageRowModel.prototype.removeItems = function (rowNodes, skipRefresh) {
+	    InfiniteRowModel.prototype.removeItems = function (rowNodes, skipRefresh) {
 	        console.log('ag-Grid: it is not possible to removeItems when using virtual pagination. Instead use the ' +
 	            'API to refresh the cache');
 	    };
-	    InfinitePageRowModel.prototype.addItems = function (items, skipRefresh) {
+	    InfiniteRowModel.prototype.addItems = function (items, skipRefresh) {
 	        console.log('ag-Grid: it is not possible to add items when using virtual pagination as the grid does not ' +
 	            'know that last index of your data - instead either use insertItemsAtIndex OR refresh the cache.');
 	    };
-	    InfinitePageRowModel.prototype.isRowPresent = function (rowNode) {
+	    InfiniteRowModel.prototype.isRowPresent = function (rowNode) {
 	        console.log('ag-Grid: not supported.');
 	        return false;
 	    };
-	    InfinitePageRowModel.prototype.refreshVirtualPageCache = function () {
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.refreshVirtualPageCache();
+	    InfiniteRowModel.prototype.refreshCache = function () {
+	        if (this.infiniteCache) {
+	            this.infiniteCache.refreshCache();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.purgeVirtualPageCache = function () {
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.purgeVirtualPageCache();
+	    InfiniteRowModel.prototype.purgeCache = function () {
+	        if (this.infiniteCache) {
+	            this.infiniteCache.purgeCache();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.getVirtualRowCount = function () {
-	        if (this.virtualPageCache) {
-	            return this.virtualPageCache.getVirtualRowCount();
+	    InfiniteRowModel.prototype.getVirtualRowCount = function () {
+	        if (this.infiniteCache) {
+	            return this.infiniteCache.getVirtualRowCount();
 	        }
 	        else {
 	            return null;
 	        }
 	    };
-	    InfinitePageRowModel.prototype.isMaxRowFound = function () {
-	        if (this.virtualPageCache) {
-	            return this.virtualPageCache.isMaxRowFound();
+	    InfiniteRowModel.prototype.isMaxRowFound = function () {
+	        if (this.infiniteCache) {
+	            return this.infiniteCache.isMaxRowFound();
 	        }
 	    };
-	    InfinitePageRowModel.prototype.setVirtualRowCount = function (rowCount, maxRowFound) {
-	        if (this.virtualPageCache) {
-	            this.virtualPageCache.setVirtualRowCount(rowCount, maxRowFound);
+	    InfiniteRowModel.prototype.setVirtualRowCount = function (rowCount, maxRowFound) {
+	        if (this.infiniteCache) {
+	            this.infiniteCache.setVirtualRowCount(rowCount, maxRowFound);
 	        }
 	    };
-	    InfinitePageRowModel.prototype.getVirtualPageState = function () {
-	        if (this.virtualPageCache) {
-	            return this.virtualPageCache.getPageState();
+	    InfiniteRowModel.prototype.getPageState = function () {
+	        if (this.infiniteCache) {
+	            return this.infiniteCache.getPageState();
 	        }
 	        else {
 	            return null;
 	        }
 	    };
-	    return InfinitePageRowModel;
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], InfiniteRowModel.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], InfiniteRowModel.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('sortController'), 
+	        __metadata('design:type', sortController_1.SortController)
+	    ], InfiniteRowModel.prototype, "sortController", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], InfiniteRowModel.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], InfiniteRowModel.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], InfiniteRowModel.prototype, "context", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], InfiniteRowModel.prototype, "init", null);
+	    __decorate([
+	        context_1.PreDestroy, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], InfiniteRowModel.prototype, "destroy", null);
+	    InfiniteRowModel = __decorate([
+	        context_1.Bean('rowModel'), 
+	        __metadata('design:paramtypes', [])
+	    ], InfiniteRowModel);
+	    return InfiniteRowModel;
 	}(beanStub_1.BeanStub));
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], InfinitePageRowModel.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], InfinitePageRowModel.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('sortController'),
-	    __metadata("design:type", sortController_1.SortController)
-	], InfinitePageRowModel.prototype, "sortController", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], InfinitePageRowModel.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], InfinitePageRowModel.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], InfinitePageRowModel.prototype, "context", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], InfinitePageRowModel.prototype, "init", null);
-	__decorate([
-	    context_1.PreDestroy,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], InfinitePageRowModel.prototype, "destroy", null);
-	InfinitePageRowModel = __decorate([
-	    context_1.Bean('rowModel')
-	], InfinitePageRowModel);
-	exports.InfinitePageRowModel = InfinitePageRowModel;
+	exports.InfiniteRowModel = InfiniteRowModel;
 
 
 /***/ },
@@ -26204,6 +25959,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -26216,50 +25976,109 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __param = (this && this.__param) || function (paramIndex, decorator) {
 	    return function (target, key) { decorator(target, key, paramIndex); }
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var context_1 = __webpack_require__(6);
 	var eventService_1 = __webpack_require__(4);
 	var events_1 = __webpack_require__(10);
 	var logger_1 = __webpack_require__(5);
-	var infinitePage_1 = __webpack_require__(112);
-	var InfinitePageCache = (function () {
-	    function InfinitePageCache(cacheSettings) {
-	        this.pages = {};
-	        this.activePageLoadsCount = 0;
-	        this.pagesInCacheCount = 0;
+	var infiniteBlock_1 = __webpack_require__(112);
+	var RowNodeCache = (function () {
+	    function RowNodeCache(params) {
 	        this.maxRowFound = false;
 	        this.active = true;
-	        this.cacheParams = cacheSettings;
-	        this.virtualRowCount = cacheSettings.paginationInitialRowCount;
+	        this.virtualRowCount = params.initialRowCount;
+	        this.rowNodeCacheParams = params;
 	    }
-	    InfinitePageCache.prototype.getRowBounds = function (index) {
+	    RowNodeCache.prototype.isActive = function () {
+	        return this.active;
+	    };
+	    RowNodeCache.prototype.getVirtualRowCount = function () {
+	        return this.virtualRowCount;
+	    };
+	    RowNodeCache.prototype.hack_setVirtualRowCount = function (virtualRowCount) {
+	        this.virtualRowCount = virtualRowCount;
+	    };
+	    RowNodeCache.prototype.isMaxRowFound = function () {
+	        return this.maxRowFound;
+	    };
+	    // as we are not a context managed bean, we cannot use @PreDestroy
+	    RowNodeCache.prototype.destroy = function () {
+	        this.active = false;
+	    };
+	    RowNodeCache.prototype.checkVirtualRowCount = function (page, lastRow) {
+	        // if client provided a last row, we always use it, as it could change between server calls
+	        // if user deleted data and then called refresh on the grid.
+	        if (typeof lastRow === 'number' && lastRow >= 0) {
+	            this.virtualRowCount = lastRow;
+	            this.maxRowFound = true;
+	            this.dispatchModelUpdated();
+	        }
+	        else if (!this.maxRowFound) {
+	            // otherwise, see if we need to add some virtual rows
+	            var lastRowIndex = (page.getPageNumber() + 1) * this.rowNodeCacheParams.pageSize;
+	            var lastRowIndexPlusOverflow = lastRowIndex + this.rowNodeCacheParams.overflowSize;
+	            if (this.virtualRowCount < lastRowIndexPlusOverflow) {
+	                this.virtualRowCount = lastRowIndexPlusOverflow;
+	                this.dispatchModelUpdated();
+	            }
+	        }
+	    };
+	    RowNodeCache.prototype.setVirtualRowCount = function (rowCount, maxRowFound) {
+	        this.virtualRowCount = rowCount;
+	        // if undefined is passed, we do not set this value, if one of {true,false}
+	        // is passed, we do set the value.
+	        if (utils_1.Utils.exists(maxRowFound)) {
+	            this.maxRowFound = maxRowFound;
+	        }
+	        // if we are still searching, then the row count must not end at the end
+	        // of a particular page, otherwise the searching will not pop into the
+	        // next page
+	        if (!this.maxRowFound) {
+	            if (this.virtualRowCount % this.rowNodeCacheParams.pageSize === 0) {
+	                this.virtualRowCount++;
+	            }
+	        }
+	        this.dispatchModelUpdated();
+	    };
+	    return RowNodeCache;
+	}());
+	exports.RowNodeCache = RowNodeCache;
+	var InfiniteCache = (function (_super) {
+	    __extends(InfiniteCache, _super);
+	    function InfiniteCache(params) {
+	        _super.call(this, params);
+	        this.blocks = {};
+	        this.activePageLoadsCount = 0;
+	        this.blocksCount = 0;
+	        this.cacheParams = params;
+	    }
+	    InfiniteCache.prototype.getRowBounds = function (index) {
 	        return {
 	            rowHeight: this.cacheParams.rowHeight,
 	            rowTop: this.cacheParams.rowHeight * index
 	        };
 	    };
-	    InfinitePageCache.prototype.setBeans = function (loggerFactory) {
+	    InfiniteCache.prototype.setBeans = function (loggerFactory) {
 	        this.logger = loggerFactory.create('VirtualPageCache');
 	    };
-	    InfinitePageCache.prototype.init = function () {
+	    InfiniteCache.prototype.init = function () {
 	        // start load of data, as the virtualRowCount will remain at 0 otherwise,
 	        // so we need this to kick things off, otherwise grid would never call getRow()
 	        this.getRow(0);
 	    };
-	    InfinitePageCache.prototype.getCurrentPageHeight = function () {
-	        return this.virtualRowCount * this.cacheParams.rowHeight;
+	    InfiniteCache.prototype.getCurrentPageHeight = function () {
+	        return this.getVirtualRowCount() * this.cacheParams.rowHeight;
 	    };
-	    InfinitePageCache.prototype.forEachNode = function (callback) {
+	    InfiniteCache.prototype.forEachNode = function (callback) {
 	        var _this = this;
 	        var index = 0;
-	        utils_1.Utils.iterateObject(this.pages, function (key, cachePage) {
+	        utils_1.Utils.iterateObject(this.blocks, function (key, cachePage) {
 	            var start = cachePage.getStartRow();
 	            var end = cachePage.getEndRow();
 	            for (var rowIndex = start; rowIndex < end; rowIndex++) {
 	                // we check against virtualRowCount as this page may be the last one, and if it is, then
 	                // it's probable that the last rows are not part of the set
-	                if (rowIndex < _this.virtualRowCount) {
+	                if (rowIndex < _this.getVirtualRowCount()) {
 	                    var rowNode = cachePage.getRow(rowIndex);
 	                    callback(rowNode, index);
 	                    index++;
@@ -26267,11 +26086,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	    };
-	    InfinitePageCache.prototype.getRowIndexAtPixel = function (pixel) {
+	    InfiniteCache.prototype.getRowIndexAtPixel = function (pixel) {
 	        if (this.cacheParams.rowHeight !== 0) {
 	            var rowIndexForPixel = Math.floor(pixel / this.cacheParams.rowHeight);
-	            if (rowIndexForPixel >= this.virtualRowCount) {
-	                return this.virtualRowCount - 1;
+	            if (rowIndexForPixel >= this.getVirtualRowCount()) {
+	                return this.getVirtualRowCount() - 1;
 	            }
 	            else {
 	                return rowIndexForPixel;
@@ -26281,7 +26100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return 0;
 	        }
 	    };
-	    InfinitePageCache.prototype.moveItemsDown = function (page, moveFromIndex, moveCount) {
+	    InfiniteCache.prototype.moveItemsDown = function (page, moveFromIndex, moveCount) {
 	        var startRow = page.getStartRow();
 	        var endRow = page.getEndRow();
 	        var indexOfLastRowToMove = moveFromIndex + moveCount;
@@ -26302,7 +26121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
-	    InfinitePageCache.prototype.insertItems = function (page, indexToInsert, items) {
+	    InfiniteCache.prototype.insertItems = function (page, indexToInsert, items) {
 	        var pageStartRow = page.getStartRow();
 	        var pageEndRow = page.getEndRow();
 	        var newRowNodes = [];
@@ -26318,13 +26137,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return newRowNodes;
 	    };
-	    InfinitePageCache.prototype.insertItemsAtIndex = function (indexToInsert, items) {
+	    InfiniteCache.prototype.insertItemsAtIndex = function (indexToInsert, items) {
 	        var _this = this;
 	        // get all page id's as NUMBERS (not strings, as we need to sort as numbers) and in descending order
-	        var pageIds = Object.keys(this.pages).map(function (str) { return parseInt(str); }).sort().reverse();
+	        var pageIds = Object.keys(this.blocks).map(function (str) { return parseInt(str); }).sort().reverse();
 	        var newNodes = [];
 	        pageIds.forEach(function (pageId) {
-	            var page = _this.pages[pageId];
+	            var page = _this.blocks[pageId];
 	            var pageEndRow = page.getEndRow();
 	            // if the insertion is after this page, then this page is not impacted
 	            if (pageEndRow <= indexToInsert) {
@@ -26334,86 +26153,82 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var newNodesThisPage = _this.insertItems(page, indexToInsert, items);
 	            newNodesThisPage.forEach(function (rowNode) { return newNodes.push(rowNode); });
 	        });
-	        if (this.maxRowFound) {
-	            this.virtualRowCount += items.length;
+	        if (this.isMaxRowFound()) {
+	            this.hack_setVirtualRowCount(this.getVirtualRowCount() + items.length);
 	        }
 	        this.dispatchModelUpdated();
 	        this.eventService.dispatchEvent(events_1.Events.EVENT_ITEMS_ADDED, newNodes);
 	    };
-	    InfinitePageCache.prototype.getRowCount = function () {
-	        return this.virtualRowCount;
+	    InfiniteCache.prototype.getRowCount = function () {
+	        return this.getVirtualRowCount();
 	    };
-	    InfinitePageCache.prototype.onPageLoaded = function (event) {
+	    InfiniteCache.prototype.onPageLoaded = function (event) {
 	        // if we are not active, then we ignore all events, otherwise we could end up getting the
 	        // grid to refresh even though we are no longer the active cache
-	        if (!this.active) {
+	        if (!this.isActive()) {
 	            return;
 	        }
 	        this.logger.log("onPageLoaded: page = " + event.page.getPageNumber() + ", lastRow = " + event.lastRow);
 	        this.activePageLoadsCount--;
-	        this.checkPageToLoad();
+	        this.checkBlockToLoad();
 	        if (event.success) {
 	            this.checkVirtualRowCount(event.page, event.lastRow);
 	        }
 	    };
-	    // as we are not a context managed bean, we cannot use @PreDestroy
-	    InfinitePageCache.prototype.destroy = function () {
-	        this.active = false;
-	    };
 	    // the rowRenderer will not pass dontCreatePage, meaning when rendering the grid,
 	    // it will want new pages in the cache as it asks for rows. only when we are inserting /
 	    // removing rows via the api is dontCreatePage set, where we move rows between the pages.
-	    InfinitePageCache.prototype.getRow = function (rowIndex, dontCreatePage) {
+	    InfiniteCache.prototype.getRow = function (rowIndex, dontCreatePage) {
 	        if (dontCreatePage === void 0) { dontCreatePage = false; }
 	        var pageNumber = Math.floor(rowIndex / this.cacheParams.pageSize);
-	        var page = this.pages[pageNumber];
+	        var page = this.blocks[pageNumber];
 	        if (!page) {
 	            if (dontCreatePage) {
 	                return null;
 	            }
 	            else {
-	                page = this.createPage(pageNumber);
+	                page = this.createBlock(pageNumber);
 	            }
 	        }
 	        return page.getRow(rowIndex);
 	    };
-	    InfinitePageCache.prototype.createPage = function (pageNumber) {
-	        var newPage = new infinitePage_1.InfinitePage(pageNumber, this.cacheParams);
-	        this.context.wireBean(newPage);
-	        newPage.addEventListener(infinitePage_1.InfinitePage.EVENT_LOAD_COMPLETE, this.onPageLoaded.bind(this));
-	        this.pages[pageNumber] = newPage;
-	        this.pagesInCacheCount++;
-	        var needToPurge = utils_1.Utils.exists(this.cacheParams.maxPagesInCache)
-	            && this.pagesInCacheCount > this.cacheParams.maxPagesInCache;
+	    InfiniteCache.prototype.createBlock = function (blockNumber) {
+	        var newBlock = new infiniteBlock_1.InfiniteBlock(blockNumber, this.cacheParams);
+	        this.context.wireBean(newBlock);
+	        newBlock.addEventListener(infiniteBlock_1.InfiniteBlock.EVENT_LOAD_COMPLETE, this.onPageLoaded.bind(this));
+	        this.blocks[blockNumber] = newBlock;
+	        this.blocksCount++;
+	        var needToPurge = utils_1.Utils.exists(this.cacheParams.maxBlocksInCache)
+	            && this.blocksCount > this.cacheParams.maxBlocksInCache;
 	        if (needToPurge) {
-	            var lruPage = this.findLeastRecentlyUsedPage(newPage);
-	            this.removePageFromCache(lruPage);
+	            var lruPage = this.findLeastRecentlyUsedPage(newBlock);
+	            this.removeBlockFromCache(lruPage);
 	        }
-	        this.checkPageToLoad();
-	        return newPage;
+	        this.checkBlockToLoad();
+	        return newBlock;
 	    };
-	    InfinitePageCache.prototype.removePageFromCache = function (pageToRemove) {
+	    InfiniteCache.prototype.removeBlockFromCache = function (pageToRemove) {
 	        if (!pageToRemove) {
 	            return;
 	        }
-	        delete this.pages[pageToRemove.getPageNumber()];
-	        this.pagesInCacheCount--;
+	        delete this.blocks[pageToRemove.getPageNumber()];
+	        this.blocksCount--;
 	        // we do not want to remove the 'loaded' event listener, as the
 	        // concurrent loads count needs to be updated when the load is complete
 	        // if the purged page is in loading state
 	    };
-	    InfinitePageCache.prototype.printCacheStatus = function () {
+	    InfiniteCache.prototype.printCacheStatus = function () {
 	        this.logger.log("checkPageToLoad: activePageLoadsCount = " + this.activePageLoadsCount + ", pages = " + JSON.stringify(this.getPageState()));
 	    };
-	    InfinitePageCache.prototype.checkPageToLoad = function () {
+	    InfiniteCache.prototype.checkBlockToLoad = function () {
 	        this.printCacheStatus();
-	        if (this.activePageLoadsCount >= this.cacheParams.maxConcurrentDatasourceRequests) {
+	        if (this.activePageLoadsCount >= this.cacheParams.maxConcurrentRequests) {
 	            this.logger.log("checkPageToLoad: max loads exceeded");
 	            return;
 	        }
 	        var pageToLoad = null;
-	        utils_1.Utils.iterateObject(this.pages, function (key, cachePage) {
-	            if (cachePage.getState() === infinitePage_1.InfinitePage.STATE_DIRTY) {
+	        utils_1.Utils.iterateObject(this.blocks, function (key, cachePage) {
+	            if (cachePage.getState() === infiniteBlock_1.InfiniteBlock.STATE_DIRTY) {
 	                pageToLoad = cachePage;
 	            }
 	        });
@@ -26427,9 +26242,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.logger.log("checkPageToLoad: no pages to load");
 	        }
 	    };
-	    InfinitePageCache.prototype.findLeastRecentlyUsedPage = function (pageToExclude) {
+	    InfiniteCache.prototype.findLeastRecentlyUsedPage = function (pageToExclude) {
 	        var lruPage = null;
-	        utils_1.Utils.iterateObject(this.pages, function (key, page) {
+	        utils_1.Utils.iterateObject(this.blocks, function (key, page) {
 	            // we exclude checking for the page just created, as this has yet to be accessed and hence
 	            // the lastAccessed stamp will not be updated for the first time yet
 	            if (page === pageToExclude) {
@@ -26441,94 +26256,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return lruPage;
 	    };
-	    InfinitePageCache.prototype.checkVirtualRowCount = function (page, lastRow) {
-	        // if client provided a last row, we always use it, as it could change between server calls
-	        // if user deleted data and then called refresh on the grid.
-	        if (typeof lastRow === 'number' && lastRow >= 0) {
-	            this.virtualRowCount = lastRow;
-	            this.maxRowFound = true;
-	            this.dispatchModelUpdated();
-	        }
-	        else if (!this.maxRowFound) {
-	            // otherwise, see if we need to add some virtual rows
-	            var lastRowIndex = (page.getPageNumber() + 1) * this.cacheParams.pageSize;
-	            var lastRowIndexPlusOverflow = lastRowIndex + this.cacheParams.paginationOverflowSize;
-	            if (this.virtualRowCount < lastRowIndexPlusOverflow) {
-	                this.virtualRowCount = lastRowIndexPlusOverflow;
-	                this.dispatchModelUpdated();
-	            }
-	        }
-	    };
-	    InfinitePageCache.prototype.dispatchModelUpdated = function () {
-	        if (this.active) {
+	    InfiniteCache.prototype.dispatchModelUpdated = function () {
+	        if (this.isActive()) {
 	            this.eventService.dispatchEvent(events_1.Events.EVENT_MODEL_UPDATED);
 	        }
 	    };
-	    InfinitePageCache.prototype.getPageState = function () {
+	    InfiniteCache.prototype.getPageState = function () {
 	        var result = [];
-	        utils_1.Utils.iterateObject(this.pages, function (pageNumber, page) {
+	        utils_1.Utils.iterateObject(this.blocks, function (pageNumber, page) {
 	            result.push({ pageNumber: pageNumber, startRow: page.getStartRow(), endRow: page.getEndRow(), pageStatus: page.getState() });
 	        });
 	        return result;
 	    };
-	    InfinitePageCache.prototype.refreshVirtualPageCache = function () {
-	        utils_1.Utils.iterateObject(this.pages, function (pageId, page) {
+	    InfiniteCache.prototype.refreshCache = function () {
+	        utils_1.Utils.iterateObject(this.blocks, function (pageId, page) {
 	            page.setDirty();
 	        });
-	        this.checkPageToLoad();
+	        this.checkBlockToLoad();
 	    };
-	    InfinitePageCache.prototype.purgeVirtualPageCache = function () {
+	    InfiniteCache.prototype.purgeCache = function () {
 	        var _this = this;
-	        var pagesList = utils_1.Utils.values(this.pages);
-	        pagesList.forEach(function (virtualPage) { return _this.removePageFromCache(virtualPage); });
+	        var pagesList = utils_1.Utils.values(this.blocks);
+	        pagesList.forEach(function (virtualPage) { return _this.removeBlockFromCache(virtualPage); });
 	        this.dispatchModelUpdated();
 	    };
-	    InfinitePageCache.prototype.getVirtualRowCount = function () {
-	        return this.virtualRowCount;
-	    };
-	    InfinitePageCache.prototype.isMaxRowFound = function () {
-	        return this.maxRowFound;
-	    };
-	    InfinitePageCache.prototype.setVirtualRowCount = function (rowCount, maxRowFound) {
-	        this.virtualRowCount = rowCount;
-	        // if undefined is passed, we do not set this value, if one of {true,false}
-	        // is passed, we do set the value.
-	        if (utils_1.Utils.exists(maxRowFound)) {
-	            this.maxRowFound = maxRowFound;
-	        }
-	        // if we are still searching, then the row count must not end at the end
-	        // of a particular page, otherwise the searching will not pop into the
-	        // next page
-	        if (!this.maxRowFound) {
-	            if (this.virtualRowCount % this.cacheParams.pageSize === 0) {
-	                this.virtualRowCount++;
-	            }
-	        }
-	        this.dispatchModelUpdated();
-	    };
-	    return InfinitePageCache;
-	}());
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], InfinitePageCache.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], InfinitePageCache.prototype, "context", void 0);
-	__decorate([
-	    __param(0, context_1.Qualifier('loggerFactory')),
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-	    __metadata("design:returntype", void 0)
-	], InfinitePageCache.prototype, "setBeans", null);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], InfinitePageCache.prototype, "init", null);
-	exports.InfinitePageCache = InfinitePageCache;
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], InfiniteCache.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], InfiniteCache.prototype, "context", void 0);
+	    __decorate([
+	        __param(0, context_1.Qualifier('loggerFactory')), 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+	        __metadata('design:returntype', void 0)
+	    ], InfiniteCache.prototype, "setBeans", null);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], InfiniteCache.prototype, "init", null);
+	    return InfiniteCache;
+	}(RowNodeCache));
+	exports.InfiniteCache = InfiniteCache;
 
 
 /***/ },
@@ -26542,6 +26316,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -26551,112 +26330,172 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
 	var rowNode_1 = __webpack_require__(28);
 	var context_1 = __webpack_require__(6);
 	var eventService_1 = __webpack_require__(4);
-	var InfinitePage = (function () {
-	    function InfinitePage(pageNumber, cacheSettings) {
-	        this.state = InfinitePage.STATE_DIRTY;
+	var RowNodeBlock = (function () {
+	    function RowNodeBlock(blockNumber, rowNodeCacheParams) {
 	        this.version = 0;
+	        this.state = RowNodeBlock.STATE_DIRTY;
 	        this.localEventService = new eventService_1.EventService();
-	        this.pageNumber = pageNumber;
-	        this.cacheParams = cacheSettings;
+	        this.rowNodeCacheParams = rowNodeCacheParams;
+	        this.blockNumber = blockNumber;
 	        // we don't need to calculate these now, as the inputs don't change,
 	        // however it makes the code easier to read if we work them out up front
-	        this.startRow = pageNumber * cacheSettings.pageSize;
-	        this.endRow = this.startRow + cacheSettings.pageSize;
+	        this.startRow = blockNumber * rowNodeCacheParams.pageSize;
+	        this.endRow = this.startRow + rowNodeCacheParams.pageSize;
 	    }
-	    InfinitePage.prototype.setDirty = function () {
+	    RowNodeBlock.prototype.addEventListener = function (eventType, listener) {
+	        this.localEventService.addEventListener(eventType, listener);
+	    };
+	    RowNodeBlock.prototype.removeEventListener = function (eventType, listener) {
+	        this.localEventService.removeEventListener(eventType, listener);
+	    };
+	    RowNodeBlock.prototype.getVersion = function () {
+	        return this.version;
+	    };
+	    RowNodeBlock.prototype.getLastAccessed = function () {
+	        return this.lastAccessed;
+	    };
+	    RowNodeBlock.prototype.getRow = function (rowIndex) {
+	        this.lastAccessed = this.rowNodeCacheParams.lastAccessedSequence.next();
+	        var localIndex = rowIndex - this.startRow;
+	        return this.rowNodes[localIndex];
+	    };
+	    RowNodeBlock.prototype.init = function (beans) {
+	        this.beans = beans;
+	        this.createRowNodes();
+	    };
+	    RowNodeBlock.prototype.getStartRow = function () {
+	        return this.startRow;
+	    };
+	    RowNodeBlock.prototype.getEndRow = function () {
+	        return this.endRow;
+	    };
+	    RowNodeBlock.prototype.getPageNumber = function () {
+	        return this.blockNumber;
+	    };
+	    RowNodeBlock.prototype.setDirty = function () {
 	        // in case any current loads in progress, this will have their results ignored
 	        this.version++;
-	        this.state = InfinitePage.STATE_DIRTY;
+	        this.state = RowNodeBlock.STATE_DIRTY;
 	    };
-	    InfinitePage.prototype.setDirtyAndPurge = function () {
+	    RowNodeBlock.prototype.setDirtyAndPurge = function () {
 	        this.setDirty();
 	        this.rowNodes.forEach(function (rowNode) {
 	            rowNode.setData(null);
 	        });
 	    };
-	    InfinitePage.prototype.getStartRow = function () {
-	        return this.startRow;
-	    };
-	    InfinitePage.prototype.getEndRow = function () {
-	        return this.endRow;
-	    };
-	    InfinitePage.prototype.getPageNumber = function () {
-	        return this.pageNumber;
-	    };
-	    InfinitePage.prototype.addEventListener = function (eventType, listener) {
-	        this.localEventService.addEventListener(eventType, listener);
-	    };
-	    InfinitePage.prototype.removeEventListener = function (eventType, listener) {
-	        this.localEventService.removeEventListener(eventType, listener);
-	    };
-	    InfinitePage.prototype.getLastAccessed = function () {
-	        return this.lastAccessed;
-	    };
-	    InfinitePage.prototype.getState = function () {
+	    RowNodeBlock.prototype.getState = function () {
 	        return this.state;
 	    };
-	    InfinitePage.prototype.setRowNode = function (rowIndex, rowNode) {
+	    RowNodeBlock.prototype.setRowNode = function (rowIndex, rowNode) {
 	        var localIndex = rowIndex - this.startRow;
 	        this.rowNodes[localIndex] = rowNode;
 	        rowNode.setRowIndex(rowIndex);
 	        this.setTopOnRowNode(rowNode, rowIndex);
 	    };
-	    InfinitePage.prototype.setBlankRowNode = function (rowIndex) {
+	    RowNodeBlock.prototype.setBlankRowNode = function (rowIndex) {
 	        var localIndex = rowIndex - this.startRow;
 	        var newRowNode = this.createBlankRowNode(rowIndex);
 	        this.rowNodes[localIndex] = newRowNode;
 	        return newRowNode;
 	    };
-	    InfinitePage.prototype.setNewData = function (rowIndex, dataItem) {
+	    RowNodeBlock.prototype.setNewData = function (rowIndex, dataItem) {
 	        var newRowNode = this.setBlankRowNode(rowIndex);
 	        newRowNode.setDataAndId(dataItem, rowIndex.toString());
 	        return newRowNode;
 	    };
-	    InfinitePage.prototype.init = function () {
-	        this.createRowNodes();
+	    RowNodeBlock.prototype.createBlankRowNode = function (rowIndex) {
+	        var rowNode = new rowNode_1.RowNode();
+	        this.beans.context.wireBean(rowNode);
+	        rowNode.setRowHeight(this.rowNodeCacheParams.rowHeight);
+	        rowNode.setRowIndex(rowIndex);
+	        this.setTopOnRowNode(rowNode, rowIndex);
+	        return rowNode;
 	    };
 	    // creates empty row nodes, data is missing as not loaded yet
-	    InfinitePage.prototype.createRowNodes = function () {
+	    RowNodeBlock.prototype.createRowNodes = function () {
 	        this.rowNodes = [];
-	        for (var i = 0; i < this.cacheParams.pageSize; i++) {
+	        for (var i = 0; i < this.rowNodeCacheParams.pageSize; i++) {
 	            var rowIndex = this.startRow + i;
 	            var rowNode = this.createBlankRowNode(rowIndex);
 	            this.rowNodes.push(rowNode);
 	        }
 	    };
-	    InfinitePage.prototype.setTopOnRowNode = function (rowNode, rowIndex) {
+	    RowNodeBlock.prototype.load = function () {
+	        this.state = RowNodeBlock.STATE_LOADING;
+	        this.loadFromDatasource();
+	    };
+	    RowNodeBlock.prototype.pageLoadFailed = function () {
+	        this.state = RowNodeBlock.STATE_FAILED;
+	        var event = { success: true, page: this };
+	        this.localEventService.dispatchEvent(RowNodeBlock.EVENT_LOAD_COMPLETE, event);
+	    };
+	    RowNodeBlock.prototype.populateWithRowData = function (rows) {
+	        var _this = this;
+	        this.rowNodes.forEach(function (rowNode, index) {
+	            var data = rows[index];
+	            if (utils_1.Utils.exists(data)) {
+	                // this means if the user is not providing id's we just use the
+	                // index for the row. this will allow selection to work (that is based
+	                // on index) as long user is not inserting or deleting rows,
+	                // or wanting to keep selection between server side sorting or filtering
+	                var indexOfRow = _this.startRow + index;
+	                rowNode.setDataAndId(data, indexOfRow.toString());
+	            }
+	            else {
+	                rowNode.setDataAndId(undefined, undefined);
+	            }
+	        });
+	    };
+	    RowNodeBlock.prototype.pageLoaded = function (version, rows, lastRow) {
+	        // we need to check the version, in case there was an old request
+	        // from the server that was sent before we refreshed the cache,
+	        // if the load was done as a result of a cache refresh
+	        if (version === this.version) {
+	            this.state = RowNodeBlock.STATE_LOADED;
+	            this.populateWithRowData(rows);
+	        }
+	        lastRow = utils_1.Utils.cleanNumber(lastRow);
+	        // check here if lastrow should be set
+	        var event = { success: true, page: this, lastRow: lastRow };
+	        this.localEventService.dispatchEvent(RowNodeBlock.EVENT_LOAD_COMPLETE, event);
+	    };
+	    RowNodeBlock.EVENT_LOAD_COMPLETE = 'loadComplete';
+	    RowNodeBlock.STATE_DIRTY = 'dirty';
+	    RowNodeBlock.STATE_LOADING = 'loading';
+	    RowNodeBlock.STATE_LOADED = 'loaded';
+	    RowNodeBlock.STATE_FAILED = 'failed';
+	    return RowNodeBlock;
+	}());
+	exports.RowNodeBlock = RowNodeBlock;
+	var InfiniteBlock = (function (_super) {
+	    __extends(InfiniteBlock, _super);
+	    function InfiniteBlock(pageNumber, cacheSettings) {
+	        _super.call(this, pageNumber, cacheSettings);
+	        this.cacheParams = cacheSettings;
+	    }
+	    InfiniteBlock.prototype.init = function () {
+	        _super.prototype.init.call(this, {
+	            context: this.context
+	        });
+	    };
+	    InfiniteBlock.prototype.setTopOnRowNode = function (rowNode, rowIndex) {
 	        rowNode.rowTop = this.cacheParams.rowHeight * rowIndex;
 	    };
-	    InfinitePage.prototype.createBlankRowNode = function (rowIndex) {
-	        var rowNode = new rowNode_1.RowNode();
-	        this.context.wireBean(rowNode);
-	        rowNode.setRowHeight(this.cacheParams.rowHeight);
-	        rowNode.setRowIndex(rowIndex);
-	        this.setTopOnRowNode(rowNode, rowIndex);
-	        return rowNode;
-	    };
-	    InfinitePage.prototype.getRow = function (rowIndex) {
-	        this.lastAccessed = this.cacheParams.lastAccessedSequence.next();
-	        var localIndex = rowIndex - this.startRow;
-	        return this.rowNodes[localIndex];
-	    };
-	    InfinitePage.prototype.load = function () {
+	    InfiniteBlock.prototype.loadFromDatasource = function () {
 	        var _this = this;
-	        this.state = InfinitePage.STATE_LOADING;
 	        // PROBLEM . . . . when the user sets sort via colDef.sort, then this code
 	        // is executing before the sort is set up, so server is not getting the sort
 	        // model. need to change with regards order - so the server side request is
 	        // AFTER thus it gets the right sort model.
 	        var params = {
-	            startRow: this.startRow,
-	            endRow: this.endRow,
-	            successCallback: this.pageLoaded.bind(this, this.version),
+	            startRow: this.getStartRow(),
+	            endRow: this.getEndRow(),
+	            successCallback: this.pageLoaded.bind(this, this.getVersion()),
 	            failCallback: this.pageLoadFailed.bind(this),
 	            sortModel: this.cacheParams.sortModel,
 	            filterModel: this.cacheParams.filterModel,
@@ -26677,63 +26516,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.cacheParams.datasource.getRows(params);
 	        }, 0);
 	    };
-	    InfinitePage.prototype.pageLoadFailed = function () {
-	        this.state = InfinitePage.STATE_FAILED;
-	        var event = { success: true, page: this };
-	        this.localEventService.dispatchEvent(InfinitePage.EVENT_LOAD_COMPLETE, event);
-	    };
-	    InfinitePage.prototype.populateWithRowData = function (rows) {
-	        var _this = this;
-	        this.rowNodes.forEach(function (rowNode, index) {
-	            var data = rows[index];
-	            if (utils_1.Utils.exists(data)) {
-	                // this means if the user is not providing id's we just use the
-	                // index for the row. this will allow selection to work (that is based
-	                // on index) as long user is not inserting or deleting rows,
-	                // or wanting to keep selection between server side sorting or filtering
-	                var indexOfRow = _this.startRow + index;
-	                rowNode.setDataAndId(data, indexOfRow.toString());
-	            }
-	            else {
-	                rowNode.setDataAndId(undefined, undefined);
-	            }
-	        });
-	    };
-	    InfinitePage.prototype.pageLoaded = function (version, rows, lastRow) {
-	        // we need to check the version, in case there was an old request
-	        // from the server that was sent before we refreshed the cache,
-	        // if the load was done as a result of a cache refresh
-	        if (version === this.version) {
-	            this.state = InfinitePage.STATE_LOADED;
-	            this.populateWithRowData(rows);
-	        }
-	        lastRow = utils_1.Utils.cleanNumber(lastRow);
-	        // check here if lastrow should be set
-	        var event = { success: true, page: this, lastRow: lastRow };
-	        this.localEventService.dispatchEvent(InfinitePage.EVENT_LOAD_COMPLETE, event);
-	    };
-	    return InfinitePage;
-	}());
-	InfinitePage.EVENT_LOAD_COMPLETE = 'loadComplete';
-	InfinitePage.STATE_DIRTY = 'dirty';
-	InfinitePage.STATE_LOADING = 'loading';
-	InfinitePage.STATE_LOADED = 'loaded';
-	InfinitePage.STATE_FAILED = 'failed';
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], InfinitePage.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], InfinitePage.prototype, "context", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], InfinitePage.prototype, "init", null);
-	exports.InfinitePage = InfinitePage;
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], InfiniteBlock.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], InfiniteBlock.prototype, "context", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], InfiniteBlock.prototype, "init", null);
+	    return InfiniteBlock;
+	}(RowNodeBlock));
+	exports.InfiniteBlock = InfiniteBlock;
 
 
 /***/ },
@@ -26756,7 +26555,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var constants_1 = __webpack_require__(8);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -26887,8 +26685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var event = {
 	            animate: params.animate,
 	            keepRenderedRows: params.keepRenderedRows,
-	            newData: params.newData
-	        };
+	            newData: params.newData };
 	        this.eventService.dispatchEvent(events_1.Events.EVENT_MODEL_UPDATED, event);
 	        if (this.$scope) {
 	            setTimeout(function () {
@@ -27140,8 +26937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.refreshModel({
 	                step: constants_1.Constants.STEP_EVERYTHING,
 	                groupState: groupState,
-	                newData: true
-	            });
+	                newData: true });
 	        }
 	    };
 	    InMemoryRowModel.prototype.doRowsToDisplay = function () {
@@ -27186,69 +26982,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventService.dispatchEvent(eventName, { rowNodes: rowNodes });
 	        }
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], InMemoryRowModel.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('columnController'), 
+	        __metadata('design:type', columnController_1.ColumnController)
+	    ], InMemoryRowModel.prototype, "columnController", void 0);
+	    __decorate([
+	        context_1.Autowired('filterManager'), 
+	        __metadata('design:type', filterManager_1.FilterManager)
+	    ], InMemoryRowModel.prototype, "filterManager", void 0);
+	    __decorate([
+	        context_1.Autowired('$scope'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "$scope", void 0);
+	    __decorate([
+	        context_1.Autowired('selectionController'), 
+	        __metadata('design:type', selectionController_1.SelectionController)
+	    ], InMemoryRowModel.prototype, "selectionController", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], InMemoryRowModel.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], InMemoryRowModel.prototype, "context", void 0);
+	    __decorate([
+	        context_1.Autowired('filterStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "filterStage", void 0);
+	    __decorate([
+	        context_1.Autowired('sortStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "sortStage", void 0);
+	    __decorate([
+	        context_1.Autowired('flattenStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "flattenStage", void 0);
+	    __decorate([
+	        context_1.Optional('groupStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "groupStage", void 0);
+	    __decorate([
+	        context_1.Optional('aggregationStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "aggregationStage", void 0);
+	    __decorate([
+	        context_1.Optional('pivotStage'), 
+	        __metadata('design:type', Object)
+	    ], InMemoryRowModel.prototype, "pivotStage", void 0);
+	    __decorate([
+	        context_1.PostConstruct, 
+	        __metadata('design:type', Function), 
+	        __metadata('design:paramtypes', []), 
+	        __metadata('design:returntype', void 0)
+	    ], InMemoryRowModel.prototype, "init", null);
+	    InMemoryRowModel = __decorate([
+	        context_1.Bean('rowModel'), 
+	        __metadata('design:paramtypes', [])
+	    ], InMemoryRowModel);
 	    return InMemoryRowModel;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], InMemoryRowModel.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('columnController'),
-	    __metadata("design:type", columnController_1.ColumnController)
-	], InMemoryRowModel.prototype, "columnController", void 0);
-	__decorate([
-	    context_1.Autowired('filterManager'),
-	    __metadata("design:type", filterManager_1.FilterManager)
-	], InMemoryRowModel.prototype, "filterManager", void 0);
-	__decorate([
-	    context_1.Autowired('$scope'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "$scope", void 0);
-	__decorate([
-	    context_1.Autowired('selectionController'),
-	    __metadata("design:type", selectionController_1.SelectionController)
-	], InMemoryRowModel.prototype, "selectionController", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], InMemoryRowModel.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], InMemoryRowModel.prototype, "context", void 0);
-	__decorate([
-	    context_1.Autowired('filterStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "filterStage", void 0);
-	__decorate([
-	    context_1.Autowired('sortStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "sortStage", void 0);
-	__decorate([
-	    context_1.Autowired('flattenStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "flattenStage", void 0);
-	__decorate([
-	    context_1.Optional('groupStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "groupStage", void 0);
-	__decorate([
-	    context_1.Optional('aggregationStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "aggregationStage", void 0);
-	__decorate([
-	    context_1.Optional('pivotStage'),
-	    __metadata("design:type", Object)
-	], InMemoryRowModel.prototype, "pivotStage", void 0);
-	__decorate([
-	    context_1.PostConstruct,
-	    __metadata("design:type", Function),
-	    __metadata("design:paramtypes", []),
-	    __metadata("design:returntype", void 0)
-	], InMemoryRowModel.prototype, "init", null);
-	InMemoryRowModel = __decorate([
-	    context_1.Bean('rowModel')
-	], InMemoryRowModel);
 	exports.InMemoryRowModel = InMemoryRowModel;
 
 
@@ -27263,7 +27060,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var rowNode_1 = __webpack_require__(28);
 	var utils_1 = __webpack_require__(7);
 	var InMemoryNodeManager = (function () {
@@ -27433,9 +27229,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return false;
 	        }
 	    };
+	    InMemoryNodeManager.TOP_LEVEL = 0;
 	    return InMemoryNodeManager;
 	}());
-	InMemoryNodeManager.TOP_LEVEL = 0;
 	exports.InMemoryNodeManager = InMemoryNodeManager;
 
 
@@ -27450,7 +27246,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	/** The base frameworks, eg React & Angular 2, override this bean with implementations specific to their requirement. */
 	var BaseFrameworkFactory = (function () {
 	    function BaseFrameworkFactory() {
@@ -27504,7 +27299,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
 	var context_1 = __webpack_require__(6);
 	var LINE_SEPARATOR = '\r\n';
 	var XmlFactory = (function () {
@@ -27553,11 +27350,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        xmlValue = '"' + xmlValue + '"';
 	        return " " + key + "=" + xmlValue;
 	    };
+	    XmlFactory = __decorate([
+	        context_1.Bean('xmlFactory'), 
+	        __metadata('design:paramtypes', [])
+	    ], XmlFactory);
 	    return XmlFactory;
 	}());
-	XmlFactory = __decorate([
-	    context_1.Bean('xmlFactory')
-	], XmlFactory);
 	exports.XmlFactory = XmlFactory;
 
 
@@ -27581,7 +27379,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __metadata = (this && this.__metadata) || function (k, v) {
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var rowNode_1 = __webpack_require__(28);
 	var inMemoryNodeManager_1 = __webpack_require__(114);
 	var gridOptionsWrapper_1 = __webpack_require__(3);
@@ -27597,23 +27394,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        nodeManager.setRowData(data);
 	        return rootNode;
 	    };
+	    __decorate([
+	        context_1.Autowired('gridOptionsWrapper'), 
+	        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+	    ], RowNodeFactory.prototype, "gridOptionsWrapper", void 0);
+	    __decorate([
+	        context_1.Autowired('eventService'), 
+	        __metadata('design:type', eventService_1.EventService)
+	    ], RowNodeFactory.prototype, "eventService", void 0);
+	    __decorate([
+	        context_1.Autowired('context'), 
+	        __metadata('design:type', context_1.Context)
+	    ], RowNodeFactory.prototype, "context", void 0);
+	    RowNodeFactory = __decorate([
+	        context_1.Bean("rowNodeFactory"), 
+	        __metadata('design:paramtypes', [])
+	    ], RowNodeFactory);
 	    return RowNodeFactory;
 	}());
-	__decorate([
-	    context_1.Autowired('gridOptionsWrapper'),
-	    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-	], RowNodeFactory.prototype, "gridOptionsWrapper", void 0);
-	__decorate([
-	    context_1.Autowired('eventService'),
-	    __metadata("design:type", eventService_1.EventService)
-	], RowNodeFactory.prototype, "eventService", void 0);
-	__decorate([
-	    context_1.Autowired('context'),
-	    __metadata("design:type", context_1.Context)
-	], RowNodeFactory.prototype, "context", void 0);
-	RowNodeFactory = __decorate([
-	    context_1.Bean("rowNodeFactory")
-	], RowNodeFactory);
 	exports.RowNodeFactory = RowNodeFactory;
 
 
@@ -27628,7 +27426,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var grid_1 = __webpack_require__(2);
 	function initialiseAgGridWithAngular1(angular) {
 	    var angularModule = angular.module("agGrid", []);
@@ -27675,7 +27472,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var componentUtil_1 = __webpack_require__(9);
 	var grid_1 = __webpack_require__(2);
 	var registered = false;
@@ -27794,7 +27590,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var utils_1 = __webpack_require__(7);
 	var TabbedLayout = (function () {
 	    function TabbedLayout(params) {
@@ -27879,12 +27674,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TabbedLayout.prototype.getGui = function () {
 	        return this.eGui;
 	    };
+	    TabbedLayout.TEMPLATE = '<div>' +
+	        '<div id="tabHeader" class="ag-tab-header"></div>' +
+	        '<div id="tabBody" class="ag-tab-body"></div>' +
+	        '</div>';
 	    return TabbedLayout;
 	}());
-	TabbedLayout.TEMPLATE = '<div>' +
-	    '<div id="tabHeader" class="ag-tab-header"></div>' +
-	    '<div id="tabBody" class="ag-tab-body"></div>' +
-	    '</div>';
 	exports.TabbedLayout = TabbedLayout;
 
 
@@ -27899,7 +27694,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var VerticalStack = (function () {
 	    function VerticalStack() {
 	        this.isLayoutPanel = true;
@@ -27945,7 +27739,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license MIT
 	 */
 	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
 	function simpleHttpRequest(params) {
 	    var promise = new Promise();
 	    var httpRequest = new XMLHttpRequest();
@@ -27992,8 +27785,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./ag-grid.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./ag-grid.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./ag-grid.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./ag-grid.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -28342,8 +28135,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./theme-blue.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./theme-blue.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./theme-blue.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./theme-blue.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -28382,8 +28175,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./theme-dark.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./theme-dark.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./theme-dark.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./theme-dark.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -28422,8 +28215,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./theme-fresh.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./theme-fresh.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./theme-fresh.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./theme-fresh.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -28462,8 +28255,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./theme-material.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./theme-material.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./theme-material.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./theme-material.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -28502,8 +28295,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/css-loader/index.js!./theme-bootstrap.css", function() {
-				var newContent = require("!!../../node_modules/css-loader/index.js!./theme-bootstrap.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./theme-bootstrap.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./theme-bootstrap.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});

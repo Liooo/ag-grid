@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var VerticalStack = (function () {
     function VerticalStack() {
         this.isLayoutPanel = true;

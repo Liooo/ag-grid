@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var constants_1 = require("../constants");
 var context_1 = require("../context/context");
@@ -242,17 +241,18 @@ var PopupService = (function () {
         }
         return hidePopup;
     };
+    __decorate([
+        context_1.Autowired('gridCore'), 
+        __metadata('design:type', gridCore_1.GridCore)
+    ], PopupService.prototype, "gridCore", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], PopupService.prototype, "gridOptionsWrapper", void 0);
+    PopupService = __decorate([
+        context_1.Bean('popupService'), 
+        __metadata('design:paramtypes', [])
+    ], PopupService);
     return PopupService;
 }());
-__decorate([
-    context_1.Autowired('gridCore'),
-    __metadata("design:type", gridCore_1.GridCore)
-], PopupService.prototype, "gridCore", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], PopupService.prototype, "gridOptionsWrapper", void 0);
-PopupService = __decorate([
-    context_1.Bean('popupService')
-], PopupService);
 exports.PopupService = PopupService;

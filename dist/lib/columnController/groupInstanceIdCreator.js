@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // class returns unique instance id's for columns.
 // eg, the following calls (in this order) will result in:
 //

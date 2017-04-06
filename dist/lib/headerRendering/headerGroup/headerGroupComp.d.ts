@@ -4,10 +4,15 @@
 import { Component } from "../../widgets/component";
 import { IComponent } from "../../interfaces/iComponent";
 import { ColumnGroup } from "../../entities/columnGroup";
+import { ColumnApi } from "../../columnController/columnController";
+import { GridApi } from "../../gridApi";
 export interface IHeaderGroupParams {
     columnGroup: ColumnGroup;
     displayName: string;
     setExpanded: (expanded: boolean) => void;
+    api: GridApi;
+    columnApi: ColumnApi;
+    context: any;
 }
 export interface IHeaderGroup {
 }

@@ -5,26 +5,19 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var component_1 = require("../../widgets/component");
-var utils_1 = require("../../utils");
+var utils_1 = require('../../utils');
 var constants_1 = require("../../constants");
 var SelectCellEditor = (function (_super) {
     __extends(SelectCellEditor, _super);
     function SelectCellEditor() {
-        var _this = _super.call(this, '<div class="ag-cell-edit-input"><select class="ag-cell-edit-input"/></div>') || this;
-        _this.eSelect = _this.getGui().querySelector('select');
-        return _this;
+        _super.call(this, '<div class="ag-cell-edit-input"><select class="ag-cell-edit-input"/></div>');
+        this.eSelect = this.getGui().querySelector('select');
     }
     SelectCellEditor.prototype.init = function (params) {
         var _this = this;

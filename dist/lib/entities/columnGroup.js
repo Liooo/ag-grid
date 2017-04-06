@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var column_1 = require("./column");
 var eventService_1 = require("../eventService");
 var context_1 = require("../context/context");
@@ -236,14 +235,14 @@ var ColumnGroup = (function () {
         }
         this.localEventService.dispatchEvent(ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED);
     };
+    ColumnGroup.HEADER_GROUP_SHOW_OPEN = 'open';
+    ColumnGroup.HEADER_GROUP_SHOW_CLOSED = 'closed';
+    ColumnGroup.EVENT_LEFT_CHANGED = 'leftChanged';
+    ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED = 'leftChanged';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], ColumnGroup.prototype, "gridOptionsWrapper", void 0);
     return ColumnGroup;
 }());
-ColumnGroup.HEADER_GROUP_SHOW_OPEN = 'open';
-ColumnGroup.HEADER_GROUP_SHOW_CLOSED = 'closed';
-ColumnGroup.EVENT_LEFT_CHANGED = 'leftChanged';
-ColumnGroup.EVENT_DISPLAYED_CHILDREN_CHANGED = 'leftChanged';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], ColumnGroup.prototype, "gridOptionsWrapper", void 0);
 exports.ColumnGroup = ColumnGroup;

@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("./context/context");
 var eventService_1 = require("./eventService");
 var events_1 = require("./events");
@@ -162,27 +161,28 @@ var FocusedCellController = (function () {
         }
         this.eventService.dispatchEvent(events_1.Events.EVENT_CELL_FOCUSED, event);
     };
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], FocusedCellController.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], FocusedCellController.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], FocusedCellController.prototype, "columnController", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], FocusedCellController.prototype, "init", null);
+    FocusedCellController = __decorate([
+        context_1.Bean('focusedCellController'), 
+        __metadata('design:paramtypes', [])
+    ], FocusedCellController);
     return FocusedCellController;
 }());
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], FocusedCellController.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], FocusedCellController.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], FocusedCellController.prototype, "columnController", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], FocusedCellController.prototype, "init", null);
-FocusedCellController = __decorate([
-    context_1.Bean('focusedCellController')
-], FocusedCellController);
 exports.FocusedCellController = FocusedCellController;

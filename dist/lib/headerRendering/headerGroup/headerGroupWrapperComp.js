@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../../widgets/component");
 var column_1 = require("../../entities/column");
 var utils_1 = require("../../utils");
@@ -37,17 +31,17 @@ var cssClassApplier_1 = require("../cssClassApplier");
 var dragAndDropService_1 = require("../../dragAndDrop/dragAndDropService");
 var setLeftFeature_1 = require("../../rendering/features/setLeftFeature");
 var componentProvider_1 = require("../../componentProvider");
+var gridApi_1 = require("../../gridApi");
 var HeaderGroupWrapperComp = (function (_super) {
     __extends(HeaderGroupWrapperComp, _super);
     function HeaderGroupWrapperComp(columnGroup, eRoot, dragSourceDropTarget, pinned) {
-        var _this = _super.call(this, HeaderGroupWrapperComp.TEMPLATE) || this;
+        _super.call(this, HeaderGroupWrapperComp.TEMPLATE);
         // the children can change, we keep destroy functions related to listening to the children here
-        _this.childColumnsDestroyFuncs = [];
-        _this.columnGroup = columnGroup;
-        _this.eRoot = eRoot;
-        _this.dragSourceDropTarget = dragSourceDropTarget;
-        _this.pinned = pinned;
-        return _this;
+        this.childColumnsDestroyFuncs = [];
+        this.columnGroup = columnGroup;
+        this.eRoot = eRoot;
+        this.dragSourceDropTarget = dragSourceDropTarget;
+        this.pinned = pinned;
     }
     HeaderGroupWrapperComp.prototype.postConstruct = function () {
         cssClassApplier_1.CssClassApplier.addHeaderClassesFromColDef(this.columnGroup.getColGroupDef(), this.getGui(), this.gridOptionsWrapper, null, this.columnGroup);
@@ -70,7 +64,10 @@ var HeaderGroupWrapperComp = (function (_super) {
             columnGroup: this.columnGroup,
             setExpanded: function (expanded) {
                 _this.columnController.setColumnGroupOpened(_this.columnGroup, expanded);
-            }
+            },
+            api: this.gridApi,
+            columnApi: this.columnApi,
+            context: this.gridOptionsWrapper.getContext()
         };
         var headerComp = this.componentProvider.newHeaderGroupComponent(params);
         this.appendChild(headerComp);
@@ -263,39 +260,47 @@ var HeaderGroupWrapperComp = (function (_super) {
         }
         return result;
     };
+    HeaderGroupWrapperComp.TEMPLATE = '<div class="ag-header-group-cell">' +
+        '<div ref="agResize" class="ag-header-cell-resize"></div>' +
+        '</div>';
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HeaderGroupWrapperComp.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], HeaderGroupWrapperComp.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('horizontalDragService'), 
+        __metadata('design:type', horizontalDragService_1.HorizontalDragService)
+    ], HeaderGroupWrapperComp.prototype, "dragService", void 0);
+    __decorate([
+        context_1.Autowired('dragAndDropService'), 
+        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+    ], HeaderGroupWrapperComp.prototype, "dragAndDropService", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], HeaderGroupWrapperComp.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('componentProvider'), 
+        __metadata('design:type', componentProvider_1.ComponentProvider)
+    ], HeaderGroupWrapperComp.prototype, "componentProvider", void 0);
+    __decorate([
+        context_1.Autowired('gridApi'), 
+        __metadata('design:type', gridApi_1.GridApi)
+    ], HeaderGroupWrapperComp.prototype, "gridApi", void 0);
+    __decorate([
+        context_1.Autowired('columnApi'), 
+        __metadata('design:type', columnController_1.ColumnApi)
+    ], HeaderGroupWrapperComp.prototype, "columnApi", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], HeaderGroupWrapperComp.prototype, "postConstruct", null);
     return HeaderGroupWrapperComp;
 }(component_1.Component));
-HeaderGroupWrapperComp.TEMPLATE = '<div class="ag-header-group-cell">' +
-    '<div ref="agResize" class="ag-header-cell-resize"></div>' +
-    '</div>';
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HeaderGroupWrapperComp.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], HeaderGroupWrapperComp.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('horizontalDragService'),
-    __metadata("design:type", horizontalDragService_1.HorizontalDragService)
-], HeaderGroupWrapperComp.prototype, "dragService", void 0);
-__decorate([
-    context_1.Autowired('dragAndDropService'),
-    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-], HeaderGroupWrapperComp.prototype, "dragAndDropService", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], HeaderGroupWrapperComp.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('componentProvider'),
-    __metadata("design:type", componentProvider_1.ComponentProvider)
-], HeaderGroupWrapperComp.prototype, "componentProvider", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], HeaderGroupWrapperComp.prototype, "postConstruct", null);
 exports.HeaderGroupWrapperComp = HeaderGroupWrapperComp;

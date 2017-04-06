@@ -17,7 +17,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var columnGroup_1 = require("../entities/columnGroup");
 var column_1 = require("../entities/column");
@@ -165,15 +164,16 @@ var ColumnApi = (function () {
         console.error('ag-Grid: getDisplayNameForCol is deprecated, use getDisplayNameForColumn');
         return this.getDisplayNameForColumn(column, null);
     };
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', ColumnController)
+    ], ColumnApi.prototype, "_columnController", void 0);
+    ColumnApi = __decorate([
+        context_1.Bean('columnApi'), 
+        __metadata('design:paramtypes', [])
+    ], ColumnApi);
     return ColumnApi;
 }());
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", ColumnController)
-], ColumnApi.prototype, "_columnController", void 0);
-ColumnApi = __decorate([
-    context_1.Bean('columnApi')
-], ColumnApi);
 exports.ColumnApi = ColumnApi;
 var ColumnController = (function () {
     function ColumnController() {
@@ -1734,69 +1734,70 @@ var ColumnController = (function () {
     ColumnController.prototype.getGridBalancedTree = function () {
         return this.gridBalancedTree;
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], ColumnController.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('expressionService'), 
+        __metadata('design:type', expressionService_1.ExpressionService)
+    ], ColumnController.prototype, "expressionService", void 0);
+    __decorate([
+        context_1.Autowired('balancedColumnTreeBuilder'), 
+        __metadata('design:type', balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
+    ], ColumnController.prototype, "balancedColumnTreeBuilder", void 0);
+    __decorate([
+        context_1.Autowired('displayedGroupCreator'), 
+        __metadata('design:type', displayedGroupCreator_1.DisplayedGroupCreator)
+    ], ColumnController.prototype, "displayedGroupCreator", void 0);
+    __decorate([
+        context_1.Autowired('autoWidthCalculator'), 
+        __metadata('design:type', autoWidthCalculator_1.AutoWidthCalculator)
+    ], ColumnController.prototype, "autoWidthCalculator", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], ColumnController.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('columnUtils'), 
+        __metadata('design:type', columnUtils_1.ColumnUtils)
+    ], ColumnController.prototype, "columnUtils", void 0);
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], ColumnController.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], ColumnController.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('columnAnimationService'), 
+        __metadata('design:type', columnAnimationService_1.ColumnAnimationService)
+    ], ColumnController.prototype, "columnAnimationService", void 0);
+    __decorate([
+        context_1.Autowired('autoGroupColService'), 
+        __metadata('design:type', autoGroupColService_1.AutoGroupColService)
+    ], ColumnController.prototype, "autoGroupColService", void 0);
+    __decorate([
+        context_1.Optional('aggFuncService'), 
+        __metadata('design:type', Object)
+    ], ColumnController.prototype, "aggFuncService", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], ColumnController.prototype, "init", null);
+    __decorate([
+        __param(0, context_1.Qualifier('loggerFactory')), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [logger_1.LoggerFactory]), 
+        __metadata('design:returntype', void 0)
+    ], ColumnController.prototype, "setBeans", null);
+    ColumnController = __decorate([
+        context_1.Bean('columnController'), 
+        __metadata('design:paramtypes', [])
+    ], ColumnController);
     return ColumnController;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], ColumnController.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('expressionService'),
-    __metadata("design:type", expressionService_1.ExpressionService)
-], ColumnController.prototype, "expressionService", void 0);
-__decorate([
-    context_1.Autowired('balancedColumnTreeBuilder'),
-    __metadata("design:type", balancedColumnTreeBuilder_1.BalancedColumnTreeBuilder)
-], ColumnController.prototype, "balancedColumnTreeBuilder", void 0);
-__decorate([
-    context_1.Autowired('displayedGroupCreator'),
-    __metadata("design:type", displayedGroupCreator_1.DisplayedGroupCreator)
-], ColumnController.prototype, "displayedGroupCreator", void 0);
-__decorate([
-    context_1.Autowired('autoWidthCalculator'),
-    __metadata("design:type", autoWidthCalculator_1.AutoWidthCalculator)
-], ColumnController.prototype, "autoWidthCalculator", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], ColumnController.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('columnUtils'),
-    __metadata("design:type", columnUtils_1.ColumnUtils)
-], ColumnController.prototype, "columnUtils", void 0);
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], ColumnController.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], ColumnController.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('columnAnimationService'),
-    __metadata("design:type", columnAnimationService_1.ColumnAnimationService)
-], ColumnController.prototype, "columnAnimationService", void 0);
-__decorate([
-    context_1.Autowired('autoGroupColService'),
-    __metadata("design:type", autoGroupColService_1.AutoGroupColService)
-], ColumnController.prototype, "autoGroupColService", void 0);
-__decorate([
-    context_1.Optional('aggFuncService'),
-    __metadata("design:type", Object)
-], ColumnController.prototype, "aggFuncService", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ColumnController.prototype, "init", null);
-__decorate([
-    __param(0, context_1.Qualifier('loggerFactory')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [logger_1.LoggerFactory]),
-    __metadata("design:returntype", void 0)
-], ColumnController.prototype, "setBeans", null);
-ColumnController = __decorate([
-    context_1.Bean('columnController')
-], ColumnController);
 exports.ColumnController = ColumnController;

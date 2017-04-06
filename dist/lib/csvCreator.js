@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("./context/context");
 var gridSerializer_1 = require("./gridSerializer");
 var downloader_1 = require("./downloader");
@@ -35,12 +29,11 @@ var LINE_SEPARATOR = '\r\n';
 var CsvSerializingSession = (function (_super) {
     __extends(CsvSerializingSession, _super);
     function CsvSerializingSession(columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback, suppressQuotes, columnSeparator) {
-        var _this = _super.call(this, columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback) || this;
-        _this.suppressQuotes = suppressQuotes;
-        _this.columnSeparator = columnSeparator;
-        _this.result = '';
-        _this.lineOpened = false;
-        return _this;
+        _super.call(this, columnController, valueService, gridOptionsWrapper, processCellCallback, processHeaderCallback);
+        this.suppressQuotes = suppressQuotes;
+        this.columnSeparator = columnSeparator;
+        this.result = '';
+        this.lineOpened = false;
     }
     CsvSerializingSession.prototype.prepare = function (columnsToExport) {
     };
@@ -140,29 +133,30 @@ var CsvCreator = (function () {
     CsvCreator.prototype.getDataAsCsv = function (params) {
         return this.gridSerializer.serialize(new CsvSerializingSession(this.columnController, this.valueService, this.gridOptionsWrapper, params ? params.processCellCallback : null, params ? params.processHeaderCallback : null, params && params.suppressQuotes, (params && params.columnSeparator) || ','), params);
     };
+    __decorate([
+        context_1.Autowired('downloader'), 
+        __metadata('design:type', downloader_1.Downloader)
+    ], CsvCreator.prototype, "downloader", void 0);
+    __decorate([
+        context_1.Autowired('gridSerializer'), 
+        __metadata('design:type', gridSerializer_1.GridSerializer)
+    ], CsvCreator.prototype, "gridSerializer", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], CsvCreator.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('valueService'), 
+        __metadata('design:type', valueService_1.ValueService)
+    ], CsvCreator.prototype, "valueService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], CsvCreator.prototype, "gridOptionsWrapper", void 0);
+    CsvCreator = __decorate([
+        context_1.Bean('csvCreator'), 
+        __metadata('design:paramtypes', [])
+    ], CsvCreator);
     return CsvCreator;
 }());
-__decorate([
-    context_1.Autowired('downloader'),
-    __metadata("design:type", downloader_1.Downloader)
-], CsvCreator.prototype, "downloader", void 0);
-__decorate([
-    context_1.Autowired('gridSerializer'),
-    __metadata("design:type", gridSerializer_1.GridSerializer)
-], CsvCreator.prototype, "gridSerializer", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], CsvCreator.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('valueService'),
-    __metadata("design:type", valueService_1.ValueService)
-], CsvCreator.prototype, "valueService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], CsvCreator.prototype, "gridOptionsWrapper", void 0);
-CsvCreator = __decorate([
-    context_1.Bean('csvCreator')
-], CsvCreator);
 exports.CsvCreator = CsvCreator;

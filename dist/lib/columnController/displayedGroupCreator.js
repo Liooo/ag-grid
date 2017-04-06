@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var columnUtils_1 = require("./columnUtils");
 var columnGroup_1 = require("../entities/columnGroup");
 var originalColumnGroup_1 = require("../entities/originalColumnGroup");
@@ -173,17 +172,18 @@ var DisplayedGroupCreator = (function () {
             }
         }
     };
+    __decorate([
+        context_2.Autowired('columnUtils'), 
+        __metadata('design:type', columnUtils_1.ColumnUtils)
+    ], DisplayedGroupCreator.prototype, "columnUtils", void 0);
+    __decorate([
+        context_2.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], DisplayedGroupCreator.prototype, "context", void 0);
+    DisplayedGroupCreator = __decorate([
+        context_1.Bean('displayedGroupCreator'), 
+        __metadata('design:paramtypes', [])
+    ], DisplayedGroupCreator);
     return DisplayedGroupCreator;
 }());
-__decorate([
-    context_2.Autowired('columnUtils'),
-    __metadata("design:type", columnUtils_1.ColumnUtils)
-], DisplayedGroupCreator.prototype, "columnUtils", void 0);
-__decorate([
-    context_2.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], DisplayedGroupCreator.prototype, "context", void 0);
-DisplayedGroupCreator = __decorate([
-    context_1.Bean('displayedGroupCreator')
-], DisplayedGroupCreator);
 exports.DisplayedGroupCreator = DisplayedGroupCreator;

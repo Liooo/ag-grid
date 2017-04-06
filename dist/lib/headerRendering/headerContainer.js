@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var context_1 = require("../context/context");
@@ -122,44 +121,44 @@ var HeaderContainer = (function () {
             this.eContainer.appendChild(headerRowComp.getGui());
         }
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], HeaderContainer.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], HeaderContainer.prototype, "context", void 0);
+    __decorate([
+        context_1.Autowired('$scope'), 
+        __metadata('design:type', Object)
+    ], HeaderContainer.prototype, "$scope", void 0);
+    __decorate([
+        context_1.Autowired('dragAndDropService'), 
+        __metadata('design:type', dragAndDropService_1.DragAndDropService)
+    ], HeaderContainer.prototype, "dragAndDropService", void 0);
+    __decorate([
+        context_1.Autowired('columnController'), 
+        __metadata('design:type', columnController_1.ColumnController)
+    ], HeaderContainer.prototype, "columnController", void 0);
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], HeaderContainer.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], HeaderContainer.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('scrollVisibleService'), 
+        __metadata('design:type', scrollVisibleService_1.ScrollVisibleService)
+    ], HeaderContainer.prototype, "scrollVisibleService", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], HeaderContainer.prototype, "init", null);
     return HeaderContainer;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], HeaderContainer.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], HeaderContainer.prototype, "context", void 0);
-__decorate([
-    context_1.Autowired('$scope'),
-    __metadata("design:type", Object)
-], HeaderContainer.prototype, "$scope", void 0);
-__decorate([
-    context_1.Autowired('dragAndDropService'),
-    __metadata("design:type", dragAndDropService_1.DragAndDropService)
-], HeaderContainer.prototype, "dragAndDropService", void 0);
-__decorate([
-    context_1.Autowired('columnController'),
-    __metadata("design:type", columnController_1.ColumnController)
-], HeaderContainer.prototype, "columnController", void 0);
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], HeaderContainer.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], HeaderContainer.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('scrollVisibleService'),
-    __metadata("design:type", scrollVisibleService_1.ScrollVisibleService)
-], HeaderContainer.prototype, "scrollVisibleService", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], HeaderContainer.prototype, "init", null);
 exports.HeaderContainer = HeaderContainer;

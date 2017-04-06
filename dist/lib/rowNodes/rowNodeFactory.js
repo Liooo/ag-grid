@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var rowNode_1 = require("../entities/rowNode");
 var inMemoryNodeManager_1 = require("../rowModels/inMemory/inMemoryNodeManager");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
@@ -30,21 +29,22 @@ var RowNodeFactory = (function () {
         nodeManager.setRowData(data);
         return rootNode;
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], RowNodeFactory.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], RowNodeFactory.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('context'), 
+        __metadata('design:type', context_1.Context)
+    ], RowNodeFactory.prototype, "context", void 0);
+    RowNodeFactory = __decorate([
+        context_1.Bean("rowNodeFactory"), 
+        __metadata('design:paramtypes', [])
+    ], RowNodeFactory);
     return RowNodeFactory;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], RowNodeFactory.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], RowNodeFactory.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('context'),
-    __metadata("design:type", context_1.Context)
-], RowNodeFactory.prototype, "context", void 0);
-RowNodeFactory = __decorate([
-    context_1.Bean("rowNodeFactory")
-], RowNodeFactory);
 exports.RowNodeFactory = RowNodeFactory;

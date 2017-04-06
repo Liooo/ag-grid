@@ -13,6 +13,8 @@ export declare class HeaderGroupWrapperComp extends Component {
     private dragAndDropService;
     private context;
     private componentProvider;
+    private gridApi;
+    private columnApi;
     private columnGroup;
     private dragSourceDropTarget;
     private pinned;

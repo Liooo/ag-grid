@@ -5,7 +5,6 @@
  * @license MIT
  */
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var ColumnChangeEvent = (function () {
     function ColumnChangeEvent(type) {
         this.type = type;

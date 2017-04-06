@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../../widgets/component");
 var context_1 = require("../../context/context");
 var gridOptionsWrapper_1 = require("../../gridOptionsWrapper");
@@ -38,7 +32,7 @@ var paginationProxy_1 = require("../paginationProxy");
 var PaginationComp = (function (_super) {
     __extends(PaginationComp, _super);
     function PaginationComp() {
-        return _super.call(this) || this;
+        _super.call(this);
     }
     PaginationComp.prototype.postConstruct = function () {
         this.setTemplate(this.getTemplate());
@@ -144,72 +138,72 @@ var PaginationComp = (function (_super) {
             this.lbRecordCount.innerHTML = moreText;
         }
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], PaginationComp.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], PaginationComp.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('serverPaginationService'), 
+        __metadata('design:type', serverPaginationService_1.ServerPaginationService)
+    ], PaginationComp.prototype, "serverPaginationService", void 0);
+    __decorate([
+        context_1.Autowired('paginationProxy'), 
+        __metadata('design:type', paginationProxy_1.PaginationProxy)
+    ], PaginationComp.prototype, "paginationProxy", void 0);
+    __decorate([
+        context_1.Autowired('rowRenderer'), 
+        __metadata('design:type', rowRenderer_1.RowRenderer)
+    ], PaginationComp.prototype, "rowRenderer", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('btFirst'), 
+        __metadata('design:type', HTMLButtonElement)
+    ], PaginationComp.prototype, "btFirst", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('btPrevious'), 
+        __metadata('design:type', HTMLButtonElement)
+    ], PaginationComp.prototype, "btPrevious", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('btNext'), 
+        __metadata('design:type', HTMLButtonElement)
+    ], PaginationComp.prototype, "btNext", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('btLast'), 
+        __metadata('design:type', HTMLButtonElement)
+    ], PaginationComp.prototype, "btLast", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('lbRecordCount'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "lbRecordCount", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('lbFirstRowOnPage'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "lbFirstRowOnPage", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('lbLastRowOnPage'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "lbLastRowOnPage", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('eSummaryPanel'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "eSummaryPanel", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('lbCurrent'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "lbCurrent", void 0);
+    __decorate([
+        componentAnnotations_1.RefSelector('lbTotal'), 
+        __metadata('design:type', Object)
+    ], PaginationComp.prototype, "lbTotal", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], PaginationComp.prototype, "postConstruct", null);
     return PaginationComp;
 }(component_1.Component));
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], PaginationComp.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], PaginationComp.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('serverPaginationService'),
-    __metadata("design:type", serverPaginationService_1.ServerPaginationService)
-], PaginationComp.prototype, "serverPaginationService", void 0);
-__decorate([
-    context_1.Autowired('paginationProxy'),
-    __metadata("design:type", paginationProxy_1.PaginationProxy)
-], PaginationComp.prototype, "paginationProxy", void 0);
-__decorate([
-    context_1.Autowired('rowRenderer'),
-    __metadata("design:type", rowRenderer_1.RowRenderer)
-], PaginationComp.prototype, "rowRenderer", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('btFirst'),
-    __metadata("design:type", HTMLButtonElement)
-], PaginationComp.prototype, "btFirst", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('btPrevious'),
-    __metadata("design:type", HTMLButtonElement)
-], PaginationComp.prototype, "btPrevious", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('btNext'),
-    __metadata("design:type", HTMLButtonElement)
-], PaginationComp.prototype, "btNext", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('btLast'),
-    __metadata("design:type", HTMLButtonElement)
-], PaginationComp.prototype, "btLast", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('lbRecordCount'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "lbRecordCount", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('lbFirstRowOnPage'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "lbFirstRowOnPage", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('lbLastRowOnPage'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "lbLastRowOnPage", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('eSummaryPanel'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "eSummaryPanel", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('lbCurrent'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "lbCurrent", void 0);
-__decorate([
-    componentAnnotations_1.RefSelector('lbTotal'),
-    __metadata("design:type", Object)
-], PaginationComp.prototype, "lbTotal", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PaginationComp.prototype, "postConstruct", null);
 exports.PaginationComp = PaginationComp;

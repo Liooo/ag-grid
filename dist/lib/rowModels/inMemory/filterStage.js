@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../../context/context");
 var gridOptionsWrapper_1 = require("../../gridOptionsWrapper");
 var filterService_1 = require("../../rowNodes/filterService");
@@ -30,17 +29,18 @@ var FilterStage = (function () {
             this.filterService.filterAccordingToColumnState(rowNode);
         }
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], FilterStage.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('filterService'), 
+        __metadata('design:type', filterService_1.FilterService)
+    ], FilterStage.prototype, "filterService", void 0);
+    FilterStage = __decorate([
+        context_1.Bean('filterStage'), 
+        __metadata('design:paramtypes', [])
+    ], FilterStage);
     return FilterStage;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], FilterStage.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('filterService'),
-    __metadata("design:type", filterService_1.FilterService)
-], FilterStage.prototype, "filterService", void 0);
-FilterStage = __decorate([
-    context_1.Bean('filterStage')
-], FilterStage);
 exports.FilterStage = FilterStage;

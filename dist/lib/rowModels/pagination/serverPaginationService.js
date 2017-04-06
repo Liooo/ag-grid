@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../../utils");
 var gridOptionsWrapper_1 = require("../../gridOptionsWrapper");
 var context_1 = require("../../context/context");
@@ -39,14 +33,13 @@ var beanStub_1 = require("../../context/beanStub");
 var ServerPaginationService = (function (_super) {
     __extends(ServerPaginationService, _super);
     function ServerPaginationService() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.callVersion = 0;
-        _this.pageSize = 100;
-        _this.rowCount = 0;
-        _this.lastPageFound = false;
-        _this.totalPages = 0;
-        _this.currentPage = 0;
-        return _this;
+        _super.apply(this, arguments);
+        this.callVersion = 0;
+        this.pageSize = 100;
+        this.rowCount = 0;
+        this.lastPageFound = false;
+        this.totalPages = 0;
+        this.currentPage = 0;
     }
     ServerPaginationService.prototype.isLastPageFound = function () {
         return this.lastPageFound;
@@ -255,43 +248,44 @@ var ServerPaginationService = (function (_super) {
     ServerPaginationService.prototype.isCallDaemon = function (versionCopy) {
         return versionCopy !== this.callVersion;
     };
+    __decorate([
+        context_1.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], ServerPaginationService.prototype, "filterManager", void 0);
+    __decorate([
+        context_1.Autowired('gridPanel'), 
+        __metadata('design:type', gridPanel_1.GridPanel)
+    ], ServerPaginationService.prototype, "gridPanel", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], ServerPaginationService.prototype, "gridOptionsWrapper", void 0);
+    __decorate([
+        context_1.Autowired('selectionController'), 
+        __metadata('design:type', selectionController_1.SelectionController)
+    ], ServerPaginationService.prototype, "selectionController", void 0);
+    __decorate([
+        context_1.Autowired('sortController'), 
+        __metadata('design:type', sortController_1.SortController)
+    ], ServerPaginationService.prototype, "sortController", void 0);
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], ServerPaginationService.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('rowModel'), 
+        __metadata('design:type', Object)
+    ], ServerPaginationService.prototype, "rowModel", void 0);
+    __decorate([
+        context_1.PostConstruct, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', []), 
+        __metadata('design:returntype', void 0)
+    ], ServerPaginationService.prototype, "init", null);
+    ServerPaginationService = __decorate([
+        context_1.Bean('serverPaginationService'), 
+        __metadata('design:paramtypes', [])
+    ], ServerPaginationService);
     return ServerPaginationService;
 }(beanStub_1.BeanStub));
-__decorate([
-    context_1.Autowired('filterManager'),
-    __metadata("design:type", filterManager_1.FilterManager)
-], ServerPaginationService.prototype, "filterManager", void 0);
-__decorate([
-    context_1.Autowired('gridPanel'),
-    __metadata("design:type", gridPanel_1.GridPanel)
-], ServerPaginationService.prototype, "gridPanel", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], ServerPaginationService.prototype, "gridOptionsWrapper", void 0);
-__decorate([
-    context_1.Autowired('selectionController'),
-    __metadata("design:type", selectionController_1.SelectionController)
-], ServerPaginationService.prototype, "selectionController", void 0);
-__decorate([
-    context_1.Autowired('sortController'),
-    __metadata("design:type", sortController_1.SortController)
-], ServerPaginationService.prototype, "sortController", void 0);
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], ServerPaginationService.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('rowModel'),
-    __metadata("design:type", Object)
-], ServerPaginationService.prototype, "rowModel", void 0);
-__decorate([
-    context_1.PostConstruct,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ServerPaginationService.prototype, "init", null);
-ServerPaginationService = __decorate([
-    context_1.Bean('serverPaginationService')
-], ServerPaginationService);
 exports.ServerPaginationService = ServerPaginationService;

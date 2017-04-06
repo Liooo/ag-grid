@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,14 +19,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 var componentAnnotations_1 = require("../widgets/componentAnnotations");
 var baseFilter_1 = require("./baseFilter");
 var NumberFilter = (function (_super) {
     __extends(NumberFilter, _super);
     function NumberFilter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     NumberFilter.prototype.modelFromFloatingFilter = function (from) {
         return {
@@ -144,21 +138,21 @@ var NumberFilter = (function (_super) {
     NumberFilter.prototype.setType = function (filterType) {
         this.setFilterType(filterType);
     };
+    NumberFilter.EQUALS = 'equals'; // 1;
+    NumberFilter.NOT_EQUAL = 'notEqual'; //2;
+    NumberFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual'; //4;
+    NumberFilter.GREATER_THAN = 'greaterThan'; //5;
+    NumberFilter.GREATER_THAN_OR_EQUAL = 'greaterThan'; //6;
+    NumberFilter.IN_RANGE = 'inRange';
+    NumberFilter.LESS_THAN = 'lessThan'; //3;
+    __decorate([
+        componentAnnotations_1.QuerySelector('#filterNumberToPanel'), 
+        __metadata('design:type', HTMLElement)
+    ], NumberFilter.prototype, "eNumberToPanel", void 0);
+    __decorate([
+        componentAnnotations_1.QuerySelector('#filterToText'), 
+        __metadata('design:type', HTMLInputElement)
+    ], NumberFilter.prototype, "eFilterToTextField", void 0);
     return NumberFilter;
 }(baseFilter_1.ScalarBaseFilter));
-NumberFilter.EQUALS = 'equals'; // 1;
-NumberFilter.NOT_EQUAL = 'notEqual'; //2;
-NumberFilter.LESS_THAN_OR_EQUAL = 'lessThanOrEqual'; //4;
-NumberFilter.GREATER_THAN = 'greaterThan'; //5;
-NumberFilter.GREATER_THAN_OR_EQUAL = 'greaterThan'; //6;
-NumberFilter.IN_RANGE = 'inRange';
-NumberFilter.LESS_THAN = 'lessThan'; //3;
-__decorate([
-    componentAnnotations_1.QuerySelector('#filterNumberToPanel'),
-    __metadata("design:type", HTMLElement)
-], NumberFilter.prototype, "eNumberToPanel", void 0);
-__decorate([
-    componentAnnotations_1.QuerySelector('#filterToText'),
-    __metadata("design:type", HTMLInputElement)
-], NumberFilter.prototype, "eFilterToTextField", void 0);
 exports.NumberFilter = NumberFilter;

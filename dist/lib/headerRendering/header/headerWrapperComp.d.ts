@@ -13,6 +13,7 @@ export declare class HeaderWrapperComp extends Component {
     private context;
     private menuFactory;
     private gridApi;
+    private columnApi;
     private sortController;
     private eventService;
     private componentProvider;

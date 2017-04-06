@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var gridOptionsWrapper_1 = require("../gridOptionsWrapper");
 var ValueFormatterService = (function () {
@@ -45,13 +44,14 @@ var ValueFormatterService = (function () {
         }
         return result;
     };
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], ValueFormatterService.prototype, "gridOptionsWrapper", void 0);
+    ValueFormatterService = __decorate([
+        context_1.Bean('valueFormatterService'), 
+        __metadata('design:paramtypes', [])
+    ], ValueFormatterService);
     return ValueFormatterService;
 }());
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], ValueFormatterService.prototype, "gridOptionsWrapper", void 0);
-ValueFormatterService = __decorate([
-    context_1.Bean('valueFormatterService')
-], ValueFormatterService);
 exports.ValueFormatterService = ValueFormatterService;

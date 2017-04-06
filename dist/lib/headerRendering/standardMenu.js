@@ -14,7 +14,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var filterManager_1 = require("../filter/filterManager");
 var utils_1 = require("../utils");
@@ -71,25 +70,26 @@ var StandardMenuFactory = (function () {
         // for standard, we show menu if filter is enabled, and he menu is not suppressed
         return this.gridOptionsWrapper.isEnableFilter() && column.isFilterAllowed();
     };
+    __decorate([
+        context_1.Autowired('eventService'), 
+        __metadata('design:type', eventService_1.EventService)
+    ], StandardMenuFactory.prototype, "eventService", void 0);
+    __decorate([
+        context_1.Autowired('filterManager'), 
+        __metadata('design:type', filterManager_1.FilterManager)
+    ], StandardMenuFactory.prototype, "filterManager", void 0);
+    __decorate([
+        context_1.Autowired('popupService'), 
+        __metadata('design:type', popupService_1.PopupService)
+    ], StandardMenuFactory.prototype, "popupService", void 0);
+    __decorate([
+        context_1.Autowired('gridOptionsWrapper'), 
+        __metadata('design:type', gridOptionsWrapper_1.GridOptionsWrapper)
+    ], StandardMenuFactory.prototype, "gridOptionsWrapper", void 0);
+    StandardMenuFactory = __decorate([
+        context_1.Bean('menuFactory'), 
+        __metadata('design:paramtypes', [])
+    ], StandardMenuFactory);
     return StandardMenuFactory;
 }());
-__decorate([
-    context_1.Autowired('eventService'),
-    __metadata("design:type", eventService_1.EventService)
-], StandardMenuFactory.prototype, "eventService", void 0);
-__decorate([
-    context_1.Autowired('filterManager'),
-    __metadata("design:type", filterManager_1.FilterManager)
-], StandardMenuFactory.prototype, "filterManager", void 0);
-__decorate([
-    context_1.Autowired('popupService'),
-    __metadata("design:type", popupService_1.PopupService)
-], StandardMenuFactory.prototype, "popupService", void 0);
-__decorate([
-    context_1.Autowired('gridOptionsWrapper'),
-    __metadata("design:type", gridOptionsWrapper_1.GridOptionsWrapper)
-], StandardMenuFactory.prototype, "gridOptionsWrapper", void 0);
-StandardMenuFactory = __decorate([
-    context_1.Bean('menuFactory')
-], StandardMenuFactory);
 exports.StandardMenuFactory = StandardMenuFactory;

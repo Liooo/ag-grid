@@ -5,16 +5,11 @@
  * @license MIT
  */
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24,7 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../widgets/component");
 var componentAnnotations_1 = require("../widgets/componentAnnotations");
 var utils_1 = require("../utils");
@@ -34,7 +28,7 @@ var componentProvider_1 = require("../componentProvider");
 var DateFilter = (function (_super) {
     __extends(DateFilter, _super);
     function DateFilter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     DateFilter.prototype.modelFromFloatingFilter = function (from) {
         return {
@@ -139,25 +133,25 @@ var DateFilter = (function (_super) {
             return null;
         return new Date(from.getFullYear(), from.getMonth(), from.getDate());
     };
+    __decorate([
+        context_1.Autowired('componentProvider'), 
+        __metadata('design:type', componentProvider_1.ComponentProvider)
+    ], DateFilter.prototype, "componentProvider", void 0);
+    __decorate([
+        componentAnnotations_1.QuerySelector('#filterDateFromPanel'), 
+        __metadata('design:type', HTMLElement)
+    ], DateFilter.prototype, "eDateFromPanel", void 0);
+    __decorate([
+        componentAnnotations_1.QuerySelector('#filterDateToPanel'), 
+        __metadata('design:type', HTMLElement)
+    ], DateFilter.prototype, "eDateToPanel", void 0);
     return DateFilter;
 }(baseFilter_1.ScalarBaseFilter));
-__decorate([
-    context_1.Autowired('componentProvider'),
-    __metadata("design:type", componentProvider_1.ComponentProvider)
-], DateFilter.prototype, "componentProvider", void 0);
-__decorate([
-    componentAnnotations_1.QuerySelector('#filterDateFromPanel'),
-    __metadata("design:type", HTMLElement)
-], DateFilter.prototype, "eDateFromPanel", void 0);
-__decorate([
-    componentAnnotations_1.QuerySelector('#filterDateToPanel'),
-    __metadata("design:type", HTMLElement)
-], DateFilter.prototype, "eDateToPanel", void 0);
 exports.DateFilter = DateFilter;
 var DefaultDateComponent = (function (_super) {
     __extends(DefaultDateComponent, _super);
     function DefaultDateComponent() {
-        return _super.call(this, "<input class=\"ag-filter-filter\" type=\"text\" placeholder=\"yyyy-mm-dd\">") || this;
+        _super.call(this, "<input class=\"ag-filter-filter\" type=\"text\" placeholder=\"yyyy-mm-dd\">");
     }
     DefaultDateComponent.prototype.init = function (params) {
         this.eDateInput = this.getGui();
