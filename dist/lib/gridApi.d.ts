@@ -16,6 +16,7 @@ import { IEnterpriseDatasource } from "./interfaces/iEnterpriseDatasource";
 export interface StartEditingCellParams {
     rowIndex: number;
     colKey: string | Column | ColDef;
+    floating: string;
     keyPress?: number;
     charPress?: string;
 }

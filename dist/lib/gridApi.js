@@ -531,7 +531,7 @@ var GridApi = (function () {
             console.warn("ag-Grid: no column found for " + params.colKey);
             return;
         }
-        var gridCellDef = { rowIndex: params.rowIndex, floating: null, column: column };
+        var gridCellDef = { rowIndex: params.rowIndex, floating: params.floating, column: column };
         var gridCell = new gridCell_1.GridCell(gridCellDef);
         this.gridPanel.ensureIndexVisible(params.rowIndex);
         this.rowRenderer.startEditingCell(gridCell, params.keyPress, params.charPress);

@@ -471,7 +471,7 @@ var RenderedCell = (function (_super) {
         var colDef = this.column.getColDef();
         if (colDef.cellEditorParams) {
             if (typeof colDef.cellEditorParams === 'function') {
-                utils_1.Utils.assign(params, colDef.cellEditorParams(this.node.data));
+                utils_1.Utils.assign(params, colDef.cellEditorParams(this.node.data, this.value));
             }
             else {
                 utils_1.Utils.assign(params, colDef.cellEditorParams);
@@ -996,7 +996,7 @@ var RenderedCell = (function (_super) {
         };
         if (cellRendererParams) {
             if (typeof cellRendererParams === 'function') {
-                utils_1.Utils.assign(params, cellRendererParams(this.node.data));
+                utils_1.Utils.assign(params, cellRendererParams(this.node.data, this.value));
             }
             else {
                 utils_1.Utils.assign(params, cellRendererParams);

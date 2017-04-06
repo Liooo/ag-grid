@@ -3573,7 +3573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            console.warn("ag-Grid: no column found for " + params.colKey);
 	            return;
 	        }
-	        var gridCellDef = { rowIndex: params.rowIndex, floating: null, column: column };
+	        var gridCellDef = { rowIndex: params.rowIndex, floating: params.floating, column: column };
 	        var gridCell = new gridCell_1.GridCell(gridCellDef);
 	        this.gridPanel.ensureIndexVisible(params.rowIndex);
 	        this.rowRenderer.startEditingCell(gridCell, params.keyPress, params.charPress);
@@ -14459,7 +14459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var colDef = this.column.getColDef();
 	        if (colDef.cellEditorParams) {
 	            if (typeof colDef.cellEditorParams === 'function') {
-	                utils_1.Utils.assign(params, colDef.cellEditorParams(this.node.data));
+	                utils_1.Utils.assign(params, colDef.cellEditorParams(this.node.data, this.value));
 	            }
 	            else {
 	                utils_1.Utils.assign(params, colDef.cellEditorParams);
@@ -14984,7 +14984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        if (cellRendererParams) {
 	            if (typeof cellRendererParams === 'function') {
-	                utils_1.Utils.assign(params, cellRendererParams(this.node.data));
+	                utils_1.Utils.assign(params, cellRendererParams(this.node.data, this.value));
 	            }
 	            else {
 	                utils_1.Utils.assign(params, cellRendererParams);
