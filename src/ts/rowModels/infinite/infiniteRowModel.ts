@@ -157,6 +157,7 @@ export class InfiniteRowModel extends BeanStub implements IRowModel {
             cacheSettings.maxConcurrentRequests = 2;
         }
         // page size needs to be 1 or greater. having it at 1 would be silly, as you would be hitting the
+
         // server for one page at a time. so the default if not specified is 100.
         if ( !(cacheSettings.pageSize>=1) ) {
             cacheSettings.pageSize = 100;

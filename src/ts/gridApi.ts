@@ -42,6 +42,7 @@ import {PaginationProxy} from "./rowModels/paginationProxy";
 export interface StartEditingCellParams {
     rowIndex: number;
     colKey: string|Column|ColDef;
+    floating: string;
     keyPress?: number;
     charPress?: string;
 }
@@ -630,7 +631,7 @@ export class GridApi {
             console.warn(`ag-Grid: no column found for ${params.colKey}`);
             return;
         }
-        let gridCellDef = <GridCellDef> {rowIndex: params.rowIndex, floating: null, column: column};
+        let gridCellDef = <GridCellDef> {rowIndex: params.rowIndex, floating: params.floating, column: column};
         var gridCell = new GridCell(gridCellDef);
         this.gridPanel.ensureIndexVisible(params.rowIndex);
         this.rowRenderer.startEditingCell(gridCell, params.keyPress, params.charPress);
